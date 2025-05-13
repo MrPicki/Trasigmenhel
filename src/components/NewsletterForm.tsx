@@ -40,14 +40,25 @@ const NewsletterForm = () => {
     setIsLoading(true);
     
     try {
-      // Send email to kontakt@trasigmenhel.se
-      // In a real implementation, this would be an API call to a backend service
-      // For now, we'll simulate it and open the user's email client
-      const subject = `Ny prenumeration från ${formData.name}`;
-      const body = `Namn: ${formData.name}\nE-post: ${formData.email}\n\nJag vill prenumerera på Trasig men Hel podcast.`;
+      // Store subscriber in localStorage
+      const newSubscriber = {
+        id: Date.now().toString(),
+        name: formData.name,
+        email: formData.email,
+        date: new Date().toLocaleDateString('sv-SE')
+      };
       
-      // Open the user's email client
-      window.location.href = `mailto:kontakt@trasigmenhel.se?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      // Get existing subscribers or initialize empty array
+      const existingSubscribersJSON = localStorage.getItem('subscribers');
+      const existingSubscribers = existingSubscribersJSON 
+        ? JSON.parse(existingSubscribersJSON) 
+        : [];
+      
+      // Add new subscriber
+      const updatedSubscribers = [...existingSubscribers, newSubscriber];
+      
+      // Save to localStorage
+      localStorage.setItem('subscribers', JSON.stringify(updatedSubscribers));
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
