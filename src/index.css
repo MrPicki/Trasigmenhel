@@ -102,3 +102,8 @@
 .animate-pulse-scale {
   animation: pulse-scale 2s ease-in-out infinite;
 }
+
+.component-transparent {
+  background-color: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(2px);
+}
