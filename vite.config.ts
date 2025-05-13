@@ -24,5 +24,8 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist",
     emptyOutDir: true,
     sourcemap: false,
+    rollupOptions: {
+      input: 'index.html'
+    }
   },
 }));
