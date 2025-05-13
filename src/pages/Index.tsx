@@ -62,9 +62,17 @@ const Index = () => {
       
       <footer className="w-full py-6 relative z-10 component-transparent">
         <div className="container">
-          <p className="text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()} Trasig men hel. Alla rättigheter reserverade.
-          </p>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <p className="text-center text-gray-500 text-sm">
+              © {new Date().getFullYear()} Trasig men hel. Alla rättigheter reserverade.
+            </p>
+            <a 
+              href="/login" 
+              className="text-xs text-gray-500 hover:text-white transition-colors px-3 py-1 border border-gray-700 rounded-md hover:border-gray-500"
+            >
+              Login
+            </a>
+          </div>
         </div>
       </footer>
     </main>
