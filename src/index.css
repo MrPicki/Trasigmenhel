@@ -86,3 +86,19 @@
 .container {
   @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
 }
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-scale {
+  animation: pulse-scale 2s ease-in-out infinite;
+}

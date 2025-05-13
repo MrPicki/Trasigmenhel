@@ -1,61 +1,36 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PodcastPlayer from './PodcastPlayer';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const Banner = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = "/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png";
-    img.onload = () => setIsImageLoaded(true);
-    
-    // Add parallax effect on scroll
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const parallaxElements = document.querySelectorAll('.parallax-bg');
-      parallaxElements.forEach((element) => {
-        const el = element as HTMLElement;
-        el.style.transform = `translateY(${scrolled * 0.4}px)`;
-      });
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <div className="relative w-full bg-charcoal-200 overflow-hidden min-h-[400px] sm:min-h-[500px]">
-      {/* Background elements */}
-      <div className="absolute inset-0 typography-texture opacity-20"></div>
-      {!isImageLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Skeleton className="w-full h-full" />
-        </div>
-      )}
-      
-      {/* Background with parallax effect */}
-      <div className="absolute inset-0 parallax-bg">
-        <div className="absolute inset-0 bg-charcoal-200"></div>
+    <div className="w-full bg-charcoal-200">
+      {/* Top bar image */}
+      <div className="w-full bg-charcoal-200 relative">
+        {!isImageLoaded && (
+          <div className="w-full h-24 sm:h-32 md:h-40 flex items-center justify-center">
+            <Skeleton className="w-full h-full" />
+          </div>
+        )}
         <img 
           src="/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png" 
-          alt="" 
-          className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-90"
+          alt="Trasig men Hel" 
+          className="w-full h-auto object-contain max-h-24 sm:max-h-32 md:max-h-40"
           style={{ 
             objectPosition: 'center',
-            objectFit: 'contain',
-            maxWidth: '100%',
-            maxHeight: '100%'
+            maxWidth: '100%'
           }}
+          onLoad={() => setIsImageLoaded(true)}
         />
-        <div className="absolute inset-0 opacity-40 bg-gradient-to-b from-transparent to-charcoal-200"></div>
       </div>
       
       {/* Content */}
-      <div className="container relative z-10 px-4 pt-20 pb-12 sm:pt-24 md:pt-32 md:pb-20 lg:pt-40 lg:pb-28">
+      <div className="container px-4 py-8 sm:py-10 md:py-12">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-12">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6">
             Lyssna på senaste avsnittet
           </p>
           

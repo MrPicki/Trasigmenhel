@@ -214,7 +214,7 @@ const PodcastPlayer = () => {
 
   if (isLoading || !episode) {
     return (
-      <div className="bg-charcoal-300 rounded-lg p-4 space-y-4">
+      <div className="bg-charcoal-300 rounded-lg p-4 space-y-4 animate-pulse">
         <div className="flex items-center gap-4">
           <div className="h-16 w-16 bg-charcoal-400 rounded-md flex-shrink-0"></div>
           <div className="flex-1 space-y-2">
@@ -231,7 +231,11 @@ const PodcastPlayer = () => {
   }
 
   return (
-    <div className="bg-charcoal-300 rounded-lg p-3 sm:p-4 shadow-xl border border-charcoal-400 backdrop-blur-sm">
+    <div 
+      className={`bg-charcoal-300 rounded-lg p-3 sm:p-4 shadow-xl border border-charcoal-400 backdrop-blur-sm transition-transform duration-700 ${
+        !isPlaying ? 'animate-pulse-scale' : ''
+      }`}
+    >
       <audio 
         ref={audioRef}
         src={episode.audioUrl}
