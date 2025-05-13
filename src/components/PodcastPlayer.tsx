@@ -214,7 +214,7 @@ const PodcastPlayer = () => {
 
   if (isLoading || !episode) {
     return (
-      <div className="bg-charcoal-300 rounded-lg p-4 animate-pulse space-y-4">
+      <div className="bg-charcoal-300 rounded-lg p-4 space-y-4">
         <div className="flex items-center gap-4">
           <div className="h-16 w-16 bg-charcoal-400 rounded-md flex-shrink-0"></div>
           <div className="flex-1 space-y-2">

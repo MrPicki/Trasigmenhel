@@ -41,8 +41,13 @@ const Banner = () => {
         <img 
           src="/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png" 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover opacity-90"
-          style={{ objectPosition: 'center' }}
+          className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-90"
+          style={{ 
+            objectPosition: 'center',
+            objectFit: 'contain',
+            maxWidth: '100%',
+            maxHeight: '100%'
+          }}
         />
         <div className="absolute inset-0 opacity-40 bg-gradient-to-b from-transparent to-charcoal-200"></div>
       </div>

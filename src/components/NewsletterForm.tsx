@@ -40,6 +40,15 @@ const NewsletterForm = () => {
     setIsLoading(true);
     
     try {
+      // Send email to kontakt@trasigmenhel.se
+      // In a real implementation, this would be an API call to a backend service
+      // For now, we'll simulate it and open the user's email client
+      const subject = `Ny prenumeration från ${formData.name}`;
+      const body = `Namn: ${formData.name}\nE-post: ${formData.email}\n\nJag vill prenumerera på Trasig men Hel podcast.`;
+      
+      // Open the user's email client
+      window.location.href = `mailto:kontakt@trasigmenhel.se?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
