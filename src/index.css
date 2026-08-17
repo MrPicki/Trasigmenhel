@@ -67,20 +67,41 @@
     font-family: 'Montserrat', sans-serif;
     @apply font-bold;
   }
-}
 
-.texture-overlay {
-  background-image: url('/crack-overlay.png');
-  background-size: cover;
-  background-blend-mode: overlay;
-  @apply opacity-20;
-}
+  /* Browser surfaces the design never draws directly still carry the
+     brand: selection, scrollbar and focus ring, themed instead of left
+     as unstyled defaults. */
+  ::selection {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #0a0a0a;
+  }
 
-.typography-texture {
-  background-image: url('/typography-texture.png');
-  background-size: cover;
-  background-blend-mode: overlay;
-  @apply opacity-30;
+  :focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #121212;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444444;
+  }
+
+  html {
+    scrollbar-color: #333333 #121212;
+  }
 }
 
 .container {

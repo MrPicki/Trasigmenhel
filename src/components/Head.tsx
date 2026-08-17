@@ -8,10 +8,10 @@ interface HeadProps {
   url?: string;
 }
 
-const Head = ({ 
+const Head = ({
   title = "Trasig men Hel - En podcast om läkning och personlig utveckling",
-  description = "Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Varje vecka delar vi berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans.",
-  image = "/lovable-uploads/66affaea-122f-4746-a96e-42d56ffbecaa.png",
+  description = "Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans.",
+  image = "/lovable-uploads/podcast-cover-og.jpg",
   url = "https://trasigmenhel.se"
 }: HeadProps) => {
   return (
@@ -47,15 +47,10 @@ const Head = ({
       <link rel="apple-touch-icon" href="/webpic.png" />
       
       {/* Preload Critical Assets */}
-      <link 
-        rel="preload" 
-        href="/lovable-uploads/66affaea-122f-4746-a96e-42d56ffbecaa.png" 
-        as="image" 
-      />
-      <link 
-        rel="preload" 
-        href="/typography-texture.png" 
-        as="image" 
+      <link
+        rel="preload"
+        href="/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png"
+        as="image"
       />
     </Helmet>
   );
