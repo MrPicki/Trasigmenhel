@@ -27,8 +27,8 @@ const EpisodeCard = ({
 
   return (
     <Card
-      className={`bg-charcoal-300 overflow-hidden transition-colors duration-300 group ${
-        isActive ? 'border-white' : 'border-charcoal-400 hover:border-gray-500'
+      className={`bg-charcoal-300 overflow-hidden transition-colors duration-300 group card-lift ${
+        isActive ? 'border-ember-500' : 'border-charcoal-400 hover:border-ember-700'
       }`}
     >
       <div className="aspect-[4/3] bg-charcoal-400 relative overflow-hidden">
@@ -55,14 +55,20 @@ const EpisodeCard = ({
           </div>
         )}
         {duration && (
-          <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 bg-black/70 text-[10px] sm:text-xs text-white py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-full">
+          <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 bg-black/70 backdrop-blur-sm text-[10px] sm:text-xs text-ember-300 border border-ember-700/50 py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-full">
             {duration}
+          </div>
+        )}
+        {isActive && (
+          <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-1.5 bg-ember-500 text-charcoal-100 text-[10px] sm:text-xs font-semibold py-0.5 sm:py-1 px-2 sm:px-2.5 rounded-full">
+            <span className="h-1.5 w-1.5 rounded-full bg-charcoal-100 ember-pulse" />
+            Spelas nu
           </div>
         )}
       </div>
       <CardContent className="p-3 sm:p-4">
         <div className="text-[10px] sm:text-xs text-gray-400 mb-1 sm:mb-2">{date}</div>
-        <h3 className="font-bold text-base sm:text-lg mb-1 sm:mb-2 line-clamp-2 group-hover:text-white transition-colors">
+        <h3 className="font-bold text-base sm:text-lg mb-1 sm:mb-2 line-clamp-2 group-hover:text-ember-300 transition-colors">
           {title}
         </h3>
         <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4 line-clamp-2">{description}</p>
@@ -70,7 +76,7 @@ const EpisodeCard = ({
           variant="outline"
           size="sm"
           onClick={onPlay}
-          className="w-full h-8 sm:h-9 text-xs sm:text-sm border-gray-600 hover:bg-white hover:text-charcoal-100 flex gap-1 sm:gap-2 items-center justify-center group-hover:border-white transition-colors"
+          className="w-full h-8 sm:h-9 text-xs sm:text-sm border-gray-600 hover:bg-ember-500 hover:text-charcoal-100 hover:border-ember-500 flex gap-1 sm:gap-2 items-center justify-center group-hover:border-ember-600 transition-colors"
         >
           {isActive ? (
             <>

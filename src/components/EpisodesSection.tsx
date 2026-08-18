@@ -17,7 +17,7 @@ const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect
     <section className="w-full bg-charcoal-200 py-10 sm:py-16">
       <div className="container px-4 sm:px-6">
         <div className="flex items-center justify-center mb-8 sm:mb-12">
-          <ListMusic className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 mr-2" />
+          <ListMusic className="h-5 w-5 sm:h-6 sm:w-6 text-ember-500 mr-2" />
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
             Avsnitt
           </h2>
@@ -58,18 +58,22 @@ const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect
         )}
 
         {!isLoading && !error && episodes.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          // A flex-wrap layout (rather than a grid) so that a handful of
+          // real episodes reads as a deliberate, centered row instead of a
+          // lone card stranded in an otherwise-empty 4-column grid.
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {episodes.map((episode) => (
-              <EpisodeCard
-                key={episode.id}
-                title={episode.title}
-                description={episode.description}
-                imageUrl={episode.image}
-                duration={formatDuration(episode.durationSeconds)}
-                date={episode.pubDate}
-                isActive={episode.id === activeEpisodeId}
-                onPlay={() => onSelect(episode)}
-              />
+              <div key={episode.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] max-w-sm">
+                <EpisodeCard
+                  title={episode.title}
+                  description={episode.description}
+                  imageUrl={episode.image}
+                  duration={formatDuration(episode.durationSeconds)}
+                  date={episode.pubDate}
+                  isActive={episode.id === activeEpisodeId}
+                  onPlay={() => onSelect(episode)}
+                />
+              </div>
             ))}
           </div>
         )}

@@ -118,7 +118,8 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
   }
 
   return (
-    <div className="bg-charcoal-300 rounded-lg p-3 sm:p-4 shadow-xl border border-charcoal-400">
+    <div className="relative bg-charcoal-300 rounded-lg p-3 sm:p-4 shadow-[0_20px_60px_-20px_rgba(244,126,37,0.35)] border border-ember-700/50">
+      <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-ember-500/70 to-transparent" aria-hidden="true" />
       <audio
         ref={audioRef}
         src={episode.audioUrl}
@@ -126,7 +127,7 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
       />
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-        <div className="h-14 w-14 sm:h-16 sm:w-16 bg-charcoal-400 rounded-md flex-shrink-0 overflow-hidden mx-auto sm:mx-0">
+        <div className="h-14 w-14 sm:h-16 sm:w-16 bg-charcoal-400 rounded-md flex-shrink-0 overflow-hidden mx-auto sm:mx-0 ring-1 ring-ember-700/60">
           {episode.image && (
             <img
               src={episode.image}
@@ -166,7 +167,7 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
           <Button
             variant="outline"
             size="icon"
-            className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white text-black hover:bg-gray-200 hover:text-black flex-shrink-0"
+            className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-ember-500 text-charcoal-100 border-ember-500 hover:bg-ember-400 hover:border-ember-400 hover:text-charcoal-100 flex-shrink-0 ${isPlaying ? 'ember-pulse' : ''}`}
             onClick={togglePlayPause}
             aria-label={isPlaying ? 'Pausa' : 'Spela'}
           >

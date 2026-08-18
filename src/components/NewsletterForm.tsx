@@ -128,11 +128,16 @@ const NewsletterForm = () => {
   };
 
   return (
-    <section className="w-full bg-charcoal-100 py-16">
-      <div className="container">
+    <section className="relative w-full bg-charcoal-100 py-16 overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-60 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(244,126,37,0.12) 0%, rgba(244,126,37,0) 60%)' }}
+        aria-hidden="true"
+      />
+      <div className="container relative">
         <div className="max-w-2xl mx-auto text-center">
           <div className="flex items-center justify-center mb-6">
-            <Mail className="h-6 w-6 text-gray-400 mr-2" />
+            <Mail className="h-6 w-6 text-ember-500 mr-2" />
             <h2 className="text-2xl md:text-3xl font-bold">
               Få våra senaste avsnitt direkt i inboxen
             </h2>
@@ -176,7 +181,7 @@ const NewsletterForm = () => {
               </div>
               <Button
                 type="submit"
-                className="w-full md:w-auto h-10 sm:h-12 bg-white text-charcoal-100 hover:bg-gray-200 font-bold disabled:opacity-50 text-sm sm:text-base"
+                className="w-full md:w-auto h-10 sm:h-12 bg-ember-500 text-charcoal-100 hover:bg-ember-400 font-bold disabled:opacity-50 text-sm sm:text-base shadow-[0_8px_24px_-8px_rgba(244,126,37,0.5)]"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -193,7 +198,7 @@ const NewsletterForm = () => {
             <Button
               variant="outline"
               size="default"
-              className="border-gray-600 hover:bg-white hover:text-charcoal-100 font-semibold text-sm sm:text-base h-10 sm:h-12 w-full md:w-auto"
+              className="border-gray-600 hover:bg-ember-500 hover:border-ember-500 hover:text-charcoal-100 font-semibold text-sm sm:text-base h-10 sm:h-12 w-full md:w-auto"
               onClick={() => window.location.href = "mailto:kontakt@trasigmenhel.se"}
             >
               <Mail className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" /> Kontakta oss

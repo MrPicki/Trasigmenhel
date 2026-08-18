@@ -12,7 +12,7 @@ export const SOCIAL_LINKS = [
   },
   {
     label: 'TikTok',
-    href: 'https://www.tiktok.com/@trasigmenhel.podd',
+    href: 'https://www.tiktok.com/@trasigmenhel',
     icon: Music2,
   },
   {
@@ -40,7 +40,7 @@ const SocialLinks = ({ variant = 'default', className = '' }: SocialLinksProps) 
           rel={href.startsWith('mailto:') ? undefined : 'noreferrer'}
           aria-label={label}
           title={label}
-          className="flex items-center justify-center h-10 w-10 rounded-full border border-charcoal-400 text-gray-300 transition-colors hover:text-white hover:border-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="flex items-center justify-center h-10 w-10 rounded-full border border-charcoal-400 text-gray-300 transition-colors hover:text-ember-400 hover:border-ember-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember-400"
         >
           <Icon size={size} />
         </a>

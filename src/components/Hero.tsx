@@ -26,12 +26,19 @@ const Hero = ({ episode, isLoading, error }: HeroProps) => {
           className="w-full h-auto"
           onLoad={() => setIsImageLoaded(true)}
         />
+        {/* Warmth breaking through the cracks — tints only the black canvas
+            via screen blending, the white wordmark and crack lines stay crisp. */}
+        {isImageLoaded && <div className="hero-glow" aria-hidden="true" />}
+        <div
+          className="absolute inset-x-0 bottom-0 h-16 sm:h-24 bg-gradient-to-b from-transparent to-charcoal-200 pointer-events-none"
+          aria-hidden="true"
+        />
       </div>
 
-      <div className="container px-4 py-8">
+      <div className="container px-4 py-10 sm:py-12">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="sr-only">Trasig men Hel – Podcast</h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8">
             En ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten.
           </p>
 

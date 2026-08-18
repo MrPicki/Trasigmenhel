@@ -37,6 +37,19 @@ export default {
 					400: '#2a2a2a',
 					500: '#333333',
 				},
+				// Warm accent: the single deliberate color on an otherwise
+				// monochrome site. Meaning: light finding its way through
+				// the cracks — ember/amber, not a generic "brand blue".
+				// Reserved for action, warmth and emphasis; never decoration.
+				ember: {
+					DEFAULT: '#f47e25',
+					300: '#fac180',
+					400: '#f8a04f',
+					500: '#f47e25',
+					600: '#d95412',
+					700: '#a53a12',
+					900: '#32170b',
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
