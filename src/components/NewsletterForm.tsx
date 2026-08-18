@@ -9,12 +9,13 @@ interface FormData {
   email: string;
 }
 
-// Web3Forms is a free form-to-email relay: https://web3forms.com — the user
-// signs up with kontakt@trasigmenhel.se and gets an access key by e-mail,
-// no backend or paid account required. Configure it as VITE_WEB3FORMS_KEY
-// (see .env.example). Until it is set, the form is honest about not being
-// wired up yet instead of pretending to collect subscribers.
-const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined;
+// Web3Forms is a free form-to-email relay: https://web3forms.com, wired to
+// kontakt@trasigmenhel.se. Web3Forms access keys are designed to be public
+// (safe in client-side code — see their docs), so it's committed here as
+// the default. VITE_WEB3FORMS_KEY can still override it (e.g. a future
+// GitHub Actions secret) without a code change.
+const WEB3FORMS_ACCESS_KEY =
+  (import.meta.env.VITE_WEB3FORMS_KEY as string | undefined) || '2af5fb03-1b0a-47dc-9c7d-496b48f95c75';
 
 const NewsletterForm = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
