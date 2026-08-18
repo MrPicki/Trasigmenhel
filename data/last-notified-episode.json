@@ -1,0 +1,6 @@
+{
+  "lastNotifiedGuid": "68658f77-0b00-4517-ad0a-7ef637f10690",
+  "lastNotifiedTitle": "Test avsnitt \"Löprundan\"",
+  "notifiedAt": null,
+  "_comment": "Seeded manually so the automation doesn't email the newsletter list about the existing test episode. Every episode published after this one will trigger an automatic email."
+}

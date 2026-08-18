@@ -17,6 +17,16 @@ interface FormData {
 const WEB3FORMS_ACCESS_KEY =
   (import.meta.env.VITE_WEB3FORMS_KEY as string | undefined) || '2af5fb03-1b0a-47dc-9c7d-496b48f95c75';
 
+// Brevo sign-up form endpoint ("Trasig men Hel - Nyhetsbrev"), generated from
+// Brevo's own "Simple HTML" embed code. This URL only accepts a new
+// subscriber's email into the list (double opt-in required before they're
+// actually added) — it carries no secret credential, so it's safe to ship in
+// client-side code, same as the Web3Forms key above. This is what actually
+// gets a subscriber into the real Brevo list that the automated
+// new-episode newsletter (.github/workflows/notify-episode.yml) sends to.
+const BREVO_FORM_URL =
+  'https://6be33624.sibforms.com/serve/MUIFAKQKICuHSRguppxuD5NX9kEsJaCOF-PPOK5cXRgV9YoPAiKqadqvUl1-ZF5TKFYMO2EMMT1BoS_ZvZ_ICelbGinxgjdQQ6FOT-EmPjgLNWzb4IB5Sp_zgeoCwOgt_4MbJiM1GvcPsEMVpx5S_tMdcRluWpojfOEtCk7RNzGk_9uAhFVXDb4o_t_dxG1bkZY4NbHX1Cd3lh2K';
+
 const NewsletterForm = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -45,39 +55,56 @@ const NewsletterForm = () => {
 
     if (!validateForm()) return;
 
-    if (!WEB3FORMS_ACCESS_KEY) {
-      toast({
-        variant: 'destructive',
-        title: 'Formuläret är inte redo än',
-        description: 'Prenumerationen är inte kopplad till en e-posttjänst ännu. Maila oss istället så lägger vi till dig manuellt.',
-      });
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          subject: 'Ny prenumerant – Trasig men Hel',
-          from_name: 'trasigmenhel.se nyhetsbrev',
-          name: formData.name,
-          email: formData.email,
-        }),
+      // Brevo is the real subscriber list: this is what the automated
+      // "new episode" newsletter (sent from GitHub Actions) actually reads
+      // from. This call is the one that must succeed.
+      const brevoBody = new URLSearchParams({
+        EMAIL: formData.email,
+        email_address_check: '', // honeypot field, must stay empty
+        locale: 'en',
+        html_type: 'simple',
       });
 
-      const result = await response.json();
+      const brevoResponse = await fetch(BREVO_FORM_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: brevoBody.toString(),
+      });
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || 'Kunde inte skicka prenumerationen');
+      if (!brevoResponse.ok) {
+        throw new Error('Kunde inte registrera prenumerationen hos Brevo');
+      }
+
+      const brevoResult = await brevoResponse.json().catch(() => null);
+      if (brevoResult && brevoResult.success === false) {
+        throw new Error('Kunde inte registrera prenumerationen hos Brevo');
+      }
+
+      // Best-effort notification email to kontakt@trasigmenhel.se so a human
+      // sees new sign-ups immediately too. Not critical to the subscription
+      // itself, so a failure here doesn't block the success message.
+      if (WEB3FORMS_ACCESS_KEY) {
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: 'Ny prenumerant – Trasig men Hel',
+            from_name: 'trasigmenhel.se nyhetsbrev',
+            name: formData.name,
+            email: formData.email,
+          }),
+        }).catch(() => {
+          // Ignore — this is just a convenience notification, not the subscription itself.
+        });
       }
 
       toast({
-        title: 'Prenumeration bekräftad!',
-        description: 'Tack för din prenumeration. Du kommer nu få våra senaste avsnitt direkt i din inkorg.',
+        title: 'Nästan klart!',
+        description: 'Kolla din inkorg – du får ett mail där du bekräftar din prenumeration.',
       });
 
       setFormData({ name: '', email: '' });
