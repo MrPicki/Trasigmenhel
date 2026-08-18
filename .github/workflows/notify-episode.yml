@@ -1,0 +1,47 @@
+name: Skicka nyhetsbrev vid nytt avsnitt
+
+on:
+  schedule:
+    # Var 6:e timme. Kostar inget att köra oftare, men avsnitt släpps sällan
+    # nog att detta räcker gott och väl för att märka det snabbt.
+    - cron: '0 */6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: notify-episode
+  cancel-in-progress: false
+
+jobs:
+  check-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sätt upp Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Kontrollera flödet och skicka vid nytt avsnitt
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: '3'
+          SENDER_EMAIL: kontakt@trasigmenhel.se
+          SENDER_NAME: Trasig men Hel
+        run: node scripts/notify-new-episode.mjs
+
+      - name: Spara uppdaterat state om det ändrats
+        run: |
+          if ! git diff --quiet -- data/last-notified-episode.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/last-notified-episode.json
+            git commit -m "Uppdatera senast aviserade avsnitt [skip ci]"
+            git push
+          else
+            echo "Inget nytt att spara."
+          fi
