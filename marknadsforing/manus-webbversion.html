@@ -1,0 +1,1027 @@
+<title>Lanseringsmanus Trasig men hel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#F2EEE6; --surface:#EBE6DA; --raise:#E3DDCF;
+  --ink:#14140F; --ink-2:#4F4B43; --muted:#6E6A61;
+  --rule:#D8D2C4; --rule-soft:#E4DFD3;
+  --accent:#A83A20; --accent-ink:#94301A; --accent-soft:rgba(168,58,32,.09);
+  --ok:#3F6B4A; --bad:#A83A20;
+  --shot:#EFE9DC;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C0C0E; --surface:#141417; --raise:#1B1B1F;
+    --ink:#F2EEE6; --ink-2:#B7B2A8; --muted:#8A867E;
+    --rule:#28282D; --rule-soft:#1E1E22;
+    --accent:#C0472B; --accent-ink:#DB6444; --accent-soft:rgba(192,71,43,.14);
+    --ok:#7FB08C; --bad:#DB6444;
+    --shot:#131316;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C0C0E; --surface:#141417; --raise:#1B1B1F;
+  --ink:#F2EEE6; --ink-2:#B7B2A8; --muted:#8A867E;
+  --rule:#28282D; --rule-soft:#1E1E22;
+  --accent:#C0472B; --accent-ink:#DB6444; --accent-soft:rgba(192,71,43,.14);
+  --ok:#7FB08C; --bad:#DB6444;
+  --shot:#131316;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;
+  font-size:16.5px; line-height:1.62; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#F2EEE6}
+
+/* ---------- nav ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:var(--ground);
+  background:color-mix(in srgb, var(--ground) 90%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{max-width:1180px;margin:0 auto;padding:.55rem 1.25rem;display:flex;gap:1.25rem;align-items:center}
+.mark{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap;flex:none
+}
+.mark b{color:var(--ink);font-weight:500}
+.jump{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.jump::-webkit-scrollbar{display:none}
+.jump a{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.06em;
+  color:var(--muted);text-decoration:none;padding:.3rem .5rem;border-radius:2px;white-space:nowrap
+}
+.jump a:hover{color:var(--ink);background:var(--surface)}
+.jump a:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px
+}
+
+/* ---------- layout ---------- */
+.page{max-width:1180px;margin:0 auto;padding:0 1.25rem 6rem}
+.sec{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:0;
+  padding-top:3.6rem;
+}
+.sec > .body{max-width:69ch}
+.gut{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);padding-bottom:.7rem
+}
+@media(min-width:1000px){
+  .sec{grid-template-columns:8.5rem minmax(0,69ch);gap:0 2.5rem}
+  .gut{text-align:right;padding-top:.55rem;padding-bottom:0;position:sticky;top:4rem;align-self:start}
+}
+h1,h2,h3,h4{font-weight:400;margin:0;text-wrap:balance}
+h2{
+  font-family:"Instrument Serif",Georgia,serif;font-size:clamp(1.85rem,4.2vw,2.6rem);
+  line-height:1.08;letter-spacing:-.005em;margin:0 0 1.3rem;
+  border-top:1px solid var(--ink);padding-top:.85rem;
+}
+h3{
+  font-family:"Instrument Serif",Georgia,serif;font-size:1.42rem;line-height:1.2;
+  margin:2.4rem 0 .6rem
+}
+h4{
+  font-family:"Archivo",sans-serif;font-weight:600;font-size:.94rem;letter-spacing:.01em;
+  margin:1.7rem 0 .35rem
+}
+p{margin:0 0 1rem}
+.body > p:first-of-type{margin-top:0}
+strong{font-weight:600}
+em{font-style:italic}
+a{color:var(--accent-ink)}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+code{background:var(--accent-soft);color:var(--accent-ink);padding:.08em .34em;border-radius:2px}
+ul,ol{margin:0 0 1.1rem;padding-left:1.15rem}
+li{margin:0 0 .35rem}
+li::marker{color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.6rem 0}
+.lede{font-size:1.06rem;color:var(--ink-2)}
+.small{font-size:.88rem;color:var(--ink-2)}
+
+/* ---------- hero ---------- */
+.hero{padding:5.5rem 0 3.2rem;border-bottom:1px solid var(--rule)}
+.kicker{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent-ink);margin-bottom:2.2rem
+}
+.hook{
+  font-family:"Instrument Serif",Georgia,serif;
+  font-size:clamp(2.1rem,7vw,4.3rem);line-height:1.02;letter-spacing:-.015em;
+  max-width:17ch;margin:0
+}
+.hook span{display:block;opacity:0}
+.hook .l1{animation:rise .5s .15s ease-out forwards}
+.hook .l2{animation:rise .5s 1.6s ease-out forwards}
+.hook .l3{animation:rise .5s 3s ease-out forwards}
+.hook .scar{display:inline;color:var(--accent);opacity:0;animation:cut .01s 3.42s forwards}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@keyframes cut{to{opacity:1}}
+.hero-meta{
+  margin-top:2.6rem;display:flex;flex-wrap:wrap;gap:.5rem 2.2rem;
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.72rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  opacity:0;animation:rise .6s 4.1s ease-out forwards
+}
+.hero-meta b{color:var(--ink);font-weight:500}
+.hero-note{
+  margin-top:1.5rem;font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:.72rem;color:var(--muted);opacity:0;animation:rise .6s 4.4s ease-out forwards
+}
+h1.doctitle{
+  font-family:"Archivo",sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink);margin-bottom:.4rem
+}
+
+/* ---------- components ---------- */
+.scroll{overflow-x:auto;margin:0 0 1.5rem;border-bottom:1px solid var(--rule-soft)}
+table{border-collapse:collapse;width:100%;font-size:.87rem;min-width:min(100%,460px)}
+th,td{
+  text-align:left;padding:.55rem .8rem .55rem 0;vertical-align:top;
+  border-bottom:1px solid var(--rule-soft)
+}
+th{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;font-size:.68rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--rule);padding-bottom:.45rem;white-space:nowrap
+}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500}
+.num{font-variant-numeric:tabular-nums}
+
+blockquote{
+  margin:1.6rem 0;padding:.15rem 0 .15rem 1.15rem;
+  border-left:2px solid var(--accent);color:var(--ink-2);font-size:.96rem
+}
+blockquote p:last-child{margin-bottom:0}
+blockquote strong{color:var(--ink)}
+
+.callout{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:1.05rem 1.15rem;margin:1.6rem 0;font-size:.94rem
+}
+.callout p:last-child{margin-bottom:0}
+.callout .tag{
+  display:block;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.64rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:.5rem
+}
+
+/* shot list */
+.shot{margin:1.5rem 0 2rem;border-top:1px solid var(--ink)}
+.row{
+  display:grid;grid-template-columns:5.4rem minmax(0,1fr);gap:0 1.1rem;
+  padding:.85rem 0;border-bottom:1px solid var(--rule-soft)
+}
+.row .tc{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.78rem;font-variant-numeric:tabular-nums;
+  color:var(--accent-ink);padding-top:.12rem;white-space:nowrap
+}
+.row .what{font-size:.92rem}
+.row .what p{margin:0 0 .4rem}
+.row .what p:last-child{margin:0}
+.row .lbl{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.63rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-right:.45rem
+}
+.row.beat{background:var(--shot)}
+.row.beat .what{color:var(--ink-2)}
+
+/* swatches */
+.sw{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem;margin:1.4rem 0 1.8rem}
+.sw div{border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.sw .chip{height:66px}
+.sw .meta{padding:.5rem .6rem;background:var(--surface)}
+.sw .nm{font-size:.84rem;font-weight:600}
+.sw .hx{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.7rem;color:var(--muted)}
+
+/* platform cards */
+.plats{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;margin:1.5rem 0 1.8rem}
+.plat{background:var(--ground);padding:1rem 1.1rem}
+.plat h5{
+  margin:0 0 .1rem;font-family:"Archivo",sans-serif;font-size:1rem;font-weight:600
+}
+.plat .role{
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink);margin-bottom:.5rem
+}
+.plat p{margin:0;font-size:.9rem;color:var(--ink-2)}
+
+/* checklist */
+.check{list-style:none;padding:0;margin:.6rem 0 1.4rem}
+.check li{display:flex;gap:.6rem;align-items:flex-start;margin:0;padding:.4rem 0;border-bottom:1px solid var(--rule-soft)}
+.check input{
+  appearance:none;-webkit-appearance:none;width:15px;height:15px;flex:none;margin-top:.25rem;
+  border:1px solid var(--muted);border-radius:2px;background:transparent;cursor:pointer
+}
+.check input:checked{background:var(--accent);border-color:var(--accent)}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.check span{font-size:.92rem}
+
+.pill{
+  display:inline-block;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.63rem;
+  letter-spacing:.12em;text-transform:uppercase;padding:.16rem .45rem;border-radius:2px;
+  background:var(--accent-soft);color:var(--accent-ink);margin-left:.4rem;vertical-align:.1em
+}
+.good{color:var(--ok);font-weight:600}
+.kill{color:var(--bad);font-weight:600}
+
+.sources{font-size:.87rem;color:var(--ink-2)}
+.sources h4{color:var(--ink)}
+.sources ul{list-style:none;padding:0}
+.sources li{padding-left:1rem;text-indent:-1rem}
+
+.end{
+  margin-top:4rem;padding-top:1.6rem;border-top:1px solid var(--ink);
+  font-family:"Instrument Serif",Georgia,serif;font-size:1.28rem;line-height:1.34;color:var(--ink)
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .hook span,.hook .scar,.hero-meta,.hero-note{opacity:1!important;transform:none!important}
+}
+</style>
+
+<div class="topbar"><div class="topbar-in">
+  <div class="mark"><b>Trasig men hel</b> · Manus</div>
+  <nav class="jump">
+    <a href="#andrat">Ändringar</a>
+    <a href="#data">Datan</a>
+    <a href="#reach">Reachen</a>
+    <a href="#design">Design</a>
+    <a href="#huvud">Huvudinlägget</a>
+    <a href="#inlagg">Alla inlägg</a>
+    <a href="#fem">5 dagar</a>
+    <a href="#capcut">CapCut</a>
+    <a href="#schema">Schema</a>
+    <a href="#betalt">Betalt</a>
+    <a href="#matning">Mätning</a>
+    <a href="#granser">Gränser</a>
+  </nav>
+</div></div>
+
+<div class="page">
+
+<header class="hero">
+  <h1 class="doctitle">Produktionsmanus · Lansering 29 aug – 7 sep 2026</h1>
+  <div class="kicker">Huvudinläggets hook</div>
+  <p class="hook">
+    <span class="l1">Du och din mamma minns inte samma barndom.</span>
+    <span class="l2">En av er minns fel.</span>
+    <span class="l3">Ingen av er <span class="scar">ljuger</span>.</span>
+  </p>
+  <div class="hero-meta">
+    <div>Skrivet <b>24 augusti 2026</b></div>
+    <div>Första inlägget om <b>5 dagar</b></div>
+    <div>Släpp <b>1 september</b></div>
+    <div>Underlag: <b>12 källor</b></div>
+  </div>
+  <p class="hero-note">Raderna ovan kommer in på 0,15 s / 1,6 s / 3,0 s. Accentordet klipps in hårt, utan toning.<br>Det är exakt så klippet ska redigeras — se Del 4.</p>
+</header>
+
+<section class="sec" id="andrat">
+  <div class="gut">Del 0</div>
+  <div class="body">
+    <h2>Vad jag ändrade, och varför</h2>
+    <p class="lede">Strategin är stark. Kärnidén — “vi säljer inte en podd, vi säljer ett obekvämt dilemma” — är bättre än vad de flesta svenska poddar går ut med. Sju saker höll den tillbaka.</p>
+
+    <h4>1 · Huvudinlägget öppnade med er, inte med lyssnaren</h4>
+    <p>Gamla hooken: <em>“Min mamma och jag minns samma historia helt olika.”</em> Det är en upplysning om två främlingar. 2026 års data är entydig: de hooks som konsekvent går bäst är <strong>motsägelsen</strong> och <strong>det självrelevanta påståendet</strong> — meningar som tvingar tittarens hjärna att lösa en konflikt om sitt eget liv. Ni hade redan den bättre meningen i dokumentet (“Du minns inte din barndom så bra som du tror”) — men ni använde den i ett teaserinlägg utan klickväg istället för i huvudannonsen.</p>
+
+    <h4>2 · Ni optimerade för visningar — plattformarna belönar sändningar</h4>
+    <p>Adam Mosseri har bekräftat att <strong>sends per reach</strong>, hur ofta någon skickar din Reel vidare i DM, är den enskilt tyngsta signalen för Reels 2026. TikTok viktar delningar cirka 3× högre än likes och höjde vikten på sparningar kraftigt under året. Praktiskt: varje inlägg måste designas med en namngiven mottagare i huvudet. Inte “vem gillar det här” utan “vem skickar du det här till klockan 23 en söndag”. Därför har varje inlägg nedan fått raden <strong>Vem skickas det till</strong>. Det är inte pynt — det är den viktigaste raden i tabellen.</p>
+
+    <h4>3 · Ni sprider er på tre plattformar och missar den fjärde som är gratis</h4>
+    <p>YouTube är en av Sveriges tre största poddplattformar och saknas helt i planen. Ni producerar redan 9:16-filer. Att lägga upp dem som Shorts kostar tre minuter per klipp.</p>
+
+    <h4>4 · Ni bränner er bästa dag på ert svagaste innehåll</h4>
+    <p>5 september är en lördag — TikToks starkaste veckodag. Där låg “Varför vi gjorde det”, kampanjens mjukaste inlägg, klockan 11:00. Lördagen ska bära er starkaste vinnare.</p>
+
+    <h4>5 · “Kommentarsfällan” låg nära en formulering som straffas</h4>
+    <p>Meta demoterar uttryckligen <em>engagement bait</em> — “kommentera JA om du håller med”-mönstret. TikTok skiljer däremot på äkta frågor, som är tillåtna och uppmuntrade, och fabricerad kontrovers, som inte är det. Er fråga är äkta. Men formuleringen måste vara omöjlig att besvara med ett ord, annars läses den som bait av både klassificeraren och publiken.</p>
+
+    <h4>6 · Designen var beskriven i ord, inte i värden</h4>
+    <p>“Svart bakgrund, vit text” är inte ett designsystem — det är samma mall som varannan TikTok. Del 3 ger hexkoder, typsnitt, exakta rörelsevärden och ljudnivåer. Skillnaden mellan “svart bakgrund” och det systemet är skillnaden mellan att se ut som en mall och att se ut som en dokumentär.</p>
+
+    <h4>7 · Ni saknade en tröskel för att döda något</h4>
+    <p>Planen sa “pausa tydliga förlorare” utan att definiera förlorare. Del 10 gör det, i procent och kronor.</p>
+  </div>
+</section>
+
+<section class="sec" id="data">
+  <div class="gut">Del 1</div>
+  <div class="body">
+    <h2>Vad datan säger om 2026</h2>
+    <p class="lede">Underlaget som allt nedan vilar på. Källor längst ner.</p>
+
+    <h3>Uppmärksamhetsfönstret</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Fakta</th><th>Siffra</th><th>Vad det betyder för er</th></tr></thead>
+      <tbody>
+        <tr><td>Hookfönster TikTok</td><td class="num"><strong>1,3 sek</strong></td><td>Texten måste finnas i <strong>första bildrutan</strong>, inte tona in</td></tr>
+        <tr><td>Hookfönster Reels</td><td class="num"><strong>2,1 sek</strong></td><td>Marginellt mer nåd, samma princip</td></tr>
+        <tr><td>Missad hook</td><td class="num">+89 % drop-off</td><td>Det finns ingen andra chans i klippet</td></tr>
+        <tr><td>Klarar 3 sek → ser 10 sek</td><td class="num">65 %</td><td>Hela slaget avgörs i sekund 1–3</td></tr>
+        <tr><td>Klarar 3 sek → ser 30 sek</td><td class="num">45 %</td><td>En stark hook bär även ett långt klipp</td></tr>
+        <tr><td>Hook rate-snitt (Meta)</td><td class="num">≈ 28 %</td><td>Under 20 % — kreativen är död, byt</td></tr>
+        <tr><td>Vanligaste haveriet</td><td class="num">30–50 % tapp sek 1→3</td><td>Orsakas nästan alltid av uppvärmning före hooken</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Vad som rankar</h3>
+    <p><strong>Instagram Reels 2026</strong>, bekräftat av Mosseri: watch time, <em>sends per reach</em>, likes per reach — i den ordningen. DM-delningar väger tyngst för att nå folk som inte följer er.</p>
+    <p><strong>TikTok 2026:</strong> watch time och completion rate först, därefter delningar (≈3× likes) och sparningar. Nytt i år: sökord i bildtexten viktas upp, completion rate justeras för videolängd så längre klipp inte straffas orättvist, och nischkonsekvens på kontonivå väger tyngre — konton som postar inom 3+ orelaterade ämnen ser omkring <strong>45 % lägre räckvidd</strong>. Distributionen sker i pooler: 100–500 tittare först, sedan 1 000–10 000, sedan uppåt.</p>
+    <blockquote><p><strong>Konsekvens:</strong> kontot får inte innehålla något annat än det här. Inga semesterbilder, inga orelaterade trender. Ett ämne — minne, familj, versioner av samma historia.</p></blockquote>
+
+    <h3>Längd</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Mål</th><th>Längd</th><th>Logik</th></tr></thead>
+      <tbody>
+        <tr><td>Viralitet TikTok</td><td class="num"><strong>21–38 sek</strong></td><td>Högst completion rate, mest FYP-distribution</td></tr>
+        <tr><td>Reels</td><td class="num"><strong>15–30 sek</strong></td><td>Skarpt fall i retention över 60 sek</td></tr>
+        <tr><td>Talking head / djupdyk</td><td class="num">60–90 sek</td><td>Bara när innehållet bär det</td></tr>
+      </tbody>
+    </table></div>
+    <p>Ert huvudinlägg låg på 30–45 sek. Vi låser det på <strong>30 sekunder</strong> — mitt i TikToks bästa band, under Reels tröskel.</p>
+
+    <h3>Ljudet är av</h3>
+    <p>70–85 % ser utan ljud. Texten bär budskapet. Undertexter på allt tal, utan undantag.</p>
+
+    <h3>Kinetiska undertexter har vänt</h3>
+    <p>Den snabba ord-för-ord-stilen på 200–240 ord/min läser som billig 2026. Rörelsen har gått mot <strong>2–4 ord per chunk som ligger kvar 600–900 millisekunder</strong>. Blandad gemen/versal med fetstil på nyckelordet slår VERSALER. Det passar er ton exakt — ni gör inte hype, ni gör obehag.</p>
+
+    <h3>Färg: mättnadströtthet</h3>
+    <p>Publiken har utvecklat en inbyggd annonsblockerare mot neon och hög mättnad — det läses som skräp och skrollas förbi. Kontrast slår färg: hög kontrast ger 20–40 % bättre klickfrekvens, men den effektivaste bakgrunden 2026 är <strong>mörkgrå eller djupt marinblå</strong>, inte skrikig färg, eftersom den får det lilla man faktiskt färgsätter att lysa. Er mörka estetik är alltså inte bara snygg — den är den rekommenderade riktningen.</p>
+
+    <h3>Sverige</h3>
+    <ul>
+      <li><strong>62 %</strong> av svenskarna har veckoräckvidd för poddar. Sverige har högst andel poddlyssnare av 54 undersökta länder (47 %).</li>
+      <li>Starkast tillväxt i gruppen <strong>45+</strong> (≈55 % penetration). Det är er mammas generation — och de delar i DM, inte i kommentarsfältet.</li>
+      <li><strong>52 %</strong> av poddlyssnare följer poddars egna sociala konton. Följare är inte fåfänga här, de är en distributionskanal.</li>
+      <li>Största poddplattformar: <strong>Spotify, Apple Podcasts, YouTube.</strong></li>
+    </ul>
+
+    <h3>Klick ut från plattformen</h3>
+    <p>TikTok-trafik från bio konverterar i snitt <strong>3,4 %</strong>. Instagram <strong>1,4 %</strong>. Länksidor med 3–7 länkar slår sidor med 10+. Över 95 % av bio-trafiken är mobil.</p>
+    <div class="callout">
+      <span class="tag">Viktigast på hela sidan</span>
+      <p>Att säga “länk i bio” mitt i en TikTok dödar watch time — och watch time är det som ger distributionen. <strong>CTA ligger sist, eller i bildtexten. Aldrig i mitten.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="reach">
+  <div class="gut">Del 2</div>
+  <div class="body">
+    <h2>Var reachen faktiskt blir störst</h2>
+    <p class="lede">Kort svar: TikTok ger räckvidden. Instagram ger klicket och trovärdigheten. Spotify Clips ger den interna upptäckten. YouTube Shorts är gratis och ni struntar i det.</p>
+
+    <div class="plats">
+      <div class="plat">
+        <h5>TikTok</h5>
+        <div class="role">Räckviddsmotorn · prioritet 1</div>
+        <p>För ett nystartat konto utan följare är det här den enda plattformen där ett klipp kan nå 50 000 personer på dag ett, eftersom For You-flödet är intressestyrt snarare än följarstyrt. Median engagement 4,25–5,5 % mot Instagrams 0,98–2,3 %. Bio-trafiken konverterar mer än dubbelt så bra. <strong>Allt publiceras här först.</strong></p>
+      </div>
+      <div class="plat">
+        <h5>Instagram</h5>
+        <div class="role">Konvertering och trovärdighet · prioritet 1</div>
+        <p>Större total annonsräckvidd (1,74 mdr mot 1,59 mdr) och cirka 5× fler medianvisningar per inlägg — men den siffran är delvis uppblåst av hur Instagram räknar visningar. Den verkliga styrkan är två saker: <strong>DM-delningen</strong>, tyngsta rankingsignalen 2026 och exakt det beteende ert innehåll utlöser, och <strong>Stories med länksticker</strong> — kampanjens enda yta där ett klick är ett tryck bort.</p>
+      </div>
+      <div class="plat">
+        <h5>Spotify Clips</h5>
+        <div class="role">Den interna motorn · prioritet 1</div>
+        <p>Ett vertikalt klipp under 90 sekunder kan visas på Home, i poddflödet, i Browse och på showsidan. Enda distributionen i hela kampanjen där tittaren redan står i appen där lyssningen ska ske. Konverteringsavståndet är noll. <strong>Högst avkastning per nedlagd minut i hela planen.</strong></p>
+      </div>
+      <div class="plat">
+        <h5>YouTube Shorts</h5>
+        <div class="role">Det gratis benet ni hoppade över · prioritet 2</div>
+        <p>YouTube är topp tre bland poddplattformar i Sverige. Ni exporterar redan 1080×1920. Tre minuter per klipp, noll kronor, och Shorts har längre svans än TikTok — ett klipp kan börja gå tre veckor efter publicering. Förvänta er ingenting första veckan.</p>
+      </div>
+      <div class="plat">
+        <h5>Facebook</h5>
+        <div class="role">Återanvändning · prioritet 3</div>
+        <p>Oförändrat: korspostera vinnare, ingen egen produktion. Er 45+-publik finns här, och det är den grupp som växer snabbast i svensk poddlyssning.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">Fällan som kostar er räckvidd gratis</span>
+      <p><strong>Ladda aldrig ner en video från TikTok och upp på Instagram.</strong> Vattenstämpeln gör att klippet demoteras. Exportera ren fil från CapCut och ladda upp den <em>nativt</em> på varje plattform, en gång per plattform.</p>
+    </div>
+
+    <h4>Standardordning för varje video</h4>
+    <ol>
+      <li><strong>TikTok</strong> först — fångar kvällspiken, ger er data snabbast</li>
+      <li><strong>Instagram Reels</strong> 45–90 minuter senare</li>
+      <li><strong>YouTube Shorts</strong> samma kväll, när som helst</li>
+      <li><strong>Instagram Stories</strong> som “ny video uppe” efter 2 timmar</li>
+      <li><strong>Facebook</strong> endast om klippet presterar</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="design">
+  <div class="gut">Del 3</div>
+  <div class="body">
+    <h2>Designsystemet</h2>
+    <p class="lede">Här slutar “svart bakgrund, vit text”. Använd exakt dessa värden på allt.</p>
+
+    <h3>Färg</h3>
+    <div class="sw">
+      <div><div class="chip" style="background:#0C0C0E"></div><div class="meta"><div class="nm">Kol</div><div class="hx">#0C0C0E · bakgrund</div></div></div>
+      <div><div class="chip" style="background:#F2EEE6"></div><div class="meta"><div class="nm">Ben</div><div class="hx">#F2EEE6 · all primärtext</div></div></div>
+      <div><div class="chip" style="background:#8A867E"></div><div class="meta"><div class="nm">Damm</div><div class="hx">#8A867E · sekundärtext</div></div></div>
+      <div><div class="chip" style="background:#C0472B"></div><div class="meta"><div class="nm">Ärr</div><div class="hx">#C0472B · ett ord per video</div></div></div>
+    </div>
+
+    <p><strong>Varför inte <code>#000000</code> och <code>#FFFFFF</code>:</strong> ren svart mot ren vit är exakt vad varje standardmall levererar, och stora typsnitt i den kombinationen skimrar obehagligt på en telefonskärm. Det varma benvita mot det svagt kalla kolsvarta gör två saker samtidigt — det läser som film istället för som undertextmall, och det skapar en temperaturkonflikt i bilden som speglar poddens innehåll. Kontrastförhållandet ligger ändå kring 17:1.</p>
+
+    <div class="callout">
+      <span class="tag">Ärr-regeln</span>
+      <p>Accentfärgen används på <strong>ett enda ord</strong> i hela klippet, och det ordet ska vara den mening som gör ont. <em>ljuger</em>. <em>fel</em>. <em>arg</em>. Färgar ni tre ord förlorar alla tre sin kraft. Färgar ni noll ord blir klippet en presentation.</p>
+    </div>
+
+    <h3>Typsnitt</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Roll</th><th>Typsnitt</th><th>Varför</th></tr></thead>
+      <tbody>
+        <tr><td>Hooks och påståenden</td><td>Hög-kontrast serif — <em>Playfair Display</em>, <em>Instrument Serif</em>, eller <em>Georgia</em> som reserv</td><td>En serif på nästan svart läser omedelbart som dokumentär. Det är den enskilt starkaste visuella skillnaden mot alla andra poddklipp i flödet, som utan undantag kör tung grotesk</td></tr>
+        <tr><td>Undertexter</td><td><em>Inter</em> Medium eller <em>Roboto</em> Medium</td><td>Neutral, läsbar i rörelse, korrekt å ä ö</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>Aldrig fler än två typsnitt i hela kampanjen.</li>
+      <li><strong>Aldrig VERSALER</strong> på hela meningar. Blandad gemen/versal med fetstil på nyckelordet läser som en person; versaler läser som en skylt.</li>
+      <li>Ingen skugga, ingen kontur, ingen platta bakom texten. Ni har mörk bakgrund — texten behöver inget skydd. Skuggor är exakt vad mallarna gör.</li>
+      <li>Hookmeningen tar <strong>2–3 rader</strong> och fyller ungefär 70 % av bildbredden. Radavstånd 1.2.</li>
+      <li>Kontrollera alltid å ä ö manuellt. CapCuts automatiska undertexter felstavar svenska egennamn nästan varje gång.</li>
+    </ul>
+
+    <h3>Säkra zoner</h3>
+    <p>Håll all text mellan <strong>15 % och 72 % av bildhöjden.</strong> TikTok äter cirka 140 px i högerkanten och 250 px i nederkanten; Instagram cirka 120 px respektive 250 px. Undertexter placeras på <strong>58–62 % av bildhöjden</strong> — under ansiktet, ovanför gränssnittet.</p>
+
+    <h3>Rörelse</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Element</th><th>Värde</th><th>Kommentar</th></tr></thead>
+      <tbody>
+        <tr><td>Push-in</td><td class="num">100 % → 106 %, ease-out</td><td>Aldrig snabbare. Aldrig på hookbilden — den ska stå helt stilla</td></tr>
+        <tr><td>Textinträde</td><td class="num">200 ms opacitet + 8 px uppåt</td><td>Ingen studs, ingen skrivmaskin, ingen rotation</td></tr>
+        <tr><td>Accentordet</td><td class="num">Hårt klipp, noll övergång</td><td>En tvärskarv läser som våld. En toning läser som lugn. Ni vill ha våld exakt en gång</td></tr>
+        <tr><td>Svarta bildrutor mellan meningar</td><td class="num">4–6 bildrutor</td><td>Gratis mönsterbrott. Nollställer uppmärksamheten mitt i klippet</td></tr>
+        <tr><td>Grain</td><td class="num">10–15 % opacitet</td><td>Får telefonfilm att se avsiktlig ut istället för slarvig</td></tr>
+        <tr><td>Vignett</td><td class="num">Mycket svag</td><td>Drar ögat mot mitten</td></tr>
+        <tr><td>Bildfrekvens</td><td class="num">30 fps</td><td>24 fps ser filmiskt ut men hackar på panoreringar i appuppspelning</td></tr>
+        <tr><td>Upplösning</td><td class="num">1080×1920 min</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <blockquote><p><strong>Stillhetsregeln.</strong> Allt annat i flödet rör sig. Det gör att <em>frånvaro</em> av rörelse är ett mönsterbrott. Er hookbild ska stå helt stilla i 1,4 sekunder. Det är kontraintuitivt och det fungerar.</p></blockquote>
+
+    <h3>Så animerar ni bilder — särskilt gamla familjefoton</h3>
+    <p>Tre metoder, i fallande ordning av vad jag rekommenderar.</p>
+
+    <h4>1 · Filma fotot istället för att animera det</h4>
+    <p>Lägg fotot på ett köksbord, tänd en lampa från sidan, filma med telefonen medan en hand rör sig in i bild och vänder på det eller stryker över det. Trettio sekunders arbete. Resultatet slår varje digital animation, eftersom det ni säljer är <em>dokumentär</em> — och en hand i bild bevisar att någon var där. Det är det enda tillfället i hela kampanjen där ni får en autenticitetsvinst gratis. Ta den.</p>
+
+    <h4>2 · Digital rörelse i CapCut, om ni måste</h4>
+    <p>Push-in 100 % → 105 % över fyra sekunder, plus <strong>±3 px slumpmässig positionsförskjutning</strong> med två eller tre nyckelbildrutor. Den lilla skakningen gör att en stillbild känns hållen istället för skannad. Utan den ser det ut som en PowerPoint.</p>
+
+    <h4>3 · Oskärpa som löser upp sig</h4>
+    <p>Fotot börjar på cirka 40 % oskärpa och blir skarpt över tre sekunder — “ett minne som kommer i fokus”. Vackert grepp, och slitet efter tre gånger. <strong>Använd det exakt en gång i hela kampanjen</strong>, i inlägg 11.</p>
+
+    <div class="callout">
+      <span class="tag">Om AI-animation av foton</span>
+      <p>Verktygen finns och de är bra nu. De är också fel för er. I det ögonblick en tittare misstänker att en familjebild är AI-genererad tappar hela kampanjen sitt enda verkliga argument — att det här faktiskt hände. Använd riktiga bilder, eller inga bilder.</p>
+    </div>
+
+    <p><strong>Vad ni aldrig gör:</strong> rörelse på allting. Om varje klipp rör sig blir ingen rörelse betydelsefull. En rörelse per video.</p>
+
+    <h3>Ljud</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Element</th><th>Värde</th><th>Varför</th></tr></thead>
+      <tbody>
+        <tr><td>Rumston under allt</td><td class="num">ca −40 dB</td><td>Ren digital tystnad läser som trasigt ljud och folk swipar. Rumston läser som <em>rum</em></td></tr>
+        <tr><td>Röst</td><td class="num">normalisera, topp −3 dB</td><td></td></tr>
+        <tr><td>Musik under nyckelmening</td><td class="num">Ingen</td><td></td></tr>
+        <tr><td>Bär känslan i</td><td class="num">200–800 Hz</td><td>En telefonhögtalare återger inte 40–60 Hz. Sub-basen ni hör i hörlurar försvinner helt för majoriteten av publiken</td></tr>
+        <tr><td>Brusreducering</td><td class="num">Sparsamt</td><td>Överdriven brusreducering låter robotiskt och förstör exakt den autenticitet ni bygger på</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout">
+      <span class="tag">Läs innan ni väljer låt</span>
+      <p>Ska ett klipp kunna köras som betald annons måste det ha <strong>originalljud eller rättighetsklarerad musik</strong>. Trendlåtar från plattformarnas vanliga bibliotek går inte att annonsera med och kan tystas i efterhand. Alla kandidater för betald push — inlägg 6, 7, 9 och 13 — körs på originalröst. Punkt.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="huvud">
+  <div class="gut">Del 4</div>
+  <div class="body">
+    <h2>Huvudinlägget, bildruta för bildruta</h2>
+    <p class="lede"><strong>“Ingen av er ljuger”</strong> · 30 sekunder · publiceras 1 september exakt vid släpp. Det här är kampanjens viktigaste trettio sekunder. Allt annat i planen finns för att få folk hit — och det här klippet finns för att få folk till Spotify.</p>
+
+    <h3>Hooken</h3>
+    <p class="small">Gammal: <em>“Min mamma och jag minns samma historia helt olika.”</em></p>
+    <blockquote>
+      <p><strong>“Du och din mamma minns inte samma barndom.”</strong><br>
+      <strong>“En av er minns fel.”</strong><br>
+      <strong>“Ingen av er ljuger.”</strong></p>
+    </blockquote>
+    <p>Tre meningar, cirka fyra sekunder. Den första gör påståendet om <strong>tittaren</strong>. Den andra skapar en anklagelse. Den tredje river undan den — och lämnar en motsägelse som hjärnan inte kan lämna olöst. Det är exakt den mekanik datan pekar ut som mest tillförlitligt viral 2026, och den är dessutom sann, vilket den billiga varianten av samma grepp aldrig är.</p>
+
+    <h3>Manus</h3>
+    <div class="shot">
+      <div class="row"><div class="tc">0,0–1,4</div><div class="what">
+        <p><span class="lbl">Bild</span>Extrem närbild. Halvt ansikte i skugga, ur fokus — eller ett fotografi som ligger med framsidan nedåt på ett bord. <strong>Absolut ingen rörelse.</strong></p>
+        <p><span class="lbl">Text</span><strong>“Du och din mamma minns inte samma barndom.”</strong></p>
+        <p><span class="lbl">Ljud</span>Rumston. Ett svagt andetag.</p>
+        <p><span class="lbl">Teknik</span>Texten finns i <strong>bildruta 1</strong>. Ingen intoning. Detta är också omslagsbilden.</p>
+      </div></div>
+      <div class="row beat"><div class="tc">1,4–1,6</div><div class="what"><p>Svart, 5 bildrutor. Rumston fortsätter.</p></div></div>
+      <div class="row"><div class="tc">1,6–2,8</div><div class="what">
+        <p><span class="lbl">Bild</span>Samma bild, nu 102 %</p>
+        <p><span class="lbl">Text</span><strong>“En av er minns fel.”</strong> · fade 200 ms</p>
+      </div></div>
+      <div class="row beat"><div class="tc">2,8–3,0</div><div class="what"><p>Svart, 5 bildrutor.</p></div></div>
+      <div class="row"><div class="tc">3,0–4,4</div><div class="what">
+        <p><span class="lbl">Bild</span>Samma bild, 104 %</p>
+        <p><span class="lbl">Text</span><strong>“Ingen av er <span style="color:var(--accent)">ljuger</span>.”</strong> — accentordet <strong>hårt in</strong>, ingen toning</p>
+      </div></div>
+      <div class="row"><div class="tc">4,4–6,0</div><div class="what">
+        <p><span class="lbl">Bild</span>Två stolar mitt emot varandra, eller mikrofonen. Stilla.</p>
+        <p><span class="lbl">Text</span>“Så vi spelade in det.” i Damm</p>
+        <p><span class="lbl">Ljud</span>Stolskrap. Liten push-in börjar.</p>
+      </div></div>
+      <div class="row"><div class="tc">6,0–10,0</div><div class="what">
+        <p><span class="lbl">Ljud</span><strong>ÄKTA LJUD 1</strong> — mamma, lugn. Något som låter harmlöst.</p>
+        <p><span class="lbl">Text</span>Ord-för-ord-undertext, 2–4 ord per chunk, 600–900 ms</p>
+      </div></div>
+      <div class="row"><div class="tc">10,0–13,5</div><div class="what">
+        <p><span class="lbl">Ljud</span><strong>ÄKTA LJUD 2</strong> — du. Frågan som ändrar rummet. Ingen musik.</p>
+      </div></div>
+      <div class="row"><div class="tc">13,5–17,0</div><div class="what">
+        <p><span class="lbl">Ljud</span><strong>ÄKTA LJUD 3</strong> — mamma, kortare, annan ton. <em>“Så minns inte jag det.”</em></p>
+      </div></div>
+      <div class="row beat"><div class="tc">17,0–18,2</div><div class="what">
+        <p><strong>Helt svart. Ingen text. Bara rumston.</strong></p>
+        <p>1,2 sekunders ren tystnad — det mest ovanliga ni kan göra i ett flöde 2026.</p>
+      </div></div>
+      <div class="row"><div class="tc">18,2–23,5</div><div class="what">
+        <p><span class="lbl">Bild</span>Svart → långsam intoning av omslaget</p>
+        <p><span class="lbl">Text</span>“Resten av det samtalet ligger uppe nu.”</p>
+        <p><span class="lbl">Ljud</span>Fjärde ljudfragmentet, <strong>avklippt mitt i en mening</strong>. Klipp mitt i ett ord, inte efter det.</p>
+      </div></div>
+      <div class="row"><div class="tc">23,5–26,5</div><div class="what">
+        <p><span class="lbl">Bild</span>Omslaget, fullt synligt</p>
+        <p><span class="lbl">Text</span><strong>“Trasig men hel”</strong> / “Del 1” i Damm</p>
+        <p><span class="lbl">Ljud</span>Mycket låg puls får komma in — först nu.</p>
+      </div></div>
+      <div class="row"><div class="tc">26,5–30,0</div><div class="what">
+        <p><span class="lbl">Text</span><strong>“Sök: Trasig men hel”</strong> + Spotify-symbol</p>
+        <p><span class="lbl">Teknik</span>Rumston fortsätter till sista bildrutan. Ljudet får aldrig ta slut före bilden — tyst slut dödar completion.</p>
+      </div></div>
+    </div>
+
+    <h3>Varför “Sök: Trasig men hel” och inte “länk i bio”</h3>
+    <p>Att säga “länk i bio” mitt i klippet kostar watch time, och watch time är det som ger distributionen. Att skriva ett <strong>sökord</strong> på skärmen i slutet gör tre saker istället: det kostar ingen watch time, det fungerar på varje plattform samtidigt, och en sökning i Spotify registreras i Spotifys egna discovery-analytics så att ni faktiskt kan se att den kom. Länken ligger i bildtext, bio och story — men skärmtexten säger <em>sök</em>.</p>
+
+    <h3>Bildtext, TikTok</h3>
+    <blockquote><p>Jag frågade min mamma vad hon minns från min barndom. Vi minns inte samma sak. Ingen av oss ljuger — och det är det som är obehagligt. Hela samtalet ligger uppe nu: sök <strong>Trasig men hel</strong> på Spotify.</p>
+    <p class="mono">#barndom #familj #mamma #svenskpodd #uppväxt</p></blockquote>
+    <p>TikTok viktar upp <strong>sökord i bildtexten</strong> 2026. Orden <em>barndom, mamma, familj, minne, uppväxt, samtal, podd</em> ska förekomma naturligt i löpande text — inte bara som hashtags. Tre till fem hashtags räcker; fler ger ingenting.</p>
+
+    <h3>Bildtext, Instagram</h3>
+    <p>Samma första tre meningar. Lägg till på egen rad: <strong>“Länk i bio → Spotify.”</strong></p>
+
+    <h3>Fäst den här kommentaren själv, direkt vid publicering</h3>
+    <blockquote><p>Om du lyssnar: säg efteråt vem du trodde på. Jag vet fortfarande inte.</p></blockquote>
+    <p>Två skäl. Den ger tittaren en anledning att komma tillbaka till klippet, vilket ger en andra distributionsvåg. Och den gör er ärliga istället för säljande — vilket är hela poddens premiss.</p>
+
+    <h3>Tre varianter att testa mot varandra</h3>
+    <p>Producera alla tre. Publicera A som huvudinlägg. B och C går ut som separata inlägg dag 2 och 3, och den som vinner får den betalda budgeten.</p>
+    <h4>A · Anklagelsen</h4>
+    <p>Manuset ovan. Text-först, mörkt, kontrollerat.</p>
+    <h4>B · Kall öppning</h4>
+    <p>Ingen text de första två sekunderna. Klippet börjar mitt i mammans röst, mitt i en mening, som om telefonen råkade spela in. Text kommer först vid 2,0 s: <em>“Det här är min mamma. Vi pratar om min barndom.”</em> Känns mest native av de tre och har högst tak — men också högst risk, eftersom ljudlösa tittare inte får någon hook alls. Lägg därför en enda liten rad undertext från bildruta 1.</p>
+    <h4>C · Telefonen i handen</h4>
+    <p>Kristoffer, en tagning, ingen klippning, ingen grafik förrän sista sekunden. <em>“Jag satte min mamma framför en mikrofon och frågade vad hon minns från min barndom. Jag trodde att jag skulle känna igen mig. Jag gjorde inte det.”</em> Den variant som ser minst ut som marknadsföring — och native-material av det här slaget kostar 30–40 % lägre CPM när det körs betalt.</p>
+  </div>
+</section>
+
+<section class="sec" id="inlagg">
+  <div class="gut">Del 5</div>
+  <div class="body">
+    <h2>Alla inlägg, förfinade</h2>
+    <p class="lede">Formatet är detsamma överallt: <strong>Hook → Friktion → Bevis → Cliffhanger → En handling.</strong> Raden <em>Vem skickas det till</em> är den viktigaste — den är designad mot Instagrams tyngsta rankingsignal.</p>
+
+    <h3>29 augusti · lördag — “Något stämmer inte”</h3>
+    <blockquote><p>Lördag är TikToks starkaste veckodag. Ni öppnar kampanjen på rätt dag. Publicera <strong>18:30</strong>, inte 19:30.</p></blockquote>
+
+    <h4>Inlägg 1 · Minnet <span class="pill">14 sek · 18:30</span></h4>
+    <ul>
+      <li><strong>Bild:</strong> extrem närbild, neutralt öga eller mörk siluett. Ingen studio. Ingen rörelse.</li>
+      <li><strong>Text:</strong> 0–2 s “Du minns inte din barndom så bra som du tror.” → 3–7 s “Problemet börjar när någon annan minns den också.” → 8–12 s “Trasig men hel. 1 september.”</li>
+      <li><strong>Ljud:</strong> låg ambient. Hellre obehaglig än sentimental.</li>
+      <li><strong>Design:</strong> Kol/Ben. Accent på <em>någon annan</em>. Långsam push-in. Ljudstopp precis före poddnamnet.</li>
+      <li><strong>CTA:</strong> ingen klick-CTA. Bara “1 september.”</li>
+      <li><strong>Vem skickas det till:</strong> ditt syskon. Skriv bildtexten så att det blir uppenbart — <em>“Skicka det här till någon som var med.”</em></li>
+    </ul>
+
+    <h4>Story · Välj sida <span class="pill">21:00</span></h4>
+    <ul>
+      <li>Story 1 helt Kol: “Om två personer minns samma barndom helt olika…”</li>
+      <li>Story 2 delad i två halvor, poll: <strong>“Vem minns oftast rätt?”</strong> → <em>Barnet</em> / <em>Föräldern</em></li>
+      <li>Pollen är hela poängen. Spara resultatet — det blir innehåll den 4 september.</li>
+    </ul>
+
+    <h3>30 augusti · söndag — “Vem ljuger?”</h3>
+    <h4>Inlägg 2 · Vem ljuger? <span class="pill">18 sek · TikTok 18:30 / Reels 19:15</span></h4>
+    <ul>
+      <li><strong>Bild:</strong> två tomma stolar mitt emot varandra. Kameran helt stilla.</li>
+      <li><strong>Text:</strong> “Två människor. Samma historia.” → “Två helt olika versioner.” → “Så vem ljuger?” → <em>(1 s svart)</em> → “Kanske ingen.”</li>
+      <li><strong>Design:</strong> varje mening står ensam. Accent på <em>ljuger</em>. En hel sekund svart före “Kanske ingen” — klippets viktigaste redigeringsbeslut.</li>
+      <li><strong>Bildtext:</strong> “Kan två motsatta minnen båda vara sanna?”</li>
+      <li><strong>Vem skickas det till:</strong> den i familjen man bråkar med.</li>
+    </ul>
+
+    <h4>Inlägg 3 · Karusellen <span class="pill">5 bilder 4:5 · 21:00</span></h4>
+    <ul>
+      <li>1: “Du har en version av din barndom.” → 2: “Din mamma har en annan.” → 3: “Du är säker på att du minns rätt.” → 4: “Det är hon också.” → 5: <strong>“Vem av er skulle du våga spela in?”</strong></li>
+      <li><strong>Design:</strong> Kol-bakgrund, Ben-text, stor serif. Max 8–10 ord per bild. Accent endast på sista bildens <em>våga</em>.</li>
+      <li>Karuseller sparas, och sparningar väger tungt 2026. Bildtext: <em>“Spara den här och läs den igen efter att du pratat med dina föräldrar.”</em></li>
+    </ul>
+
+    <h3>31 augusti · måndag — “Imorgon får ni höra det”</h3>
+    <h4>Inlägg 4 · Den riktiga rösten <span class="pill">22 sek · 12:00</span></h4>
+    <ul>
+      <li><strong>Ljud:</strong> ett <strong>äkta</strong> utdrag där en av er öppnar en konflikt utan att avslöja svaret. Originalrösten dominerar. Ingen musik under den viktigaste meningen.</li>
+      <li><strong>Text:</strong> överst ett ordagrant kort citat ur ljudet. Efter klippet: “Det här samtalet skulle vi kanske aldrig ha spelat in.” → “Imorgon.”</li>
+      <li><strong>Teknik:</strong> texta ord för ord. Klipp <strong>exakt före</strong> svaret.</li>
+      <li><strong>Vem skickas det till:</strong> den som alltid säger “så var det inte”.</li>
+    </ul>
+
+    <h4>Inlägg 5 · Nedräkning <span class="pill">3 stories · kväll</span></h4>
+    <p>1: “Imorgon hör du båda versionerna.” 2: “Inte en intervju. Ett samtal som går sönder.” 3: omslaget + <strong>countdown-sticker till exakt släpptid</strong>. Stickern är inte dekoration — den skickar en notis till alla som aktiverar den, exakt när avsnittet går live. Gratis push-notiser till er varmaste publik.</p>
+
+    <h3>1 september · tisdag — LANSERING</h3>
+    <h4>Inlägg 6 · Huvudtrailern <span class="pill">30 sek · exakt vid släpp</span></h4>
+    <p>Fullständigt manus i <a href="#huvud">Del 4</a>. Publiceras även som <strong>Spotify Clip</strong>. Betald push startar här.</p>
+
+    <h4>Inlägg 7 · Attacken <span class="pill">20 sek · 15:00</span></h4>
+    <ul>
+      <li><strong>Bild:</strong> Kristoffer rakt in i kameran. Mobilkänsla. Ingen studio, ingen ljussättning, ingen grafik.</li>
+      <li><strong>Manus:</strong> <em>“Du som är helt säker på att du minns exakt hur din barndom var — jag tror att du hade blivit obekväm om du satte din mamma framför en mikrofon och frågade henne. Jag gjorde det. Nu ligger samtalet uppe.”</em></li>
+      <li><strong>Design:</strong> ingen musik, bara röst. En eller två tagningar max. Undertexter, inget annat. Sista bildrutan: “Sök: Trasig men hel.”</li>
+      <li>Kampanjens billigaste och sannolikt näst bästa creative. Native-material av det här slaget kostar 30–40 % lägre CPM betalt.</li>
+    </ul>
+
+    <h4>Inlägg 8 · Frågan <span class="pill">Stories + TikTok · 20:30</span></h4>
+    <ul>
+      <li><strong>Fråga, omskriven:</strong> <em>“Vad är värst — att en förälder inte minns, eller att den minns något helt annat än du?”</em></li>
+      <li>Gamla formuleringen låg nära ett bait-mönster. Den här går inte att besvara med ett ord, och den är en äkta fråga — vilket är exakt gränsen plattformarna drar.</li>
+      <li><strong>Skriv aldrig:</strong> “Kommentera JA om du håller med”, “Enig? Kommentera!”, eller något som ber om en specifik reaktion. Det demoteras.</li>
+      <li>TikTok-slutbild: “Svara innan du lyssnar. Svara igen efteråt.” Kommentarerna här är råmaterial för inlägg 10 och 12.</li>
+    </ul>
+
+    <h3>2 september · onsdag — “Efter första lyssningen”</h3>
+    <h4>Inlägg 9 · Det hårdaste ögonblicket <span class="pill">28 sek · 12:00</span></h4>
+    <ul>
+      <li><strong>Ljud:</strong> det mest emotionellt laddade ögonblicket som kan stå för sig självt <strong>utan att förvränga sammanhanget</strong>.</li>
+      <li><strong>Text:</strong> första raden är själva konflikten — inte poddnamnet. Slut: “Det här är bara en del av samtalet.”</li>
+      <li><strong>Teknik:</strong> klipp på reaktionen eller tystnaden. Aldrig på en förklarande upplösning. Musik först <em>efter</em> repliken.</li>
+      <li><strong>Målgrupp:</strong> de som såg lanseringen men inte klickade. Kör retargeting här.</li>
+    </ul>
+
+    <h4>Inlägg 10 · Svar på kommentar <span class="pill">20 sek · 18:00</span></h4>
+    <p>Välj en <strong>verklig</strong> kommentar, helst i stil med <em>“men någon måste väl minnas fel?”</em> Svara: <em>“Precis. Och det är där det blir jobbigt — för vi kom aldrig fram till vem.”</em> Reply-videos får native distribution och signalerar till TikTok att kontot driver ett samtal, inte en kampanj. Gör det här varje gång ni får en bra kommentar, inte bara en gång.</p>
+
+    <h3>3 september · torsdag — “Kan man älska någon och ändå vara arg?”</h3>
+    <h4>Inlägg 11 · Igenkänningen <span class="pill">18 sek · 19:00</span></h4>
+    <ul>
+      <li><strong>Bild:</strong> gamla familjebilder — <strong>filmade på ett bord med en hand i bild</strong>. Eller nyinspelade detaljer: händer, tom korridor, köksbord.</li>
+      <li>Här, och bara här, får ni använda oskärpa-som-löser-upp-sig.</li>
+      <li><strong>Text:</strong> “Kan man älska sin mamma och fortfarande vara arg på henne?” → “Kan hon älska dig och ändå ha gjort dig illa?” → “Det är ungefär där vårt samtal börjar.”</li>
+      <li><strong>Design:</strong> långsamt, rent, låg piano/ambient — rättighetsklarerad. Accent på <em>arg</em>.</li>
+      <li><strong>Vem skickas det till:</strong> kampanjens mest delningsbara inlägg. Formulera bildtexten som en uppmaning att skicka, inte att kommentera.</li>
+      <li><strong>Integritet:</strong> inga igenkännbara bilder på privatpersoner som inte gett sitt uttryckliga ja.</li>
+    </ul>
+
+    <h3>4 september · fredag — “Det publiken inte kan enas om”</h3>
+    <h4>Inlägg 12 · 50/50 <span class="pill">5 bilder · 18:30</span></h4>
+    <p>1: “Ni hörde samma samtal.” → 2–4: tre korta, <strong>verkliga</strong>, motsatta reaktioner från era kommentarsfält → 5: “Och ni hörde tre olika saker.” Lägg in resultatet från pollen den 29 augusti om det blev jämnt. Ett 50/50-resultat är kampanjens bästa sociala bevis, och det är gratis. <strong>Endast verkliga kommentarer.</strong> Anonymisera vid behov.</p>
+
+    <h3>5 september · lördag — den starkaste dagen</h3>
+    <blockquote><p><strong>Ändring mot ursprungsplanen.</strong> Här låg “Varför vi gjorde det” — kampanjens mjukaste inlägg — klockan 11:00. Lördag är TikToks starkaste dag och ska bära er starkaste creative.</p></blockquote>
+    <h4>Inlägg 13 · Vinnaren, version B <span class="pill">18:30</span></h4>
+    <ul>
+      <li>Ta veckans mest presterande klipp och gör om det med <strong>ny öppningsmening och ny första bildruta</strong>. Behåll formatet, byt hook. Detta är inte en repost.</li>
+      <li>Om “Vem ljuger?” vann: testa <em>“Om din mamma säger att det aldrig hände — ändrar det ditt minne?”</em></li>
+      <li>Om talking head vann: öppna med den starkaste publikkommentaren, uppläst.</li>
+      <li><strong>Flytta huvuddelen av den betalda budgeten hit.</strong></li>
+    </ul>
+
+    <h3>6 september · söndag — förtroende och spridning</h3>
+    <h4>Inlägg 14 · Varför vi gjorde det <span class="pill">40 sek · 11:00</span></h4>
+    <p>Flyttad hit från 5 september. Kristoffer i vardaglig miljö, ingen dramatisk ljussättning, få klipp. <strong>Kärna:</strong> <em>“Det här gjordes inte för att vinna över min mamma. Det gjordes för att se vad som händer när två människor slutar berätta sin version var för sig och faktiskt sätter sig mitt emot varandra.”</em> Efter en vecka av hårda hooks behöver kampanjen det här. Det konverterar skeptikerna och skyddar kontot från att klassas som ren provokation.</p>
+
+    <h4>Inlägg 15 · Frågan du ska ställa hemma <span class="pill">25 sek · 18:00</span></h4>
+    <ul>
+      <li><strong>Hook:</strong> <em>“Ställ den här frågan till din mamma eller pappa ikväll: vilken händelse från min barndom tror du att vi minns helt olika? Sedan håller du käften och lyssnar.”</em></li>
+      <li>Slut: “Det var ungefär så Trasig men hel började.”</li>
+      <li><strong>CTA:</strong> <em>“Skicka den här till någon som borde ställa frågan.”</em></li>
+      <li>Kampanjens enda inlägg vars hela syfte är DM-delning — den tyngsta rankingsignalen på Instagram 2026. Kan mycket väl bli veckans mest spridda klipp. Se till att poddnamnet finns i sista bildrutan, för det här klippet kommer ses av folk som aldrig sett något annat från er.</li>
+    </ul>
+
+    <h3>7 september · måndag — vecka ett stängs</h3>
+    <p>Ingen ny produktion. Sammanställ loggen, utse vinnaren, flytta all betald budget dit, pausa resten, och skriv nästa veckas fem hooks utifrån vad datan sa — inte utifrån vad ni tyckte var finast.</p>
+  </div>
+</section>
+
+<section class="sec" id="fem">
+  <div class="gut">Del 6</div>
+  <div class="body">
+    <h2>De fem dagarna innan</h2>
+    <p class="lede">24–28 augusti. Bocka av direkt på sidan — rutorna sparas i den här webbläsaren.</p>
+
+    <h3>Måndag 24 augusti · råmaterialet</h3>
+    <ul class="check" data-k="d24">
+      <li><input type="checkbox"><span>Lyssna igenom hela avsnittet med papper och penna. <strong>Tidsstämpla tio ögonblick.</strong> Ni behöver tre — men ni måste välja bland tio.</span></li>
+      <li><input type="checkbox"><span>Märk varje ögonblick: <em>konflikt</em>, <em>sårbarhet</em> eller <em>tystnad</em>. Minst ett av varje.</span></li>
+      <li><input type="checkbox"><span>Testa varje kandidat: <strong>fungerar det här för någon som inte hört en sekund av podden?</strong> Om nej — stryk.</span></li>
+      <li><input type="checkbox"><span>Skapa/rensa konton. Bio på TikTok och Instagram: en rad om kärnan + plats för Spotify-länken.</span></li>
+      <li><input type="checkbox"><span>Sätt upp länkhubben. <strong>3–7 länkar, inte fler.</strong> Spotify överst och störst.</span></li>
+    </ul>
+
+    <h3>Tisdag 25 augusti · filma allt talking head på en gång</h3>
+    <ul class="check" data-k="d25">
+      <li><input type="checkbox"><span>En session, 40 minuter: allt material till inlägg 7, 14 och 15 plus variant C av trailern.</span></li>
+      <li><input type="checkbox"><span>Telefonen i ögonhöjd, fönster framför dig — inte bakom. Ingen studio. Ingen ringlampa.</span></li>
+      <li><input type="checkbox"><span>1080p, 30 fps. Kontrollera att ljudet inte klipper.</span></li>
+      <li><input type="checkbox"><span>Två tagningar av varje. Aldrig fler — den tredje låter alltid inövad, och inövat är motsatsen till vad ni säljer.</span></li>
+    </ul>
+
+    <h3>Onsdag 26 augusti · klipp huvudtrailern</h3>
+    <ul class="check" data-k="d26">
+      <li><input type="checkbox"><span>Bygg inlägg 6 exakt enligt Del 4.</span></li>
+      <li><input type="checkbox"><span>Bygg variant B och C.</span></li>
+      <li><input type="checkbox"><span>Se alla tre <strong>utan ljud</strong> på telefon. Går budskapet inte fram är texten fel, inte ljudet.</span></li>
+    </ul>
+
+    <h3>Torsdag 27 augusti · resten</h3>
+    <ul class="check" data-k="d27">
+      <li><input type="checkbox"><span>Klipp inlägg 1, 2, 4, 9 och 11.</span></li>
+      <li><input type="checkbox"><span>Bygg karusellerna — inlägg 3 och mallen för 12.</span></li>
+      <li><input type="checkbox"><span>Skriv <strong>alla</strong> bildtexter i förväg, i ett dokument. Bildtexter som skrivs i publiceringsögonblicket blir alltid sämre.</span></li>
+      <li><input type="checkbox"><span>Skriv de fästa kommentarerna i förväg också.</span></li>
+    </ul>
+
+    <h3>Fredag 28 augusti · kvalitetskontroll och ladd</h3>
+    <ul class="check" data-k="d28">
+      <li><input type="checkbox"><span>Kör checklistan nedan på <strong>varje</strong> klipp.</span></li>
+      <li><input type="checkbox"><span>Testa Spotify-länken på en telefon som inte är er egen.</span></li>
+      <li><input type="checkbox"><span>Ladda upp trailern som Spotify Clip-utkast om funktionen finns på kontot.</span></li>
+      <li><input type="checkbox"><span>Öppna loggen (Del 10).</span></li>
+      <li><input type="checkbox"><span>Bestäm exakt släpptid 1 september och använd <strong>samma tid överallt</strong>.</span></li>
+    </ul>
+
+    <h3>Checklista per klipp</h3>
+    <p class="small">Inget publiceras utan att alla rutor är i.</p>
+    <ul class="check" data-k="qc">
+      <li><input type="checkbox"><span>Hooktexten finns i <strong>bildruta 1</strong>, inte 0,5 sekunder in</span></li>
+      <li><input type="checkbox"><span>Klippet fungerar helt utan ljud</span></li>
+      <li><input type="checkbox"><span>Undertexter på allt tal, å ä ö kontrollerade manuellt</span></li>
+      <li><input type="checkbox"><span>All text mellan 15 % och 72 % av bildhöjden</span></li>
+      <li><input type="checkbox"><span><strong>Ingen logointro.</strong> Poddnamnet kommer sent</span></li>
+      <li><input type="checkbox"><span>En idé per video</span></li>
+      <li><input type="checkbox"><span>Exakt ett ord i accentfärg</span></li>
+      <li><input type="checkbox"><span>Ljudet tar inte slut före bilden</span></li>
+      <li><input type="checkbox"><span>Ingen vattenstämpel, ingen CapCut-slutbild</span></li>
+      <li><input type="checkbox"><span>Rumston under hela klippet</span></li>
+      <li><input type="checkbox"><span>Kan klippet bli annons: originalljud eller klarerad musik</span></li>
+      <li><input type="checkbox"><span>Bildtexten innehåller sökbara ord i löpande text</span></li>
+      <li><input type="checkbox"><span>Klippet går att förstå av någon som aldrig hört talas om Trasig men hel</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="capcut">
+  <div class="gut">Del 7</div>
+  <div class="body">
+    <h2>CapCut, steg för steg</h2>
+    <ol>
+      <li><strong>Nytt projekt</strong> → 1080×1920, 30 fps.</li>
+      <li><strong>Bakgrund:</strong> lägg ett heltäckande färglager på <code>#0C0C0E</code>. Använd inte “svart” ur menyn utan att kontrollera värdet.</li>
+      <li><strong>Hooktexten först, allt annat sedan.</strong> Lägg texten på tidslinjen innan ni lägger något annat. Bär inte hooken är resten bortkastat arbete.</li>
+      <li><strong>Text:</strong> välj serifen. Storlek så att meningen tar 2–3 rader och fyller ~70 % av bredden. Radavstånd 1.2. <strong>Stäng av skugga, kontur och bakgrundsplatta.</strong> Färg <code>#F2EEE6</code>.</li>
+      <li><strong>Animation:</strong> enkel <em>Fade</em>, 0,2 s in, 0 s ut. Rör aldrig Bounce, Typewriter, Neon eller Shake.</li>
+      <li><strong>Accentordet:</strong> dela textlagret så att accentordet är ett eget lager i <code>#C0472B</code> utan animation alls.</li>
+      <li><strong>Svarta bildrutor:</strong> klipp in 4–6 bildrutor rent färglager mellan meningarna.</li>
+      <li><strong>Push-in:</strong> markera videoklippet → skala-nyckelbildruta 100 % i början, 106 % i slutet. Ease-out om valet finns.</li>
+      <li><strong>Undertexter:</strong> automatiska undertexter → svenska → dela i <strong>2–4 ords-chunkar</strong> → <strong>läs igenom varje ord manuellt</strong>. Placera på 58–62 % av höjden. Inter Medium, <code>#F2EEE6</code>, ingen kontur.</li>
+      <li><strong>Ljud:</strong> normalisera röstspåret, topp −3 dB. Lägg rumston på eget spår på ca −40 dB <strong>under hela klippet, inklusive tystnaderna</strong>.</li>
+      <li><strong>Grain:</strong> Effekter → Film grain, 10–15 %. Mycket svag vignett.</li>
+      <li><strong>Sista kontrollen:</strong> spela upp med telefonen på ljudlöst, på armlängds avstånd. Det är så klippet faktiskt kommer att ses.</li>
+      <li><strong>Export:</strong> 1080p, 30 fps, högsta bitrate. <strong>Ta bort CapCut-slutbilden.</strong></li>
+      <li><strong>Uppladdning:</strong> ladda upp originalfilen nativt på varje plattform, en gång per plattform. Över wifi, med högsta uppladdningskvalitet påslaget i Instagrams inställningar.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="schema">
+  <div class="gut">Del 8</div>
+  <div class="body">
+    <h2>Publiceringsschemat</h2>
+    <p class="lede">Alla tider CET. Ordningen inom varje dag är lika viktig som klockslaget.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Datum</th><th>Dag</th><th>Inlägg</th><th>TikTok</th><th>Reels</th><th>Shorts</th><th>Stories</th></tr></thead>
+      <tbody class="num">
+        <tr><td>29 aug</td><td><strong>lör</strong></td><td>1 · Minnet</td><td>18:30</td><td>19:15</td><td>kväll</td><td>21:00 poll</td></tr>
+        <tr><td>30 aug</td><td>sön</td><td>2 · Vem ljuger?</td><td>18:30</td><td>19:15</td><td>kväll</td><td>—</td></tr>
+        <tr><td>30 aug</td><td>sön</td><td>3 · Karusellen</td><td>—</td><td>21:00</td><td>—</td><td>—</td></tr>
+        <tr><td>31 aug</td><td>mån</td><td>4 · Den riktiga rösten</td><td>12:00</td><td>12:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>31 aug</td><td>mån</td><td>5 · Nedräkning</td><td>—</td><td>—</td><td>—</td><td>kväll</td></tr>
+        <tr><td><strong>1 sep</strong></td><td><strong>tis</strong></td><td><strong>6 · TRAILERN</strong></td><td><strong>släpp</strong></td><td><strong>+45 min</strong></td><td>samma dag</td><td>direkt</td></tr>
+        <tr><td>1 sep</td><td>tis</td><td>7 · Attacken</td><td>15:00</td><td>15:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>1 sep</td><td>tis</td><td>8 · Frågan</td><td>20:30</td><td>—</td><td>—</td><td>20:30</td></tr>
+        <tr><td>2 sep</td><td>ons</td><td>9 · Hårdaste ögonblicket</td><td>12:00</td><td>12:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>2 sep</td><td>ons</td><td>10 · Svar på kommentar</td><td>18:00</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>3 sep</td><td>tors</td><td>11 · Igenkänningen</td><td>19:00</td><td>19:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>4 sep</td><td>fre</td><td>12 · 50/50</td><td>18:30</td><td>18:30</td><td>—</td><td>—</td></tr>
+        <tr><td><strong>5 sep</strong></td><td><strong>lör</strong></td><td><strong>13 · Vinnaren, version B</strong></td><td><strong>18:30</strong></td><td><strong>19:15</strong></td><td>kväll</td><td>—</td></tr>
+        <tr><td>6 sep</td><td>sön</td><td>14 · Varför vi gjorde det</td><td>11:00</td><td>11:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>6 sep</td><td>sön</td><td>15 · Frågan hemma</td><td>18:00</td><td>18:45</td><td>kväll</td><td>—</td></tr>
+        <tr><td>7 sep</td><td>mån</td><td>Utvärdering</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Varför de här tiderna:</strong> kontinentaleuropeisk Reels-trafik toppar 19:00–21:00 CET. TikTok har två fönster — morgon och 19:00–23:00 — och lördag är veckans starkaste dag. Men er egen publik kan ligga en till två timmar åt endera hållet: <strong>från och med 3 september styr era egna analytics, inte den här tabellen.</strong></p>
+
+    <h3>Rutinen efter varje publicering</h3>
+    <ol>
+      <li><strong>Första 60 minuterna: var kvar i appen.</strong> Svara på varje kommentar. Tidiga svar väger tungt när klippet ska ta sig ur den första testpoolen på 100–500 tittare.</li>
+      <li>Fäst den förberedda kommentaren direkt.</li>
+      <li>Efter 2 timmar: dela klippet till Stories med “ny video uppe”.</li>
+      <li>Spara den bästa kommentaren. Den är morgondagens innehåll.</li>
+      <li><strong>Svara aldrig aggressivt.</strong> Ni bjuder in till oenighet — ni deltar inte i den.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="betalt">
+  <div class="gut">Del 9</div>
+  <div class="body">
+    <h2>Betald trafik, i kronor</h2>
+    <p class="lede">Grundregeln är oförändrad och den är rätt: inga pengar innan människor faktiskt kan lyssna. 29–31 augusti är organisk uppvärmning. Betalt startar 1 september.</p>
+
+    <div class="scroll"><table>
+      <thead><tr><th></th><th>TikTok Ads</th><th>Meta (IG/FB)</th></tr></thead>
+      <tbody class="num">
+        <tr><td>CPM</td><td>ca 40–120 kr</td><td>ca 75–130 kr</td></tr>
+        <tr><td>CPC</td><td>ca 3–14 kr</td><td>oftast högre</td></tr>
+        <tr><td>Minsta budget</td><td>20 USD/dag per annonsgrupp, 50 USD per kampanj</td><td>lägre trösklar</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Siffrorna är internationella riktvärden — svenska CPM ligger normalt i det övre spannet. Behandla dem som storleksordning, inte prislapp.</p>
+
+    <h4>1–2 september · testfasen</h4>
+    <p>300 kr/dag på TikTok och 300 kr/dag på Meta. Tre tydligt <em>olika</em> creatives per plattform — trailern (A), attacken (C) och det hårdaste ögonblicket. <strong>Inte tre varianter av samma annons.</strong> Bred svensk målgrupp, 25–55. Översegmentera inte.</p>
+    <h4>3–4 september · rensning</h4>
+    <p>Pausa förlorarna enligt trösklarna i Del 10. Flytta pengarna till de två som överlever.</p>
+    <h4>5–7 september · skalning</h4>
+    <p>Merparten på veckans vinnare, i version B. En liten summa kvar på en utmanare, så ni aldrig står utan nästa test.</p>
+    <p><strong>Veckototal: cirka 4 000–4 500 kr.</strong> Det räcker för att lära er vilken hook som säljer. Det räcker inte för att köpa en lansering — och det är inte heller vad ni ska köpa.</p>
+
+    <h3>Tre saker som avgör kostnaden mer än budgeten</h3>
+    <ol>
+      <li><strong>Kreativen sätter priset.</strong> På TikTok slår kreativ kvalitet nästan allt annat — annonser som samlar sparningar, delningar och completions får bättre leverans till lägre CPM. Native-material kostar 30–40 % lägre CPM än putsade reklamfilmer. Er billigaste creative (inlägg 7, telefon i handen) kan mycket väl bli er billigaste kund.</li>
+      <li><strong>Optimera inte mot billiga videovisningar.</strong> Optimera mot länkklick, och läs alltid av vad som händer på Spotify <em>samma timmar</em>.</li>
+      <li><strong>Retargeting från 2 september.</strong> De som engagerat sig men inte klickat får en annan vinkel — kör inlägg 9 mot dem, aldrig samma klipp igen.</li>
+    </ol>
+
+    <div class="callout">
+      <span class="tag">Den enda frågan som betyder något</span>
+      <p>När en creative får distribution — <strong>syns en mätbar ökning på Spotify samma timmar?</strong></p>
+      <p><span class="good">Ja</span> → skala.<br>
+      <span class="kill">Nej</span> → ni har ett uppmärksamhetsklipp, inte ett konverteringsklipp. Det kan vara värt att köra organiskt, men det ska inte ha en krona.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="matning">
+  <div class="gut">Del 10</div>
+  <div class="body">
+    <h2>Mätning</h2>
+    <h3>Loggen</h3>
+    <p>Ett kalkylark. En rad per publicerat klipp. Fyll i vid +24 h och +72 h.</p>
+    <p class="mono small">Datum · Inlägg · Plattform · Hook (första meningen ordagrant) · Format · Visningar · 3-sek-retention · Genomsnittlig tittartid · Completion % · Delningar · Sparningar · Kommentarer · Profilbesök · Länkklick · Spotify plays samma dygn</p>
+    <p>Kolumnen <strong>Hook, ordagrant</strong> är den viktigaste. Efter en vecka har ni femton meningar sorterade efter utfall. Det är kampanjens verkliga produkt.</p>
+
+    <h3>Trösklar — bestämda i förväg, inte i efterhand</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Mått</th><th>Bra</th><th>Döda den</th></tr></thead>
+      <tbody class="num">
+        <tr><td>Hook rate / 3-sek-retention</td><td class="good">över 30 %</td><td class="kill">under 20 %</td></tr>
+        <tr><td>Completion (klipp under 30 s)</td><td class="good">över 45 %</td><td class="kill">under 25 %</td></tr>
+        <tr><td>Delningar per 1 000 visningar</td><td class="good">över 5</td><td class="kill">under 1</td></tr>
+        <tr><td>Sparningar per 1 000 visningar</td><td class="good">över 3</td><td class="kill">under 1</td></tr>
+        <tr><td>CPC betalt</td><td class="good">under 5 kr</td><td class="kill">över 12 kr efter 48 h</td></tr>
+        <tr><td>Länkklick → Spotify-lyft samma timmar</td><td class="good">synligt</td><td class="kill">inget lyft efter två försök</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Två mått som ljuger</h3>
+    <p><strong>Visningar.</strong> Instagram räknar Reels-visningar generöst. Ett klipp med 40 000 visningar och 8 delningar är sämre än ett med 6 000 visningar och 90 delningar. Titta på delningar och sparningar per tusen visningar — aldrig på totalen.</p>
+    <p><strong>Likes.</strong> TikTok viktar delningar cirka 3× högre än likes, och Instagram viktar DM-sändningar högst av allt. Likes är den enda siffran ni får ignorera helt.</p>
+
+    <h3>Vad ni gör den 7 september</h3>
+    <p>Ta de tre hooks som gav flest <strong>delningar per 1 000 visningar</strong> — inte flest visningar. Skriv fem nya varianter på dem. Det är vecka två.</p>
+  </div>
+</section>
+
+<section class="sec" id="granser">
+  <div class="gut">Del 11</div>
+  <div class="body">
+    <h2>Gränser</h2>
+    <p class="lede">Strategins idébank är användbar och den håller. Fyra saker att befästa innan ni börjar.</p>
+    <h4>1 · Er mamma är en verklig privatperson</h4>
+    <p>Hon behöver godkänna varje ljudklipp som publiceras, inte bara avsnittet i stort. Ett klipp som fungerar i tjugo minuters sammanhang kan vara förödande som femton sekunder. Låt henne höra varje klipp i den form det publiceras, innan det publiceras. Det är inte bara anständigt — det är det som gör att ni fortfarande kan göra säsong två.</p>
+    <h4>2 · Klipp aldrig så att innebörden ändras</h4>
+    <p>Cliffhangers är tillåtna. Att klippa så att någon tillskrivs en åsikt de inte har är det inte, och det är inte heller en gråzon — det är den enda saken som kan sänka hela projektet.</p>
+    <h4>3 · Provokation behöver en motvikt</h4>
+    <p>Om varje inlägg är en anklagelse kommer kontot att klassificeras därefter, och TikToks nischkonsekvens- och kvalitetssignaler arbetar då emot er. Håll ungefär <strong>två provocerande inlägg per ett varmt</strong>. Inlägg 11, 14 och 15 är motvikten. De är inte utfyllnad — de är det som gör de hårda inläggen trovärdiga.</p>
+    <h4>4 · Var inte falsk om att en annons är en annons</h4>
+    <p>Att en creative <em>ser ut</em> som organiskt innehåll är helt i sin ordning, och dessutom det som fungerar bäst. Att påstå att den inte är marknadsföring är det inte.</p>
+    <blockquote><p>Aldrig, under några omständigheter: fabricerade citat, påhittade lyssnarreaktioner, köpta kommentarer eller följare, fejkade konflikter, uppfunna recensioner. Utöver att det är ohederligt tar TikTok bort falsk aktivitet och lämnar kvar ett konto flaggat för manipulation — med sämre verklig räckvidd än det hade från början.</p></blockquote>
+  </div>
+</section>
+
+<section class="sec" id="kallor">
+  <div class="gut">Del 12</div>
+  <div class="body">
+    <h2>Källor</h2>
+    <div class="sources">
+      <h4>Plattformarnas egna underlag</h4>
+      <ul>
+        <li>Spotify for Creators — <em>Top tips to supercharge your podcast discovery on social media</em></li>
+        <li>Spotify for Creators — <em>How shows are using short-form video clips to drive podcast discovery</em></li>
+        <li>Spotify for Creators — <em>Bringing deeper insight to know and grow your audience</em> (11 juni 2026)</li>
+        <li>TikTok for Business — <em>Creative best practices for performance ads</em></li>
+        <li>Meta for Business — <em>Instagram &amp; Facebook Reels Ads</em></li>
+        <li>Meta Business Help Center — <em>How to Avoid Posting Engagement Bait</em></li>
+      </ul>
+      <h4>Rankingsignaler och algoritm 2026</h4>
+      <ul>
+        <li>Sprout Social — <em>How the Instagram Algorithm Works (2026)</em></li>
+        <li>Hootsuite — <em>Instagram algorithm tips for 2026</em> · <em>How the TikTok algorithm works in 2026</em></li>
+        <li>Sprout Social — <em>How the TikTok Algorithm Works in 2026</em></li>
+        <li>OpusClip — <em>What Content Creators Need to Know About TikTok's New Algorithm in 2026</em></li>
+      </ul>
+      <h4>Benchmarks och kreativ data</h4>
+      <ul>
+        <li>Kapwing — <em>Short-Form Video Statistics: TikTok, Reels, and Shorts by the Numbers in 2026</em></li>
+        <li>SocialCrawl — <em>Social Media Engagement Rate Benchmarks 2026</em> (1 269 analyserade inlägg)</li>
+        <li>OpusClip — <em>Best TikTok Hooks 2026</em> · <em>TikTok Hook Formulas That Drive 3-Second Holds</em></li>
+        <li>Joyspace — <em>Ideal Video Length for TikTok, Reels &amp; YouTube Shorts in 2026</em></li>
+        <li>FontMirror — <em>Typography Trends Shaping Short-Form Video Content</em></li>
+        <li>Vmake / GrowthOS — <em>The Psychology of Color</em> (mättnadströtthet, kontrastdata)</li>
+      </ul>
+      <h4>Marknad och kostnad</h4>
+      <ul>
+        <li>Kantar Sifo / Acast — <em>4 insikter att ta med sig in i 2026</em> (svensk poddräckvidd)</li>
+        <li>SQ Magazine — <em>TikTok vs Instagram Statistics 2026</em></li>
+        <li>Admetrics / Stackmatix — <em>TikTok Ads Cost 2026</em></li>
+        <li>SimpleURL / Tapmy — <em>Link-in-Bio benchmarks 2026</em></li>
+      </ul>
+    </div>
+
+    <p class="end">Strategin sa att lanseringen inte ska se ut som “en ny podd söker lyssnare”, utan som att publiken råkat kliva rakt in i en familjekonflikt de känner igen från sitt eget liv. Det stämmer, och det är fortfarande rätt.<br><br>
+    Det enda som ändrats här är precisionen. Hooken pekar nu på tittaren istället för på er. Varje inlägg är byggt för att bli <em>skickat</em> till en specifik person. Färgerna har värden, rörelsen har millisekunder, lördagen bär vinnaren. Och ni vet i förväg vid vilken siffra ni dödar något, så att beslutet fattas av datan och inte av hur mycket arbete som låg bakom klippet.<br><br>
+    Spotify-länken kommer fortfarande sist. Först ska någon behöva höra resten.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var lists = document.querySelectorAll('.check');
+  lists.forEach(function(ul){
+    var key = 'tmh-' + (ul.getAttribute('data-k') || '');
+    var boxes = ul.querySelectorAll('input[type=checkbox]');
+    var saved = [];
+    try { saved = JSON.parse(localStorage.getItem(key) || '[]') || []; } catch(e) { saved = []; }
+    boxes.forEach(function(b,i){ if (saved.indexOf(i) !== -1) b.checked = true; });
+    ul.addEventListener('change', function(){
+      var on = [];
+      boxes.forEach(function(b,i){ if (b.checked) on.push(i); });
+      try { localStorage.setItem(key, JSON.stringify(on)); } catch(e) {}
+    });
+  });
+})();
+</script>
