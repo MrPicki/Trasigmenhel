@@ -8,14 +8,25 @@ interface HeadProps {
   url?: string;
 }
 
+const SITE_URL = 'https://trasigmenhel.se';
+
+/** og:image and canonical must be absolute — relative paths are ignored by
+ *  most crawlers, so resolve anything relative against the real domain. */
+const absolute = (path: string) =>
+  path.startsWith('http') ? path : `${SITE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+
 const Head = ({
   title = "Trasig men Hel - En podcast om läkning och personlig utveckling",
   description = "Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans.",
   image = "/lovable-uploads/podcast-cover-og.jpg",
-  url = "https://trasigmenhel.se"
+  url = SITE_URL
 }: HeadProps) => {
+  const canonical = absolute(url);
+  const imageUrl = absolute(image);
+
   return (
     <Helmet>
+      <link rel="canonical" href={canonical} />
       {/* Primary Meta Tags */}
       <title>{title}</title>
       <meta name="title" content={title} />
@@ -23,21 +34,24 @@ const Head = ({
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
-      <meta property="og:url" content={url} />
+      <meta property="og:url" content={canonical} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={imageUrl} />
+
+      <meta property="og:site_name" content="Trasig men Hel" />
+      <meta property="og:locale" content="sv_SE" />
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={url} />
+      <meta property="twitter:url" content={canonical} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={image} />
+      <meta property="twitter:image" content={imageUrl} />
       
       {/* Additional Meta Tags */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-      <meta name="theme-color" content="#1a1a1a" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+      <meta name="theme-color" content="#0F0F11" />
       <meta name="keywords" content="podcast, personlig utveckling, mental hälsa, självhjälp, läkning, välmående, självacceptans" />
       <meta name="author" content="Trasig men Hel" />
       <meta name="language" content="sv" />

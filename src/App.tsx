@@ -20,7 +20,7 @@ const RouteHead = () => {
         return {
           title: "Trasig men Hel - En podcast om läkning och personlig utveckling",
           description: "Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans.",
-          url: "https://trasigmenhel.se"
+          url: "https://trasigmenhel.se/"
         };
       case '/lankar':
         return {

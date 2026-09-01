@@ -55,18 +55,18 @@ export const LINKS: SiteLink[] = [
     icon: TikTokIcon,
   },
   {
-    // TODO: paste the exact channel URL, e.g. https://www.youtube.com/@trasigmenhel
-    // Until then this row is hidden automatically.
     label: 'YouTube',
-    href: null,
-    note: 'Avsnitt i videoformat',
+    href: 'https://www.youtube.com/@Trasigmenhel',
+    note: '@Trasigmenhel',
     icon: YouTubeIcon,
   },
   {
-    // TODO: paste the exact page URL, e.g. https://www.facebook.com/trasigmenhel
-    // Until then this row is hidden automatically.
+    // Facebook pages without a claimed username fall back to this numeric
+    // profile.php form. It works, but it reads as a machine address next to
+    // the other handles. Claim a username on the page (Settings -> Page name
+    // and username) and swap this for https://www.facebook.com/<namn>.
     label: 'Facebook',
-    href: null,
+    href: 'https://www.facebook.com/profile.php?id=61567352826893',
     icon: FacebookIcon,
   },
   {
@@ -89,11 +89,13 @@ export const LINKS_MESSAGE = {
   enabled: true,
   /** Two or three lines at most. This is the first thing anyone reads. */
   body: 'Första avsnittet av Trasig men hel ligger uppe nu. Lyssna, och säg efteråt vem du trodde på.',
-  /** Optional button under the message. Set to null for no button. */
-  action: {
-    label: 'Hör hela samtalet',
-    href: 'https://podcasters.spotify.com/pod/show/trasigmenhel',
-  } as { label: string; href: string } | null,
+  /**
+   * Optional button under the message. Left off because the Spotify button
+   * sits directly below it — turn it on only when the message points
+   * somewhere the link list doesn't already go, e.g. a live event or a form:
+   *   action: { label: 'Boka biljett', href: 'https://...' }
+   */
+  action: null as { label: string; href: string } | null,
 };
 
 /**
