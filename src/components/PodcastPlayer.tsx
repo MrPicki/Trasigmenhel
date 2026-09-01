@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
+
+const SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/trasigmenhel';
 
 const formatTime = (seconds: number) => {
   if (!Number.isFinite(seconds)) return '0:00';
@@ -23,12 +23,13 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [imageFailed, setImageFailed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Reset playback state whenever the selected episode changes.
   useEffect(() => {
     setIsPlaying(false);
     setCurrentTime(0);
+    setImageFailed(false);
     setDuration(episode?.durationSeconds || 0);
   }, [episode?.id]);
 
@@ -85,110 +86,103 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
 
   if (error) {
     return (
-      <Alert variant="destructive" className="text-left">
-        <AlertDescription>
-          Kunde inte hämta senaste avsnittet just nu. Lyssna direkt på{' '}
-          <a
-            href="https://podcasters.spotify.com/pod/show/trasigmenhel"
-            target="_blank"
-            rel="noreferrer"
-            className="underline underline-offset-2 hover:text-white"
-          >
-            Spotify
-          </a>{' '}
-          istället.
-        </AlertDescription>
-      </Alert>
+      <div className="border-t border-charcoal-400 pt-5 text-sm text-bone-400">
+        Avsnittet gick inte att hämta just nu. Lyssna direkt på{' '}
+        <a
+          href={SPOTIFY_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="text-bone-200 underline underline-offset-4 hover:no-underline"
+        >
+          Spotify
+        </a>
+        .
+      </div>
     );
   }
 
   if (isLoading || !episode) {
     return (
-      <div className="bg-charcoal-300 rounded-lg p-4 space-y-4 border border-charcoal-400" aria-busy="true" aria-label="Laddar avsnitt">
+      <div className="border-t border-charcoal-400 pt-6" aria-busy="true" aria-label="Hämtar senaste avsnittet">
         <div className="flex items-center gap-4">
-          <div className="h-16 w-16 bg-charcoal-400 rounded-md flex-shrink-0 animate-pulse" />
-          <div className="flex-1 space-y-2">
-            <div className="h-5 bg-charcoal-400 rounded w-3/4 animate-pulse" />
-            <div className="h-4 bg-charcoal-400 rounded w-1/2 animate-pulse" />
+          <div className="h-14 w-14 rounded bg-charcoal-300 animate-pulse flex-shrink-0" />
+          <div className="flex-1 space-y-2.5">
+            <div className="h-4 w-3/5 rounded bg-charcoal-300 animate-pulse" />
+            <div className="h-3 w-2/5 rounded bg-charcoal-400 animate-pulse" />
           </div>
         </div>
-        <div className="h-2 bg-charcoal-400 rounded animate-pulse" />
+        <div className="mt-6 h-px w-full bg-charcoal-400 animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div className="relative bg-charcoal-300 rounded-lg p-3 sm:p-4 shadow-[0_20px_60px_-20px_rgba(244,126,37,0.35)] border border-ember-700/50">
-      <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-ember-500/70 to-transparent" aria-hidden="true" />
-      <audio
-        ref={audioRef}
-        src={episode.audioUrl}
-        preload="metadata"
-      />
+    <div className="border-t border-charcoal-400 pt-6">
+      <audio ref={audioRef} src={episode.audioUrl} preload="metadata" />
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-        <div className="h-14 w-14 sm:h-16 sm:w-16 bg-charcoal-400 rounded-md flex-shrink-0 overflow-hidden mx-auto sm:mx-0 ring-1 ring-ember-700/60">
-          {episode.image && (
-            <img
-              src={episode.image}
-              alt=""
-              className="w-full h-full object-cover rounded-md"
-            />
-          )}
-        </div>
-        <div className="flex-1 min-w-0 text-center sm:text-left">
-          <h3 className="text-base sm:text-lg font-semibold text-white truncate">
+      <div className="flex items-start gap-4">
+        {episode.image && !imageFailed && (
+          <img
+            src={episode.image}
+            alt=""
+            onError={() => setImageFailed(true)}
+            className="h-14 w-14 sm:h-16 sm:w-16 rounded object-cover flex-shrink-0 bg-charcoal-300"
+          />
+        )}
+        <div className="min-w-0 flex-1">
+          <h2 className="font-display text-xl sm:text-2xl leading-snug text-bone-200">
             {episode.title}
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-400 truncate">
+          </h2>
+          <p className="mt-1 text-sm text-bone-600 tabular-nums">
             {episode.pubDate}
+            {duration ? ` · ${Math.round(duration / 60)} min` : ''}
           </p>
         </div>
       </div>
 
-      <div className="space-y-3 sm:space-y-4">
-        <div className="space-y-1 sm:space-y-2">
+      <div className="mt-6 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={togglePlayPause}
+          aria-label={isPlaying ? 'Pausa avsnittet' : 'Spela avsnittet'}
+          className="row-hover flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-bone-200 text-charcoal-100 hover:bg-bone-100 active:scale-[0.97]"
+        >
+          {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
+        </button>
+
+        <div className="min-w-0 flex-1">
           <Slider
             value={[currentTime]}
             max={duration || 1}
             step={0.1}
             disabled={!duration}
             onValueChange={handleSeek}
-            aria-label="Spolningsläge"
-            className={`w-full ${duration ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
+            aria-label="Spola i avsnittet"
+            className={`w-full ${duration ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
           />
-          <div className="flex justify-between text-xs text-gray-400 tabular-nums">
+          <div className="mt-2 flex justify-between text-xs text-bone-600 tabular-nums">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
 
-        <div className="flex justify-between items-center gap-2 sm:gap-4">
-          <Button
-            variant="outline"
-            size="icon"
-            className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-ember-500 text-charcoal-100 border-ember-500 hover:bg-ember-400 hover:border-ember-400 hover:text-charcoal-100 flex-shrink-0 ${isPlaying ? 'ember-pulse' : ''}`}
-            onClick={togglePlayPause}
-            aria-label={isPlaying ? 'Pausa' : 'Spela'}
+        <div className="hidden sm:flex items-center gap-2 w-28 flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => handleVolumeChange([volume === 0 ? 100 : 0])}
+            aria-label={volume === 0 ? 'Slå på ljudet' : 'Stäng av ljudet'}
+            className="row-hover text-bone-600 hover:text-bone-200"
           >
-            {isPlaying ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
-          </Button>
-
-          <div className="flex items-center gap-1 sm:gap-2 flex-1">
-            {volume === 0 ? (
-              <VolumeX size={14} className="text-gray-400 hidden sm:block flex-shrink-0" />
-            ) : (
-              <Volume2 size={14} className="text-gray-400 hidden sm:block flex-shrink-0" />
-            )}
-            <Slider
-              value={[volume * 100]}
-              max={100}
-              step={1}
-              aria-label="Volym"
-              className="w-16 sm:w-24 cursor-pointer"
-              onValueChange={handleVolumeChange}
-            />
-          </div>
+            {volume === 0 ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          </button>
+          <Slider
+            value={[volume * 100]}
+            max={100}
+            step={1}
+            aria-label="Volym"
+            className="flex-1 cursor-pointer"
+            onValueChange={handleVolumeChange}
+          />
         </div>
       </div>
     </div>

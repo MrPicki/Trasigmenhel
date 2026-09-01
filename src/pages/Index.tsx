@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import Hero from '@/components/Hero';
 import AboutSection from '@/components/AboutSection';
 import EpisodesSection from '@/components/EpisodesSection';
@@ -10,16 +11,16 @@ const Index = () => {
   const { episodes, feedInfo, isLoading, error } = usePodcastFeed();
   const [selectedEpisode, setSelectedEpisode] = useState<PodcastEpisode | null>(null);
 
+  // The feed arrives sorted newest-first (see use-podcast-feed), so the first
+  // entry is the current episode until the visitor picks another one.
   const activeEpisode = useMemo(
     () => selectedEpisode ?? episodes[0] ?? null,
     [selectedEpisode, episodes]
   );
 
   return (
-    <main className="min-h-screen flex flex-col bg-charcoal-200">
+    <main className="flex min-h-screen flex-col bg-charcoal-200">
       <Hero episode={activeEpisode} isLoading={isLoading} error={error} />
-
-      <AboutSection description={feedInfo?.description} />
 
       <EpisodesSection
         episodes={episodes}
@@ -29,18 +30,22 @@ const Index = () => {
         onSelect={setSelectedEpisode}
       />
 
-      <div className="component-transparent">
-        <NewsletterForm />
-      </div>
+      <AboutSection description={feedInfo?.description} />
 
-      <footer className="w-full py-10 component-transparent">
-        <div className="container">
-          <div className="flex flex-col items-center justify-center gap-5">
-            <SocialLinks />
-            <p className="text-center text-gray-500 text-sm">
-              © {new Date().getFullYear()} Trasig men hel. Alla rättigheter reserverade.
-            </p>
-          </div>
+      <NewsletterForm />
+
+      <footer className="w-full py-12 sm:py-16">
+        <div className="shell flex flex-col items-center gap-6 text-center">
+          <SocialLinks />
+          <Link
+            to="/lankar"
+            className="row-hover text-sm text-bone-600 underline-offset-4 hover:text-bone-200 hover:underline"
+          >
+            Alla våra länkar
+          </Link>
+          <p className="text-xs text-bone-700">
+            © {new Date().getFullYear()} Trasig men hel. Alla rättigheter reserverade.
+          </p>
         </div>
       </footer>
     </main>

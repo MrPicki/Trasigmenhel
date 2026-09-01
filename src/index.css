@@ -1,55 +1,50 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
+    /* Monochrome throughout. The neutrals carry a faint warm bias so the
+       page reads as paper and film rather than as default UI grey. */
+    --background: 240 6% 6%;
+    --foreground: 40 26% 93%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 6% 9%;
+    --card-foreground: 40 26% 93%;
 
-    --popover: 0 0% 3%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 9% 4%;
+    --popover-foreground: 40 26% 93%;
 
-    --primary: 26 90% 55%;
-    --primary-foreground: 0 0% 4%;
+    /* The primary action is the page inverted, not a coloured button. */
+    --primary: 40 26% 93%;
+    --primary-foreground: 240 9% 4%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 240 8% 15%;
+    --secondary-foreground: 40 12% 88%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 240 8% 15%;
+    --muted-foreground: 40 5% 52%;
 
-    --accent: 26 90% 55%;
-    --accent-foreground: 0 0% 4%;
+    --accent: 240 8% 15%;
+    --accent-foreground: 40 26% 93%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 40 26% 93%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 29 92% 64%;
+    --border: 240 8% 15%;
+    --input: 240 8% 15%;
+    --ring: 40 9% 76%;
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
+    --sidebar-background: 240 6% 6%;
+    --sidebar-foreground: 40 26% 93%;
+    --sidebar-primary: 40 26% 93%;
+    --sidebar-primary-foreground: 240 9% 4%;
+    --sidebar-accent: 240 8% 15%;
+    --sidebar-accent-foreground: 40 26% 93%;
+    --sidebar-border: 240 8% 15%;
+    --sidebar-ring: 40 9% 76%;
   }
 }
 
@@ -59,26 +54,33 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Merriweather', serif;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
-  h1, h2, h3, h4 {
-    font-family: 'Montserrat', sans-serif;
-    @apply font-bold;
+  h1, h2, h3 {
+    @apply font-display font-normal;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
-  /* Browser surfaces the design never draws directly still carry the
-     brand: selection, scrollbar and focus ring, themed instead of left
+  h4, h5, h6 {
+    @apply font-sans font-semibold;
+  }
+
+  /* Browser surfaces the design never draws directly still belong to it:
+     selection, caret, scrollbar and focus ring, themed rather than left
      as unstyled defaults. */
   ::selection {
-    background-color: rgba(244, 126, 37, 0.55);
-    color: #0a0a0a;
+    background-color: #F2EFE9;
+    color: #0A0A0C;
   }
 
   :focus-visible {
-    outline: 2px solid #f8a04f;
-    outline-offset: 2px;
+    outline: 2px solid #F2EFE9;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   ::-webkit-scrollbar {
@@ -87,78 +89,75 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #121212;
+    background: #0A0A0C;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #333333;
+    background: #232327;
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #444444;
+    background: #33333A;
   }
 
   html {
-    scrollbar-color: #333333 #121212;
+    scrollbar-color: #232327 #0A0A0C;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  input, textarea {
+    caret-color: #F2EFE9;
   }
 }
 
 .container {
-  @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
+  @apply px-5 sm:px-6 lg:px-8 mx-auto max-w-7xl;
 }
 
-@keyframes pulse-scale {
-  0% {
-    transform: scale(1);
+/* The reading column. Narrow enough to hold a 65–75 character measure. */
+.shell {
+  @apply px-5 sm:px-6 mx-auto w-full max-w-[46rem];
+}
+
+/* Hairline divider used instead of boxes wherever something needs separating. */
+.rule {
+  @apply border-0 border-t border-charcoal-400;
+}
+
+/* The one authored moment on the site: the top of the page assembles itself
+   once on load, each element settling a beat after the one above it.
+   Everything below the fold is already visible — no scroll-triggered
+   entrances, no repeat of the same effect on every section. */
+.stage > * {
+  animation: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stage > *:nth-child(1) { animation-delay: 0.05s; }
+.stage > *:nth-child(2) { animation-delay: 0.16s; }
+.stage > *:nth-child(3) { animation-delay: 0.27s; }
+.stage > *:nth-child(4) { animation-delay: 0.38s; }
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Links and rows lift by contrast, never by shadow or glow. */
+.row-hover {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
-  50% {
-    transform: scale(1.02);
+  .stage > * {
+    opacity: 1 !important;
+    transform: none !important;
   }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.animate-pulse-scale {
-  animation: pulse-scale 2s ease-in-out infinite;
-}
-
-.component-transparent {
-  background-color: rgba(26, 26, 26, 0.85);
-  backdrop-filter: blur(2px);
-}
-
-/* Light finding its way through the cracks: a warm glow that only tints the
-   black canvas of the wordmark image, via screen blending, without touching
-   the white crack lines or type. Positioned near the crack's origin point. */
-.hero-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  background: radial-gradient(
-    ellipse 55% 70% at 24% 48%,
-    rgba(244, 126, 37, 0.55) 0%,
-    rgba(217, 84, 18, 0.28) 35%,
-    rgba(217, 84, 18, 0) 70%
-  );
-}
-
-.card-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px -12px rgba(244, 126, 37, 0.25);
-}
-
-@keyframes ember-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 126, 37, 0.35); }
-  50% { box-shadow: 0 0 0 8px rgba(244, 126, 37, 0); }
-}
-
-.ember-pulse {
-  animation: ember-pulse 2.4s ease-in-out infinite;
 }

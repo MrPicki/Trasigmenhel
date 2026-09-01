@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
 import PodcastPlayer from './PodcastPlayer';
-import { Skeleton } from '@/components/ui/skeleton';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
 interface HeroProps {
@@ -13,41 +14,46 @@ const Hero = ({ episode, isLoading, error }: HeroProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
-    <div className="w-full">
-      <div className="w-full relative">
-        {!isImageLoaded && (
-          <div className="w-full h-48 sm:h-64 md:h-80 lg:h-96 flex items-center justify-center">
-            <Skeleton className="w-full h-full" />
-          </div>
-        )}
+    <header className="w-full">
+      <div className="relative w-full">
+        {!isImageLoaded && <div className="w-full aspect-[16/7] bg-charcoal-100" aria-hidden="true" />}
         <img
           src="/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png"
-          alt="Trasig men Hel – podcast"
-          className="w-full h-auto"
+          alt="Trasig men hel"
+          className={`w-full h-auto transition-opacity duration-700 ${isImageLoaded ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}
           onLoad={() => setIsImageLoaded(true)}
+          fetchPriority="high"
         />
-        {/* Warmth breaking through the cracks — tints only the black canvas
-            via screen blending, the white wordmark and crack lines stay crisp. */}
-        {isImageLoaded && <div className="hero-glow" aria-hidden="true" />}
         <div
-          className="absolute inset-x-0 bottom-0 h-16 sm:h-24 bg-gradient-to-b from-transparent to-charcoal-200 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-20 sm:h-28 bg-gradient-to-b from-transparent to-charcoal-200 pointer-events-none"
           aria-hidden="true"
         />
       </div>
 
-      <div className="container px-4 py-10 sm:py-12">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="sr-only">Trasig men Hel – Podcast</h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8">
-            En ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten.
-          </p>
+      <div className="shell stage pt-8 pb-10 sm:pt-12 sm:pb-14">
+        <h1 className="sr-only">Trasig men hel — podcast</h1>
 
-          <div className="mx-auto max-w-2xl">
-            <PodcastPlayer episode={episode} isLoading={isLoading} error={error} />
-          </div>
+        <p className="font-display text-[1.75rem] leading-[1.15] sm:text-[2.5rem] sm:leading-[1.1] text-bone-200 max-w-[30ch] text-balance">
+          En ärlig och osminkad podd om att bryta negativa mönster och hitta styrka i sårbarheten.
+        </p>
+
+        <div className="mt-9 sm:mt-12">
+          <PodcastPlayer episode={episode} isLoading={isLoading} error={error} />
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-bone-600">
+          <Link
+            to="/lankar"
+            className="row-hover inline-flex items-center gap-1.5 text-bone-400 hover:text-bone-200 underline-offset-4 hover:underline"
+          >
+            Alla våra länkar
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+          <span className="hidden sm:inline text-charcoal-500" aria-hidden="true">/</span>
+          <span>Nya avsnitt varannan vecka</span>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
