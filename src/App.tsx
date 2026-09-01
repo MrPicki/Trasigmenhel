@@ -25,7 +25,7 @@ const RouteHead = () => {
       case '/lankar':
         return {
           title: "Länkar | Trasig men Hel",
-          description: "Alla kanaler för podden Trasig men Hel på ett ställe - Spotify, Instagram, TikTok och mer.",
+          description: "Alla kanaler för podden Trasig men Hel på ett ställe - Spotify, Apple Podcasts, Instagram, TikTok och mer.",
           url: "https://trasigmenhel.se/lankar"
         };
       default:

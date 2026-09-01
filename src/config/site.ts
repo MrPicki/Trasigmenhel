@@ -1,5 +1,6 @@
 import {
   SpotifyIcon,
+  ApplePodcastsIcon,
   TikTokIcon,
   YouTubeIcon,
   FacebookIcon,
@@ -41,6 +42,12 @@ export const LINKS: SiteLink[] = [
     note: 'Alla avsnitt, gratis',
     icon: SpotifyIcon,
     primary: true,
+  },
+  {
+    label: 'Apple Podcasts',
+    href: 'https://podcasts.apple.com/se/podcast/trasig-men-hel/id6807401829',
+    note: 'Prenumerera',
+    icon: ApplePodcastsIcon,
   },
   {
     label: 'Instagram',
