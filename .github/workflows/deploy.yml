@@ -30,6 +30,13 @@ jobs:
       - name: Installera beroenden
         run: npm ci
 
+      # Hämtar färska avsnitt till public/episodes.json innan bygget, så varje
+      # deploy går ut med aktuellt innehåll. Går flödet inte att nå behålls den
+      # incheckade filen — därför får steget inte fälla bygget.
+      - name: Hämta avsnitt
+        continue-on-error: true
+        run: node scripts/fetch-episodes.mjs
+
       - name: Bygg sajten
         run: npm run build
         env:
