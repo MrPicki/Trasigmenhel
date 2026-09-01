@@ -21,7 +21,7 @@ const ROUTES = [
     dir: 'lankar',
     title: 'Länkar | Trasig men Hel',
     description:
-      'Alla kanaler för podden Trasig men Hel på ett ställe - Spotify, Instagram, TikTok, YouTube och Facebook.',
+      'Alla kanaler för podden Trasig men Hel på ett ställe - Spotify, Apple Podcasts, Instagram, TikTok, YouTube och Facebook.',
   },
 ];
 
