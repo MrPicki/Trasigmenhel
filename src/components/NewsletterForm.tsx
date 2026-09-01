@@ -128,83 +128,82 @@ const NewsletterForm = () => {
   };
 
   return (
-    <section className="relative w-full bg-charcoal-100 py-16 overflow-hidden">
-      <div
-        className="absolute inset-0 opacity-60 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(244,126,37,0.12) 0%, rgba(244,126,37,0) 60%)' }}
-        aria-hidden="true"
-      />
-      <div className="container relative">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-6">
-            <Mail className="h-6 w-6 text-ember-500 mr-2" />
-            <h2 className="text-2xl md:text-3xl font-bold">
-              Få våra senaste avsnitt direkt i inboxen
-            </h2>
-          </div>
+    <section className="w-full bg-charcoal-100 py-14 sm:py-20" aria-labelledby="nyhetsbrev">
+      <div className="shell">
+        <h2 id="nyhetsbrev" className="text-2xl sm:text-3xl text-bone-200">
+          Få nya avsnitt i inkorgen
+        </h2>
+        <p className="mt-3 max-w-prose text-bone-600">
+          Ett mejl när ett nytt avsnitt släpps. Inget annat.
+        </p>
 
-          <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-center justify-center w-full px-4 sm:px-0">
-            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 md:space-y-0 md:flex md:gap-3 lg:gap-4 flex-1 w-full" noValidate>
-              <div className="flex-1 w-full">
-                <Input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Ditt namn"
-                  aria-invalid={!!errors.name}
-                  className={`bg-charcoal-200 border-charcoal-400 h-10 sm:h-12 text-sm sm:text-base ${
-                    errors.name ? 'border-red-500' : ''
-                  }`}
-                  disabled={isLoading}
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-1 text-left">{errors.name}</p>
-                )}
-              </div>
-              <div className="flex-1 w-full">
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Din e-post"
-                  aria-invalid={!!errors.email}
-                  className={`bg-charcoal-200 border-charcoal-400 h-10 sm:h-12 text-sm sm:text-base ${
-                    errors.email ? 'border-red-500' : ''
-                  }`}
-                  disabled={isLoading}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-1 text-left">{errors.email}</p>
-                )}
-              </div>
-              <Button
-                type="submit"
-                className="w-full md:w-auto h-10 sm:h-12 bg-ember-500 text-charcoal-100 hover:bg-ember-400 font-bold disabled:opacity-50 text-sm sm:text-base shadow-[0_8px_24px_-8px_rgba(244,126,37,0.5)]"
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex-1">
+              <label htmlFor="nl-name" className="sr-only">Ditt namn</label>
+              <Input
+                id="nl-name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Ditt namn"
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? 'nl-name-error' : undefined}
+                className={`h-12 rounded border-charcoal-400 bg-charcoal-200 text-bone-200 placeholder:text-bone-700 ${
+                  errors.name ? 'border-destructive' : ''
+                }`}
                 disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
-                    Skickar...
-                  </>
-                ) : (
-                  'Prenumerera'
-                )}
-              </Button>
-            </form>
-
-            <Button
-              variant="outline"
-              size="default"
-              className="border-gray-600 hover:bg-ember-500 hover:border-ember-500 hover:text-charcoal-100 font-semibold text-sm sm:text-base h-10 sm:h-12 w-full md:w-auto"
-              onClick={() => window.location.href = "mailto:kontakt@trasigmenhel.se"}
-            >
-              <Mail className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" /> Kontakta oss
-            </Button>
+              />
+              {errors.name && (
+                <p id="nl-name-error" className="mt-1.5 text-sm text-destructive">{errors.name}</p>
+              )}
+            </div>
+            <div className="flex-1">
+              <label htmlFor="nl-email" className="sr-only">Din e-post</label>
+              <Input
+                id="nl-email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Din e-post"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'nl-email-error' : undefined}
+                className={`h-12 rounded border-charcoal-400 bg-charcoal-200 text-bone-200 placeholder:text-bone-700 ${
+                  errors.email ? 'border-destructive' : ''
+                }`}
+                disabled={isLoading}
+              />
+              {errors.email && (
+                <p id="nl-email-error" className="mt-1.5 text-sm text-destructive">{errors.email}</p>
+              )}
+            </div>
           </div>
-        </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button
+              type="submit"
+              className="h-12 rounded bg-bone-200 px-6 font-semibold text-charcoal-100 hover:bg-bone-100 disabled:opacity-50 sm:w-auto"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                  Skickar
+                </>
+              ) : (
+                'Prenumerera'
+              )}
+            </Button>
+            <a
+              href="mailto:kontakt@trasigmenhel.se"
+              className="row-hover inline-flex h-12 items-center justify-center rounded border border-charcoal-400 px-6 text-sm font-medium text-bone-400 hover:border-bone-400 hover:text-bone-200 sm:w-auto"
+            >
+              <Mail className="mr-2 h-4 w-4" aria-hidden="true" /> Kontakta oss
+            </a>
+          </div>
+        </form>
       </div>
     </section>
   );

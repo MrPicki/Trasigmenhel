@@ -1,8 +1,8 @@
 import React from 'react';
-import EpisodeCard from './EpisodeCard';
-import { ListMusic, Mic } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import EpisodeRow from './EpisodeRow';
 import { formatDuration, type PodcastEpisode } from '@/hooks/use-podcast-feed';
+
+const SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/trasigmenhel';
 
 interface EpisodesSectionProps {
   episodes: PodcastEpisode[];
@@ -12,37 +12,37 @@ interface EpisodesSectionProps {
   onSelect: (episode: PodcastEpisode) => void;
 }
 
-const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect }: EpisodesSectionProps) => {
-  return (
-    <section className="w-full bg-charcoal-200 py-10 sm:py-16">
-      <div className="container px-4 sm:px-6">
-        <div className="flex items-center justify-center mb-8 sm:mb-12">
-          <ListMusic className="h-5 w-5 sm:h-6 sm:w-6 text-ember-500 mr-2" />
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
-            Avsnitt
-          </h2>
-        </div>
+const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect }: EpisodesSectionProps) => (
+  <section className="w-full py-14 sm:py-20" aria-labelledby="avsnitt">
+    <div className="shell">
+      <h2 id="avsnitt" className="text-2xl sm:text-3xl text-bone-200">
+        Avsnitt
+      </h2>
 
+      <div className="mt-8 sm:mt-10">
         {isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="space-y-3">
-                <Skeleton className="aspect-[4/3] w-full rounded-lg" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-full" />
-              </div>
+          <ul className="space-y-6" aria-busy="true" aria-label="Hämtar avsnitt">
+            {[0, 1, 2].map((i) => (
+              <li key={i} className="flex gap-4 border-t border-charcoal-400 pt-6 first:border-t-0 first:pt-0">
+                <div className="h-16 w-16 flex-shrink-0 rounded bg-charcoal-300 animate-pulse sm:h-20 sm:w-20" />
+                <div className="flex-1 space-y-2.5 pt-1">
+                  <div className="h-3 w-24 rounded bg-charcoal-400 animate-pulse" />
+                  <div className="h-4 w-3/4 rounded bg-charcoal-300 animate-pulse" />
+                  <div className="h-3 w-full rounded bg-charcoal-400 animate-pulse" />
+                </div>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         {!isLoading && error && (
-          <p className="text-center text-gray-400 max-w-md mx-auto">
-            Kunde inte hämta avsnitten just nu. Prova igen om en stund, eller lyssna direkt på{' '}
+          <p className="max-w-prose text-bone-400">
+            Avsnitten gick inte att hämta just nu. Prova igen om en stund, eller lyssna direkt på{' '}
             <a
-              href="https://podcasters.spotify.com/pod/show/trasigmenhel"
+              href={SPOTIFY_URL}
               target="_blank"
               rel="noreferrer"
-              className="underline underline-offset-2 hover:text-white"
+              className="text-bone-200 underline underline-offset-4 hover:no-underline"
             >
               Spotify
             </a>
@@ -51,35 +51,30 @@ const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect
         )}
 
         {!isLoading && !error && episodes.length === 0 && (
-          <div className="text-center text-gray-400 max-w-md mx-auto flex flex-col items-center gap-3">
-            <Mic className="h-8 w-8 opacity-50" />
-            <p>Inga avsnitt publicerade än — det första släpps inom kort.</p>
-          </div>
+          <p className="max-w-prose text-bone-400">
+            Inga avsnitt publicerade än — det första släpps inom kort.
+          </p>
         )}
 
         {!isLoading && !error && episodes.length > 0 && (
-          // A flex-wrap layout (rather than a grid) so that a handful of
-          // real episodes reads as a deliberate, centered row instead of a
-          // lone card stranded in an otherwise-empty 4-column grid.
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+          <ul>
             {episodes.map((episode) => (
-              <div key={episode.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] max-w-sm">
-                <EpisodeCard
-                  title={episode.title}
-                  description={episode.description}
-                  imageUrl={episode.image}
-                  duration={formatDuration(episode.durationSeconds)}
-                  date={episode.pubDate}
-                  isActive={episode.id === activeEpisodeId}
-                  onPlay={() => onSelect(episode)}
-                />
-              </div>
+              <EpisodeRow
+                key={episode.id}
+                title={episode.title}
+                description={episode.description}
+                imageUrl={episode.image}
+                duration={formatDuration(episode.durationSeconds)}
+                date={episode.pubDate}
+                isActive={episode.id === activeEpisodeId}
+                onPlay={() => onSelect(episode)}
+              />
             ))}
-          </div>
+          </ul>
         )}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default EpisodesSection;

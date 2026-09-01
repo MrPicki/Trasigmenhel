@@ -3,18 +3,35 @@
 <html lang="sv">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Trasig men hel | Podcast</title>
-    <meta name="description" content="Lyssna på Trasig men hel - en podcast om sårbarhet, styrka och människans resa." />
+    <meta name="description" content="Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans." />
     <meta name="author" content="Trasig men hel" />
 
-    <meta property="og:title" content="Trasig men hel | Podcast" />
-    <meta property="og:description" content="Lyssna på Trasig men hel - en podcast om sårbarhet, styrka och människans resa." />
+    <!-- Social crawlers do not run JavaScript, so these static tags — not the
+         Helmet ones — are what actually produce a link preview. They mirror
+         the home page's Helmet values exactly so the SPA duplicate is inert. -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Trasig men Hel" />
+    <meta property="og:locale" content="sv_SE" />
+    <meta property="og:url" content="https://trasigmenhel.se/" />
+    <meta property="og:title" content="Trasig men Hel - En podcast om läkning och personlig utveckling" />
+    <meta property="og:description" content="Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans." />
     <meta property="og:image" content="https://trasigmenhel.se/lovable-uploads/podcast-cover-og.jpg" />
+    <meta name="theme-color" content="#0F0F11" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://trasigmenhel.se/lovable-uploads/podcast-cover-og.jpg" />
+
+    <!-- Typefaces: one editorial serif for display, one grotesque for the rest.
+         Linked here rather than @import-ed from CSS so they don't block the
+         stylesheet from parsing. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&display=swap"
+    />
 
     <!-- Favicon -->
     <link rel="icon" href="/webpic.png" type="image/png" />

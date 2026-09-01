@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { EPISODES } from '@/config/site';
 
 export interface PodcastEpisode {
   id: string;
@@ -52,6 +53,27 @@ const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim();
 const stripTrailingHashtags = (text: string) =>
   text.replace(/(\s*#[^\s#]+){2,}\s*$/u, '').trim();
 
+/**
+ * rss2json hands back dates as "2026-09-01 05:00:00" while raw RSS uses
+ * "Mon, 01 Sep 2026 05:00:00 GMT". Safari refuses the first form, so
+ * normalise it before parsing rather than trusting `new Date` with either.
+ */
+const toTimestamp = (value: string) => {
+  if (!value) return NaN;
+  const normalised = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value)
+    ? value.replace(' ', 'T') + 'Z'
+    : value;
+  return new Date(normalised).getTime();
+};
+
+const isHidden = (title: string) =>
+  EPISODES.hiddenTitlePatterns.some((pattern) => pattern.test(title));
+
+const matchesFeatured = (episode: PodcastEpisode, match: string | RegExp) =>
+  match instanceof RegExp
+    ? match.test(episode.title) || match.test(episode.id)
+    : episode.title.toLowerCase().includes(match.toLowerCase()) || episode.id === match;
+
 const formatDuration = (seconds: number) => {
   if (!seconds || Number.isNaN(seconds)) return '';
   const mins = Math.floor(seconds / 60);
@@ -99,7 +121,25 @@ export const usePodcastFeed = () => {
           durationSeconds: Number(item.enclosure?.duration) || 0,
           image: item.thumbnail || item.enclosure?.image || data.feed?.image || '',
           link: item.link || '',
-        })).filter((ep: PodcastEpisode) => !!ep.audioUrl);
+        }))
+          .filter((ep: PodcastEpisode) => !!ep.audioUrl && !isHidden(ep.title))
+          // The feed's own order is not dependable, so sort here. Newest
+          // first; anything with an unparseable date keeps its feed position
+          // at the end rather than jumping to the top.
+          .sort((a: PodcastEpisode, b: PodcastEpisode) => {
+            const at = toTimestamp(a.pubDateRaw);
+            const bt = toTimestamp(b.pubDateRaw);
+            if (Number.isNaN(at) && Number.isNaN(bt)) return 0;
+            if (Number.isNaN(at)) return 1;
+            if (Number.isNaN(bt)) return -1;
+            return bt - at;
+          });
+
+        // A pinned episode leads the page regardless of publish date.
+        if (EPISODES.featuredMatch) {
+          const index = episodes.findIndex((ep) => matchesFeatured(ep, EPISODES.featuredMatch!));
+          if (index > 0) episodes.unshift(...episodes.splice(index, 1));
+        }
 
         if (!cancelled) {
           setState({

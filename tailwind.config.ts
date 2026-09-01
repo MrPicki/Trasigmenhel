@@ -20,8 +20,10 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				montserrat: ['Montserrat', 'sans-serif'],
-				merriweather: ['Merriweather', 'serif'],
+				// One editorial serif for display, one grotesque for everything
+				// else. Two faces, no third.
+				display: ['"Instrument Serif"', 'Georgia', 'Times New Roman', 'serif'],
+				sans: ['Archivo', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -29,26 +31,24 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				// The site is monochrome by decision, not by omission. Emphasis
+				// comes from contrast, weight and space — the primary action is
+				// the inversion of the page, not a coloured button.
 				charcoal: {
-					DEFAULT: '#1a1a1a',
-					100: '#0a0a0a',
-					200: '#121212',
-					300: '#1f1f1f',
-					400: '#2a2a2a',
-					500: '#333333',
+					DEFAULT: '#121214',
+					100: '#0A0A0C',
+					200: '#0F0F11',
+					300: '#161619',
+					400: '#232327',
+					500: '#33333A',
 				},
-				// Warm accent: the single deliberate color on an otherwise
-				// monochrome site. Meaning: light finding its way through
-				// the cracks — ember/amber, not a generic "brand blue".
-				// Reserved for action, warmth and emphasis; never decoration.
-				ember: {
-					DEFAULT: '#f47e25',
-					300: '#fac180',
-					400: '#f8a04f',
-					500: '#f47e25',
-					600: '#d95412',
-					700: '#a53a12',
-					900: '#32170b',
+				bone: {
+					DEFAULT: '#F2EFE9',
+					100: '#FAF9F6',
+					200: '#F2EFE9',
+					400: '#C7C3BA',
+					600: '#8C887F',
+					700: '#66635D',
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -106,12 +106,18 @@ export default {
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(10px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' },
+				},
+				reveal: {
+					'0%': { opacity: '0', transform: 'translateY(14px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
+				// Exponential ease-out: fast departure, long settle.
+				reveal: 'reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both',
 			}
 		}
 	},
