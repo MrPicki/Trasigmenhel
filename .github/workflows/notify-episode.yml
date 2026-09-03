@@ -30,7 +30,7 @@ jobs:
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: '3'
-          SENDER_EMAIL: kontakt@trasigmenhel.se
+          SENDER_EMAIL: mail@trasigmenhel.se
           SENDER_NAME: Trasig men Hel
         run: node scripts/notify-new-episode.mjs
 
