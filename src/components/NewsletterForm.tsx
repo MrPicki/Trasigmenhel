@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mail, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { CONTACT_EMAIL } from '@/config/site';
 
 interface FormData {
   name: string;
@@ -10,7 +11,9 @@ interface FormData {
 }
 
 // Web3Forms is a free form-to-email relay: https://web3forms.com, wired to
-// kontakt@trasigmenhel.se. Web3Forms access keys are designed to be public
+// the address configured on the Web3Forms key itself (see CONTACT_EMAIL in
+// src/config/site.ts — the key's recipient is set at web3forms.com, not here).
+// Web3Forms access keys are designed to be public
 // (safe in client-side code — see their docs), so it's committed here as
 // the default. VITE_WEB3FORMS_KEY can still override it (e.g. a future
 // GitHub Actions secret) without a code change.
@@ -83,7 +86,7 @@ const NewsletterForm = () => {
         throw new Error('Kunde inte registrera prenumerationen hos Brevo');
       }
 
-      // Best-effort notification email to kontakt@trasigmenhel.se so a human
+      // Best-effort notification email to the address on the Web3Forms key, so a human
       // sees new sign-ups immediately too. Not critical to the subscription
       // itself, so a failure here doesn't block the success message.
       if (WEB3FORMS_ACCESS_KEY) {
@@ -197,7 +200,7 @@ const NewsletterForm = () => {
               )}
             </Button>
             <a
-              href="mailto:kontakt@trasigmenhel.se"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="row-hover inline-flex h-12 items-center justify-center rounded border border-charcoal-400 px-6 text-sm font-medium text-bone-400 hover:border-bone-400 hover:text-bone-200 sm:w-auto"
             >
               <Mail className="mr-2 h-4 w-4" aria-hidden="true" /> Kontakta oss

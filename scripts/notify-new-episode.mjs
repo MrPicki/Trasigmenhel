@@ -13,7 +13,7 @@
  *   BREVO_API_KEY   - Brevo API key (Settings -> SMTP & API -> API keys)
  * Optional:
  *   BREVO_LIST_ID   - defaults to 3 ("Nyhetsbrev - Trasig men Hel")
- *   SENDER_EMAIL    - defaults to kontakt@trasigmenhel.se (verified Brevo sender)
+ *   SENDER_EMAIL    - defaults to mail@trasigmenhel.se (must be a verified Brevo sender)
  *   SENDER_NAME     - defaults to "Trasig men Hel"
  *   DRY_RUN         - set to "true" to log what would happen without calling Brevo
  */
@@ -30,7 +30,7 @@ const SITE_URL = 'https://trasigmenhel.se';
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID || '3');
-const SENDER_EMAIL = process.env.SENDER_EMAIL || 'kontakt@trasigmenhel.se';
+const SENDER_EMAIL = process.env.SENDER_EMAIL || 'mail@trasigmenhel.se';
 const SENDER_NAME = process.env.SENDER_NAME || 'Trasig men Hel';
 const DRY_RUN = process.env.DRY_RUN === 'true';
 

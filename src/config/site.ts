@@ -15,6 +15,16 @@ import {
  * Edit here, commit, run `npm run deploy` — no component code needed.
  */
 
+/**
+ * Den enda e-postadressen sajten använder — i länkar, formulär och som
+ * avsändare för nyhetsbrevet. Ändras den, ändras den här och ingen
+ * annanstans i koden.
+ *
+ * Två ställen ligger utanför repot och måste ändras för hand: mottagaren
+ * på Web3Forms-nyckeln, och avsändaren i Brevo.
+ */
+export const CONTACT_EMAIL = 'mail@trasigmenhel.se';
+
 export interface SiteLink {
   /** Shown as the button label. */
   label: string;
@@ -78,8 +88,8 @@ export const LINKS: SiteLink[] = [
   },
   {
     label: 'Mejla oss',
-    href: 'mailto:kontakt@trasigmenhel.se',
-    note: 'kontakt@trasigmenhel.se',
+    href: `mailto:${CONTACT_EMAIL}`,
+    note: CONTACT_EMAIL,
     icon: MailIcon,
   },
 ];
