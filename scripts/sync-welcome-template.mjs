@@ -25,6 +25,28 @@ export async function loadEpisodes() {
   return visibleEpisodes(data.episodes, 3);
 }
 
+async function findVerifiedSenderId() {
+  const response = await fetch('https://api.brevo.com/v3/senders?domain=trasigmenhel.se', {
+    headers: {
+      'api-key': BREVO_API_KEY,
+      Accept: 'application/json',
+    },
+    signal: AbortSignal.timeout(30000),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Kunde inte läsa Brevos avsändare (${response.status}): ${body}`);
+  }
+
+  const data = await response.json();
+  const sender = data.senders?.find(
+    (candidate) => candidate.email?.toLowerCase() === SENDER_EMAIL.toLowerCase() && candidate.active !== false
+  );
+  if (!sender?.id) throw new Error(`${SENDER_EMAIL} finns inte som en verifierad Brevo-avsändare.`);
+  return sender.id;
+}
+
 export async function syncWelcomeTemplate() {
   const episodes = await loadEpisodes();
   const payload = {
@@ -46,6 +68,12 @@ export async function syncWelcomeTemplate() {
   }
 
   if (!BREVO_API_KEY) throw new Error('BREVO_API_KEY saknas.');
+
+  // Brevo's template endpoint requires the internal sender ID even though the
+  // campaign endpoint accepts an email address. Resolve it at runtime so no
+  // account-specific ID needs to be guessed or copied into the repository.
+  const senderId = await findVerifiedSenderId();
+  payload.sender = { name: SENDER_NAME, id: senderId };
 
   const response = await fetch(`https://api.brevo.com/v3/smtp/templates/${encodeURIComponent(TEMPLATE_ID)}`, {
     method: 'PUT',
@@ -74,4 +102,3 @@ if (isDirectRun) {
     process.exitCode = 1;
   });
 }
-

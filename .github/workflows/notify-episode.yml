@@ -4,7 +4,7 @@ on:
   schedule:
     # Var 6:e timme. Kostar inget att köra oftare, men avsnitt släpps sällan
     # nog att detta räcker gott och väl för att märka det snabbt.
-    - cron: '0 */6 * * *'
+    - cron: '20 */6 * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -41,7 +41,8 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add data/last-notified-episode.json
             git commit -m "Uppdatera senast aviserade avsnitt [skip ci]"
-            git push
+            git pull --rebase origin master
+            git push origin HEAD:master
           else
             echo "Inget nytt att spara."
           fi

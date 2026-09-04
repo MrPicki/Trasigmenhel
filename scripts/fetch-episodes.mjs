@@ -124,12 +124,18 @@ async function main() {
     return;
   }
 
+  try {
+    const existing = JSON.parse(await readFile(OUT_FILE, 'utf-8'));
+    if (JSON.stringify({ feed: existing.feed, episodes: existing.episodes }) === JSON.stringify({ feed, episodes })) {
+      console.log(`Inga avsnittsförändringar (${episodes.length} avsnitt). Filen lämnas orörd.`);
+      return;
+    }
+  } catch {
+    // The first successful fetch creates the file below.
+  }
+
   await mkdir(path.dirname(OUT_FILE), { recursive: true });
-  await writeFile(
-    OUT_FILE,
-    JSON.stringify({ generatedAt: new Date().toISOString(), feed, episodes }, null, 2) + '\n',
-    'utf-8'
-  );
+  await writeFile(OUT_FILE, JSON.stringify({ generatedAt: new Date().toISOString(), feed, episodes }, null, 2) + '\n', 'utf-8');
 
   console.log(`Skrev ${episodes.length} avsnitt till public/episodes.json`);
   for (const episode of episodes) {
