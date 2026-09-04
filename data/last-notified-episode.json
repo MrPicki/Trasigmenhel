@@ -1,6 +1,7 @@
 {
-  "lastNotifiedGuid": "68658f77-0b00-4517-ad0a-7ef637f10690",
-  "lastNotifiedTitle": "Test avsnitt \"Löprundan\"",
+  "lastNotifiedGuid": "df713108-0af4-4e76-a502-169017d989f7",
+  "lastNotifiedTitle": "Premiär Avsnitt 1 Del 1",
   "notifiedAt": null,
-  "_comment": "Seeded manually so the automation doesn't email the newsletter list about the existing test episode. Every episode published after this one will trigger an automatic email."
+  "skippedAt": "2026-09-04T09:38:18.302Z",
+  "skippedReason": "no-subscribers"
 }
