@@ -20,7 +20,8 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { buildNewEpisodeEmailHtml, visibleEpisodes } from './newsletter-template.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STATE_FILE = path.join(__dirname, '..', 'data', 'last-notified-episode.json');
@@ -48,26 +49,60 @@ function extractAttr(xml, tag, attr) {
   return match ? match[1] : '';
 }
 
-function stripHtml(html) {
-  return html.replace(/<[^>]*>/g, '').trim();
+function decodeEntities(value) {
+  return value
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&');
 }
 
-function parseLatestEpisode(rssXml) {
-  const firstItemMatch = rssXml.match(/<item>([\s\S]*?)<\/item>/i);
-  if (!firstItemMatch) return null;
-  const item = firstItemMatch[1];
+function stripHtml(html) {
+  return decodeEntities(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
 
+function parseEpisode(item) {
   const guid = extractTag(item, 'guid') || extractTag(item, 'link');
   const title = stripHtml(extractTag(item, 'title'));
+  if (!guid || !title) return null;
+
   const link = extractTag(item, 'link');
   const pubDate = extractTag(item, 'pubDate');
   const rawDescription = extractTag(item, 'description') || extractTag(item, 'itunes:summary');
   const description = stripHtml(rawDescription);
   const audioUrl = extractAttr(item, 'enclosure', 'url');
+  const image = extractAttr(item, 'itunes:image', 'href');
+  const rawDuration = extractTag(item, 'itunes:duration');
+  const durationParts = rawDuration.split(':').map(Number);
+  const durationSeconds = /^\d+$/.test(rawDuration)
+    ? Number(rawDuration)
+    : durationParts.every(Number.isFinite)
+      ? durationParts.reduce((total, part) => total * 60 + part, 0)
+      : 0;
 
-  if (!guid || !title) return null;
+  return {
+    guid,
+    id: guid,
+    title,
+    link: link || SITE_URL,
+    pubDate,
+    pubDateRaw: pubDate,
+    publishedAt: pubDate,
+    description,
+    audioUrl,
+    image,
+    durationSeconds,
+  };
+}
 
-  return { guid, title, link: link || SITE_URL, pubDate, description, audioUrl };
+export function parseLatestEpisode(rssXml) {
+  const episodes = [...rssXml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)]
+    .map((match) => parseEpisode(match[1]))
+    .filter(Boolean);
+
+  return visibleEpisodes(episodes, 1)[0] || null;
 }
 
 async function loadState() {
@@ -84,21 +119,22 @@ async function saveState(state) {
   await writeFile(STATE_FILE, JSON.stringify(state, null, 2) + '\n', 'utf-8');
 }
 
-function buildEmailHtml(episode) {
-  const description = episode.description
-    ? `<p style="color:#444;line-height:1.6;">${episode.description.slice(0, 600)}</p>`
-    : '';
+async function getListSubscriberCount() {
+  const response = await fetch(`https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_ID}`, {
+    headers: {
+      'api-key': BREVO_API_KEY,
+      Accept: 'application/json',
+    },
+    signal: AbortSignal.timeout(30000),
+  });
 
-  return `
-  <div style="font-family:Helvetica,Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#fff;padding:32px 24px;">
-    <p style="text-transform:uppercase;letter-spacing:1px;font-size:12px;color:#999;margin:0 0 8px;">Nytt avsnitt av Trasig men Hel</p>
-    <h1 style="font-size:24px;margin:0 0 16px;">${episode.title}</h1>
-    ${description}
-    <p style="margin:32px 0 0;">
-      <a href="${episode.link}" style="display:inline-block;background:#fff;color:#0a0a0a;text-decoration:none;font-weight:bold;padding:12px 24px;border-radius:4px;">Lyssna nu</a>
-    </p>
-    <p style="margin-top:32px;font-size:13px;color:#888;">Du får det här mailet för att du prenumererar på nyhetsbrevet från Trasig men Hel.</p>
-  </div>`;
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Kunde inte läsa Brevo-listan (${response.status}): ${body}`);
+  }
+
+  const list = await response.json();
+  return Number(list.uniqueSubscribers ?? list.totalSubscribers ?? 0);
 }
 
 async function sendCampaign(episode) {
@@ -115,8 +151,9 @@ async function sendCampaign(episode) {
       name: `Nytt avsnitt: ${episode.title} (${new Date().toISOString().slice(0, 10)})`,
       subject: `Nytt avsnitt: ${episode.title}`,
       sender: { name: SENDER_NAME, email: SENDER_EMAIL },
+      replyTo: SENDER_EMAIL,
       type: 'classic',
-      htmlContent: buildEmailHtml(episode),
+      htmlContent: buildNewEpisodeEmailHtml(episode),
       recipients: { listIds: [BREVO_LIST_ID] },
     }),
   });
@@ -142,7 +179,7 @@ async function sendCampaign(episode) {
   console.log(`Skickade kampanj #${id} till lista ${BREVO_LIST_ID}`);
 }
 
-async function main() {
+export async function main() {
   console.log(`Hämtar flöde: ${FEED_URL}`);
   const res = await fetch(FEED_URL);
   if (!res.ok) throw new Error(`Kunde inte hämta RSS-flödet: ${res.status}`);
@@ -171,6 +208,21 @@ async function main() {
     throw new Error('BREVO_API_KEY saknas. Sätt den som en GitHub Actions secret.');
   }
 
+  const subscriberCount = await getListSubscriberCount();
+  if (subscriberCount === 0) {
+    console.log('Listan har inga prenumeranter. Avsnittet markeras som hanterat utan utskick.');
+    await saveState({
+      lastNotifiedGuid: episode.guid,
+      lastNotifiedTitle: episode.title,
+      notifiedAt: null,
+      skippedAt: new Date().toISOString(),
+      skippedReason: 'no-subscribers',
+    });
+    return;
+  }
+
+  console.log(`Skickar till ${subscriberCount} prenumerant${subscriberCount === 1 ? '' : 'er'}.`);
+
   await sendCampaign(episode);
 
   await saveState({
@@ -182,7 +234,10 @@ async function main() {
   console.log('Klart.');
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  });
+}

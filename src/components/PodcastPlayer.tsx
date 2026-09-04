@@ -31,7 +31,7 @@ const PodcastPlayer = ({ episode, isLoading, error }: PodcastPlayerProps) => {
     setCurrentTime(0);
     setImageFailed(false);
     setDuration(episode?.durationSeconds || 0);
-  }, [episode?.id]);
+  }, [episode?.id, episode?.durationSeconds]);
 
   const togglePlayPause = async () => {
     if (!audioRef.current) return;

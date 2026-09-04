@@ -45,3 +45,25 @@ jobs:
           git add public/episodes.json
           git commit -m "Uppdatera avsnittslistan"
           git push
+
+  sync-welcome-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sätt upp Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Hämta avsnitt
+        run: node scripts/fetch-episodes.mjs
+
+      - name: Uppdatera välkomstmejlet i Brevo
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_WELCOME_TEMPLATE_ID: '5'
+          SENDER_EMAIL: mail@trasigmenhel.se
+          SENDER_NAME: Trasig men Hel
+        run: node scripts/sync-welcome-template.mjs

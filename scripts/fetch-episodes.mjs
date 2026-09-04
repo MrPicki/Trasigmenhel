@@ -36,7 +36,7 @@ const decode = (text) =>
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&');
 
-const stripHtml = (html) => decode(html).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+const stripHtml = (html) => decode(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
 const tag = (xml, name) => {
   const match = xml.match(new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, 'i'));

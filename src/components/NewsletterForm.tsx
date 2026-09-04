@@ -6,47 +6,41 @@ import { useToast } from '@/components/ui/use-toast';
 import { CONTACT_EMAIL } from '@/config/site';
 
 interface FormData {
-  name: string;
   email: string;
+  consent: boolean;
 }
 
-// Web3Forms is a free form-to-email relay: https://web3forms.com, wired to
-// the address configured on the Web3Forms key itself (see CONTACT_EMAIL in
-// src/config/site.ts — the key's recipient is set at web3forms.com, not here).
-// Web3Forms access keys are designed to be public
-// (safe in client-side code — see their docs), so it's committed here as
-// the default. VITE_WEB3FORMS_KEY can still override it (e.g. a future
-// GitHub Actions secret) without a code change.
-const WEB3FORMS_ACCESS_KEY =
-  (import.meta.env.VITE_WEB3FORMS_KEY as string | undefined) || '2af5fb03-1b0a-47dc-9c7d-496b48f95c75';
+interface FormErrors {
+  email?: string;
+  consent?: string;
+}
 
 // Brevo sign-up form endpoint ("Trasig men Hel - Nyhetsbrev"), generated from
 // Brevo's own "Simple HTML" embed code. This URL only accepts a new
-// subscriber's email into the list (double opt-in required before they're
-// actually added) — it carries no secret credential, so it's safe to ship in
-// client-side code, same as the Web3Forms key above. This is what actually
-// gets a subscriber into the real Brevo list that the automated
-// new-episode newsletter (.github/workflows/notify-episode.yml) sends to.
+// subscriber's email into the list. It carries no secret credential, so it is
+// safe in client-side code. The OPT_IN field from the generated Brevo form is
+// required too; omitting it makes the request appear successful without adding
+// the contact to the newsletter list.
 const BREVO_FORM_URL =
   'https://6be33624.sibforms.com/serve/MUIFAKQKICuHSRguppxuD5NX9kEsJaCOF-PPOK5cXRgV9YoPAiKqadqvUl1-ZF5TKFYMO2EMMT1BoS_ZvZ_ICelbGinxgjdQQ6FOT-EmPjgLNWzb4IB5Sp_zgeoCwOgt_4MbJiM1GvcPsEMVpx5S_tMdcRluWpojfOEtCk7RNzGk_9uAhFVXDb4o_t_dxG1bkZY4NbHX1Cd3lh2K';
 
 const NewsletterForm = () => {
-  const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [formData, setFormData] = useState<FormData>({ email: '', consent: false });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Namn krävs';
-    }
+    const newErrors: FormErrors = {};
 
     if (!formData.email.trim()) {
       newErrors.email = 'E-post krävs';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Ogiltig e-postadress';
+    }
+
+    if (!formData.consent) {
+      newErrors.consent = 'Du behöver godkänna nyhetsbrevet för att prenumerera';
     }
 
     setErrors(newErrors);
@@ -65,7 +59,8 @@ const NewsletterForm = () => {
       // "new episode" newsletter (sent from GitHub Actions) actually reads
       // from. This call is the one that must succeed.
       const brevoBody = new URLSearchParams({
-        EMAIL: formData.email,
+        EMAIL: formData.email.trim().toLowerCase(),
+        OPT_IN: '1',
         email_address_check: '', // honeypot field, must stay empty
         locale: 'en',
         html_type: 'simple',
@@ -86,31 +81,12 @@ const NewsletterForm = () => {
         throw new Error('Kunde inte registrera prenumerationen hos Brevo');
       }
 
-      // Best-effort notification email to the address on the Web3Forms key, so a human
-      // sees new sign-ups immediately too. Not critical to the subscription
-      // itself, so a failure here doesn't block the success message.
-      if (WEB3FORMS_ACCESS_KEY) {
-        fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject: 'Ny prenumerant – Trasig men Hel',
-            from_name: 'trasigmenhel.se nyhetsbrev',
-            name: formData.name,
-            email: formData.email,
-          }),
-        }).catch(() => {
-          // Ignore — this is just a convenience notification, not the subscription itself.
-        });
-      }
-
       toast({
-        title: 'Nästan klart!',
-        description: 'Kolla din inkorg – du får ett mail där du bekräftar din prenumeration.',
+        title: 'Klart!',
+        description: 'Välkomstmejlet med de senaste avsnitten är på väg till din inkorg.',
       });
 
-      setFormData({ name: '', email: '' });
+      setFormData({ email: '', consent: false });
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -122,54 +98,36 @@ const NewsletterForm = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof FormData]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((previous) => ({ ...previous, email: e.target.value }));
+    if (errors.email) setErrors((previous) => ({ ...previous, email: undefined }));
+  };
+
+  const handleConsentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((previous) => ({ ...previous, consent: e.target.checked }));
+    if (errors.consent) setErrors((previous) => ({ ...previous, consent: undefined }));
   };
 
   return (
     <section className="w-full bg-charcoal-100 py-14 sm:py-20" aria-labelledby="nyhetsbrev">
       <div className="shell">
         <h2 id="nyhetsbrev" className="text-2xl sm:text-3xl text-bone-200">
-          Få nya avsnitt i inkorgen
+          Få de senaste avsnitten i inkorgen
         </h2>
         <p className="mt-3 max-w-prose text-bone-600">
-          Ett mejl när ett nytt avsnitt släpps. Inget annat.
+          Du får ett välkomstmejl direkt och sedan ett mejl när ett nytt avsnitt släpps. Inget annat.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <div className="flex-1">
-              <label htmlFor="nl-name" className="sr-only">Ditt namn</label>
-              <Input
-                id="nl-name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Ditt namn"
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? 'nl-name-error' : undefined}
-                className={`h-12 rounded border-charcoal-400 bg-charcoal-200 text-bone-200 placeholder:text-bone-700 ${
-                  errors.name ? 'border-destructive' : ''
-                }`}
-                disabled={isLoading}
-              />
-              {errors.name && (
-                <p id="nl-name-error" className="mt-1.5 text-sm text-destructive">{errors.name}</p>
-              )}
-            </div>
-            <div className="flex-1">
+          <div className="max-w-xl">
+            <div>
               <label htmlFor="nl-email" className="sr-only">Din e-post</label>
               <Input
                 id="nl-email"
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={handleEmailChange}
                 placeholder="Din e-post"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'nl-email-error' : undefined}
@@ -181,6 +139,36 @@ const NewsletterForm = () => {
               {errors.email && (
                 <p id="nl-email-error" className="mt-1.5 text-sm text-destructive">{errors.email}</p>
               )}
+            </div>
+
+            <div className="mt-4">
+              <label htmlFor="nl-consent" className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-bone-500">
+                <input
+                  id="nl-consent"
+                  type="checkbox"
+                  checked={formData.consent}
+                  onChange={handleConsentChange}
+                  aria-invalid={!!errors.consent}
+                  aria-describedby={errors.consent ? 'nl-consent-error' : 'nl-consent-help'}
+                  className="mt-1 h-4 w-4 rounded border-charcoal-400 accent-bone-200"
+                  disabled={isLoading}
+                />
+                <span>Jag vill få nyhetsbrev från Trasig men Hel. Jag kan avsluta prenumerationen när som helst.</span>
+              </label>
+              {errors.consent && (
+                <p id="nl-consent-error" className="mt-1.5 text-sm text-destructive">{errors.consent}</p>
+              )}
+              <p id="nl-consent-help" className="mt-2 text-xs leading-5 text-bone-700">
+                Prenumerationen hanteras av{' '}
+                <a
+                  href="https://www.brevo.com/en/legal/privacypolicy/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-bone-400"
+                >
+                  Brevo
+                </a>.
+              </p>
             </div>
           </div>
 

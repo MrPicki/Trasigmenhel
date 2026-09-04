@@ -39,8 +39,6 @@ jobs:
 
       - name: Bygg sajten
         run: npm run build
-        env:
-          VITE_WEB3FORMS_KEY: ${{ secrets.VITE_WEB3FORMS_KEY }}
 
       - name: Ladda upp byggresultat
         uses: actions/upload-pages-artifact@v3

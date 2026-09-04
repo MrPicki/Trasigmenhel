@@ -20,8 +20,8 @@ import {
  * avsändare för nyhetsbrevet. Ändras den, ändras den här och ingen
  * annanstans i koden.
  *
- * Två ställen ligger utanför repot och måste ändras för hand: mottagaren
- * på Web3Forms-nyckeln, och avsändaren i Brevo.
+ * Brevo använder samma adress som avsändare. Den synkas automatiskt från
+ * GitHub Actions via scripts/sync-welcome-template.mjs.
  */
 export const CONTACT_EMAIL = 'mail@trasigmenhel.se';
 

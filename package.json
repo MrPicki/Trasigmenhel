@@ -9,6 +9,9 @@
     "postbuild": "node scripts/prerender-routes.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "test": "node --test scripts/*.test.mjs",
+    "newsletter:sync": "node scripts/sync-welcome-template.mjs",
+    "newsletter:notify": "node scripts/notify-new-episode.mjs",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
