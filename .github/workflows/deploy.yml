@@ -24,11 +24,11 @@ jobs:
       - name: Sätt upp Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Installera beroenden
-        run: npm ci
+        run: npm ci --no-audit --no-fund
 
       # Hämtar färska avsnitt till public/episodes.json innan bygget, så varje
       # deploy går ut med aktuellt innehåll. Går flödet inte att nå behålls den
