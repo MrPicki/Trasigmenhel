@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
@@ -14,17 +13,18 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '1.25rem',
 			screens: {
 				'2xl': '1400px'
 			}
 		},
 		extend: {
 			fontFamily: {
-				// One editorial serif for display, one grotesque for everything
-				// else. Two faces, no third.
-				display: ['"Instrument Serif"', 'Georgia', 'Times New Roman', 'serif'],
-				sans: ['Archivo', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+				// Two faces, self-hosted (see src/main.tsx). Familjen Grotesk sets
+				// everything a person reads; Martian Mono sets only what a machine
+				// recorded — dates, durations, episode numbers, timecodes.
+				sans: ['"Familjen Grotesk Variable"', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica Neue', 'sans-serif'],
+				mono: ['"Martian Mono Variable"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -32,24 +32,27 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				// The site is monochrome by decision, not by omission. Emphasis
-				// comes from contrast, weight and space — the primary action is
-				// the inversion of the page, not a coloured button.
-				charcoal: {
-					DEFAULT: '#121214',
-					100: '#0A0A0C',
-					200: '#0F0F11',
-					300: '#161619',
-					400: '#232327',
-					500: '#33333A',
+				// Two grounds, not a ground plus accents. `ink` is the dark the
+				// podcast is listened in; `paper` is the record it is written on.
+				// The page switches between them at a hard edge, never a gradient.
+				ink: {
+					DEFAULT: '#0B0B0D',
+					900: '#050506',
+					800: '#0B0B0D',
+					700: '#141417',
+					600: '#222227', // hairline rule on ink
+					500: '#35353D',
+					400: '#5A5A64',
 				},
-				bone: {
-					DEFAULT: '#F2EFE9',
-					100: '#FAF9F6',
-					200: '#F2EFE9',
-					400: '#C7C3BA',
-					600: '#8C887F',
-					700: '#66635D',
+				paper: {
+					DEFAULT: '#EDE9E1',
+					100: '#F7F5F1',
+					200: '#EDE9E1',
+					300: '#DFDAD0',
+					400: '#C6C0B4', // hairline rule on paper
+					500: '#A29B8D', // muted text on ink — 7.1:1
+					600: '#6E685E', // muted text on paper — 4.6:1
+					700: '#4A463F', // secondary text on paper — 7.8:1
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -79,21 +82,16 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
 			},
+			// A record has square corners. Radius is opt-in per element (the play
+			// button, the cover thumbnails) rather than the default everywhere.
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: '0px',
+				md: '0px',
+				sm: '0px',
+			},
+			letterSpacing: {
+				label: '0.14em',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -104,21 +102,27 @@ export default {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' },
 				},
-				'fade-in': {
-					'0%': { opacity: '0', transform: 'translateY(10px)' },
-					'100%': { opacity: '1', transform: 'translateY(0)' },
-				},
+				// The page assembles itself once, top down.
 				reveal: {
-					'0%': { opacity: '0', transform: 'translateY(14px)' },
-					'100%': { opacity: '1', transform: 'translateY(0)' },
-				}
+					from: { opacity: '0', transform: 'translateY(18px)' },
+					to: { opacity: '1', transform: 'none' },
+				},
+				// The fracture draws itself from the point of impact outwards.
+				fracture: {
+					from: { strokeDashoffset: '1400' },
+					to: { strokeDashoffset: '0' },
+				},
+				// The player bar rises from the bottom edge when playback starts.
+				dock: {
+					from: { transform: 'translateY(100%)' },
+					to: { transform: 'none' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.6s ease-out',
-				// Exponential ease-out: fast departure, long settle.
-				reveal: 'reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both',
+				reveal: 'reveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both',
+				dock: 'dock 0.45s cubic-bezier(0.16, 1, 0.3, 1) both',
 			}
 		}
 	},

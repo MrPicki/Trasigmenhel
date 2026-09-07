@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="sv">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Trasig men hel | Podcast</title>
+    <title>Trasig men Hel | Podcast</title>
     <meta name="description" content="Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans." />
     <meta name="author" content="Trasig men hel" />
 
@@ -18,25 +17,20 @@
     <meta property="og:title" content="Trasig men Hel - En podcast om läkning och personlig utveckling" />
     <meta property="og:description" content="Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans." />
     <meta property="og:image" content="https://trasigmenhel.se/lovable-uploads/podcast-cover-og.jpg" />
-    <meta name="theme-color" content="#0F0F11" />
+    <meta name="theme-color" content="#0B0B0D" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://trasigmenhel.se/lovable-uploads/podcast-cover-og.jpg" />
 
-    <!-- Typefaces: one editorial serif for display, one grotesque for the rest.
-         Linked here rather than @import-ed from CSS so they don't block the
-         stylesheet from parsing. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&display=swap"
-    />
+    <!-- Typefaces are self-hosted and bundled by Vite (see src/main.tsx):
+         Familjen Grotesk for everything a person reads, Martian Mono for what
+         a machine recorded. No third-party stylesheet in the critical path,
+         and no visitor IP handed to a font CDN. -->
 
     <!-- Favicon -->
     <link rel="icon" href="/webpic.png" type="image/png" />
     <link rel="apple-touch-icon" href="/webpic.png" />
-    
+
     <!-- Script for GitHub Pages SPA routing -->
     <script type="text/javascript">
       // This script checks to see if a redirect is present in the query string,
@@ -48,7 +42,7 @@
       // the single page app to route accordingly.
       (function(l) {
         if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
+          var decoded = l.search.slice(1).split('&').map(function(s) {
             return s.replace(/~and~/g, '&')
           }).join('?');
           window.history.replaceState(null, null,
@@ -60,6 +54,28 @@
   </head>
 
   <body>
+    <!--
+      DIRECTION — AKTEN (seed af97a951)
+
+      THESIS: A podcast site built as a record that has been opened. Refuses the
+      category default: cover art in a rounded card over a row of "listen on"
+      pills and a grid of episode cards.
+      OWN-WORLD: Two grounds at page scale, not a ground plus accents — ink
+      #0B0B0D for the voice, paper #EDE9E1 for the record — switching at one
+      hard edge. Square corners everywhere, hairline rules instead of boxes,
+      no shadows. Familjen Grotesk set huge and tight; Martian Mono only where
+      something was recorded. The fracture is drawn geometry, not a screenshot.
+      STORY: This is one man's unvarnished account; here is where to follow it.
+      FIRST VIEWPORT: Black. Wordmark at viewport scale with the fracture
+      drawing itself outward behind it, the promise in one line, then Spotify
+      (inverted, filled) and Apple Podcasts (ruled) at full width — the primary
+      action, above the fold on a phone. Listening here is the quiet third door.
+      FORM: candidate 3 of 7 (the case record), seed af97a951; roll ran degraded
+      — no challengers were available.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

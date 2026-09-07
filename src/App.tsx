@@ -7,6 +7,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import Index from "./pages/Index";
 import Links from "./pages/Links";
 import Head from "@/components/Head";
+import PlayerBar from "@/components/PlayerBar";
+import { PlayerProvider } from "@/player/PlayerProvider";
 
 const queryClient = new QueryClient();
 
@@ -45,17 +47,22 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <RouteHead />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/lankar" element={<Links />} />
-            {/* Convenience alias so an English-typed URL still lands right. */}
-            <Route path="/links" element={<Navigate to="/lankar" replace />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </BrowserRouter>
+        {/* The player sits above the router so playback survives navigating
+            between / and /lankar. */}
+        <PlayerProvider>
+          <BrowserRouter>
+            <RouteHead />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/lankar" element={<Links />} />
+              {/* Convenience alias so an English-typed URL still lands right. */}
+              <Route path="/links" element={<Navigate to="/lankar" replace />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </BrowserRouter>
+          <PlayerBar />
+        </PlayerProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>

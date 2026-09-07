@@ -25,6 +25,14 @@ import {
  */
 export const CONTACT_EMAIL = 'mail@trasigmenhel.se';
 
+/**
+ * De två destinationer sajten faktiskt jobbar för. De ligger också i LINKS
+ * nedan (länksidan visar alla kanaler), men startsidans huvudåtgärder pekar
+ * hit direkt så att adressen bara finns på ett ställe.
+ */
+export const SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/trasigmenhel';
+export const APPLE_URL = 'https://podcasts.apple.com/se/podcast/trasig-men-hel/id6807401829';
+
 export interface SiteLink {
   /** Shown as the button label. */
   label: string;
@@ -48,14 +56,14 @@ export interface SiteLink {
 export const LINKS: SiteLink[] = [
   {
     label: 'Lyssna på Spotify',
-    href: 'https://podcasters.spotify.com/pod/show/trasigmenhel',
+    href: SPOTIFY_URL,
     note: 'Alla avsnitt, gratis',
     icon: SpotifyIcon,
     primary: true,
   },
   {
     label: 'Apple Podcasts',
-    href: 'https://podcasts.apple.com/se/podcast/trasig-men-hel/id6807401829',
+    href: APPLE_URL,
     note: 'Prenumerera',
     icon: ApplePodcastsIcon,
   },

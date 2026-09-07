@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Mail, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { CONTACT_EMAIL } from '@/config/site';
 
@@ -24,6 +22,10 @@ interface FormErrors {
 const BREVO_FORM_URL =
   'https://6be33624.sibforms.com/serve/MUIFAKQKICuHSRguppxuD5NX9kEsJaCOF-PPOK5cXRgV9YoPAiKqadqvUl1-ZF5TKFYMO2EMMT1BoS_ZvZ_ICelbGinxgjdQQ6FOT-EmPjgLNWzb4IB5Sp_zgeoCwOgt_4MbJiM1GvcPsEMVpx5S_tMdcRluWpojfOEtCk7RNzGk_9uAhFVXDb4o_t_dxG1bkZY4NbHX1Cd3lh2K';
 
+/**
+ * The page's second dark band, and its last loud moment. Same Brevo request
+ * as before — only the surface changed.
+ */
 const NewsletterForm = () => {
   const [formData, setFormData] = useState<FormData>({ email: '', consent: false });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -109,40 +111,65 @@ const NewsletterForm = () => {
   };
 
   return (
-    <section className="w-full bg-charcoal-100 py-14 sm:py-20" aria-labelledby="nyhetsbrev">
-      <div className="shell">
-        <h2 id="nyhetsbrev" className="text-2xl sm:text-3xl text-bone-200">
-          Få de senaste avsnitten i inkorgen
-        </h2>
-        <p className="mt-3 max-w-prose text-bone-600">
-          Du får ett välkomstmejl direkt och sedan ett mejl när ett nytt avsnitt släpps. Inget annat.
-        </p>
+    <section className="bg-ink text-paper" aria-labelledby="nyhetsbrev">
+      <div className="shell py-16 sm:py-24">
+        <div className="grid gap-x-8 gap-y-8 sm:grid-cols-[5.5rem_1fr]">
+          <div className="label pt-2 text-paper-500">Nyhetsbrev</div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>
-          <div className="max-w-xl">
-            <div>
-              <label htmlFor="nl-email" className="sr-only">Din e-post</label>
-              <Input
-                id="nl-email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleEmailChange}
-                placeholder="Din e-post"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'nl-email-error' : undefined}
-                className={`h-12 rounded border-charcoal-400 bg-charcoal-200 text-bone-200 placeholder:text-bone-700 ${
-                  errors.email ? 'border-destructive' : ''
-                }`}
-                disabled={isLoading}
-              />
+          <div className="min-w-0">
+            <h2
+              id="nyhetsbrev"
+              className="max-w-[16ch] text-paper"
+              style={{ fontSize: 'clamp(2rem, 7vw, 4rem)', letterSpacing: '-0.04em', lineHeight: 0.94 }}
+            >
+              Ett mejl när ett nytt avsnitt släpps.
+            </h2>
+            <p className="mt-5 max-w-[52ch] text-paper-300">
+              Du får ett välkomstmejl direkt och sedan ett mejl per avsnitt. Inget annat, ingen
+              vidareförsäljning, avsluta när du vill.
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-9 max-w-2xl" noValidate>
+              <div className="flex flex-col sm:flex-row">
+                <label htmlFor="nl-email" className="sr-only">
+                  Din e-post
+                </label>
+                <input
+                  id="nl-email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  value={formData.email}
+                  onChange={handleEmailChange}
+                  placeholder="din@epost.se"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'nl-email-error' : undefined}
+                  disabled={isLoading}
+                  className={`h-14 min-w-0 flex-1 border bg-ink-700 px-4 text-paper outline-none transition-colors placeholder:text-paper-500 focus:border-paper disabled:opacity-60 sm:h-16 sm:px-5 ${
+                    errors.email ? 'border-destructive' : 'border-ink-500'
+                  }`}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="mt-2 inline-flex h-14 items-center justify-center gap-2 bg-paper px-7 font-semibold tracking-tight text-ink transition-colors hover:bg-paper-100 disabled:opacity-50 sm:mt-0 sm:h-16"
+                >
+                  {isLoading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+                  {isLoading ? 'Skickar' : 'Prenumerera'}
+                </button>
+              </div>
+
               {errors.email && (
-                <p id="nl-email-error" className="mt-1.5 text-sm text-destructive">{errors.email}</p>
+                <p id="nl-email-error" className="mt-2 text-sm text-destructive">
+                  {errors.email}
+                </p>
               )}
-            </div>
 
-            <div className="mt-4">
-              <label htmlFor="nl-consent" className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-bone-500">
+              <label
+                htmlFor="nl-consent"
+                className="mt-5 flex cursor-pointer items-start gap-3 text-sm leading-6 text-paper-300"
+              >
                 <input
                   id="nl-consent"
                   type="checkbox"
@@ -150,51 +177,38 @@ const NewsletterForm = () => {
                   onChange={handleConsentChange}
                   aria-invalid={!!errors.consent}
                   aria-describedby={errors.consent ? 'nl-consent-error' : 'nl-consent-help'}
-                  className="mt-1 h-4 w-4 rounded border-charcoal-400 accent-bone-200"
+                  className="mt-1 h-4 w-4 flex-shrink-0 rounded-none border border-ink-500 accent-paper"
                   disabled={isLoading}
                 />
-                <span>Jag vill få nyhetsbrev från Trasig men Hel. Jag kan avsluta prenumerationen när som helst.</span>
+                <span>
+                  Jag vill få nyhetsbrev från Trasig men Hel. Jag kan avsluta prenumerationen när som
+                  helst.
+                </span>
               </label>
               {errors.consent && (
-                <p id="nl-consent-error" className="mt-1.5 text-sm text-destructive">{errors.consent}</p>
+                <p id="nl-consent-error" className="mt-2 text-sm text-destructive">
+                  {errors.consent}
+                </p>
               )}
-              <p id="nl-consent-help" className="mt-2 text-xs leading-5 text-bone-700">
+
+              <p id="nl-consent-help" className="mt-4 text-xs leading-5 text-paper-500">
                 Prenumerationen hanteras av{' '}
                 <a
                   href="https://www.brevo.com/en/legal/privacypolicy/"
                   target="_blank"
                   rel="noreferrer"
-                  className="underline underline-offset-2 hover:text-bone-400"
+                  className="underline underline-offset-2 hover:text-paper"
                 >
                   Brevo
-                </a>.
+                </a>
+                . Hellre skriva direkt?{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="underline underline-offset-2 hover:text-paper">
+                  {CONTACT_EMAIL}
+                </a>
               </p>
-            </div>
+            </form>
           </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button
-              type="submit"
-              className="h-12 rounded bg-bone-200 px-6 font-semibold text-charcoal-100 hover:bg-bone-100 disabled:opacity-50 sm:w-auto"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                  Skickar
-                </>
-              ) : (
-                'Prenumerera'
-              )}
-            </Button>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="row-hover inline-flex h-12 items-center justify-center rounded border border-charcoal-400 px-6 text-sm font-medium text-bone-400 hover:border-bone-400 hover:text-bone-200 sm:w-auto"
-            >
-              <Mail className="mr-2 h-4 w-4" aria-hidden="true" /> Kontakta oss
-            </a>
-          </div>
-        </form>
+        </div>
       </div>
     </section>
   );

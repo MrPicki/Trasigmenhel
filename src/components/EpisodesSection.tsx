@@ -1,34 +1,45 @@
 import React from 'react';
 import EpisodeRow from './EpisodeRow';
-import { formatDuration, type PodcastEpisode } from '@/hooks/use-podcast-feed';
-
-const SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/trasigmenhel';
+import { SPOTIFY_URL } from '@/config/site';
+import { usePlayer } from '@/player/PlayerProvider';
+import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
 interface EpisodesSectionProps {
   episodes: PodcastEpisode[];
   isLoading: boolean;
   error: string | null;
-  activeEpisodeId: string | null;
-  onSelect: (episode: PodcastEpisode) => void;
 }
 
-const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect }: EpisodesSectionProps) => (
-  <section className="w-full py-14 sm:py-20" aria-labelledby="avsnitt">
-    <div className="shell">
-      <h2 id="avsnitt" className="text-2xl sm:text-3xl text-bone-200">
-        Avsnitt
-      </h2>
+/**
+ * The register. This is where the page turns from ink to paper — the one
+ * hard edge on the site, and the reason the hero can be as dark as it is.
+ */
+const EpisodesSection = ({ episodes, isLoading, error }: EpisodesSectionProps) => {
+  const { toggle, isPlaying, isCurrent } = usePlayer();
 
-      <div className="mt-8 sm:mt-10">
+  return (
+    <section className="bg-paper text-ink" aria-labelledby="avsnitt">
+      <div className="shell">
+        <div className="flex items-baseline justify-between border-b border-ink py-5">
+          <h2 id="avsnitt" className="text-2xl tracking-tight sm:text-3xl">
+            Avsnitt
+          </h2>
+          <span className="label tnum text-paper-600">
+            {isLoading ? 'Hämtar' : `${String(episodes.length).padStart(2, '0')} i registret`}
+          </span>
+        </div>
+
         {isLoading && (
-          <ul className="space-y-6" aria-busy="true" aria-label="Hämtar avsnitt">
-            {[0, 1, 2].map((i) => (
-              <li key={i} className="flex gap-4 border-t border-charcoal-400 pt-6 first:border-t-0 first:pt-0">
-                <div className="h-16 w-16 flex-shrink-0 rounded bg-charcoal-300 animate-pulse sm:h-20 sm:w-20" />
-                <div className="flex-1 space-y-2.5 pt-1">
-                  <div className="h-3 w-24 rounded bg-charcoal-400 animate-pulse" />
-                  <div className="h-4 w-3/4 rounded bg-charcoal-300 animate-pulse" />
-                  <div className="h-3 w-full rounded bg-charcoal-400 animate-pulse" />
+          <ul aria-busy="true" aria-label="Hämtar avsnitt">
+            {[0, 1].map((i) => (
+              <li key={i} className="border-t border-paper-400 first:border-t-0">
+                <div className="grid grid-cols-[auto_1fr] gap-x-4 py-10 sm:grid-cols-[5.5rem_1fr] sm:gap-x-8">
+                  <div className="h-3 w-10 animate-pulse bg-paper-300" />
+                  <div className="space-y-4">
+                    <div className="h-3 w-40 animate-pulse bg-paper-300" />
+                    <div className="h-9 w-3/4 animate-pulse bg-paper-300" />
+                    <div className="h-3 w-full animate-pulse bg-paper-300" />
+                  </div>
                 </div>
               </li>
             ))}
@@ -36,13 +47,13 @@ const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect
         )}
 
         {!isLoading && error && (
-          <p className="max-w-prose text-bone-400">
+          <p className="max-w-prose py-12 text-paper-700">
             Avsnitten gick inte att hämta just nu. Prova igen om en stund, eller lyssna direkt på{' '}
             <a
               href={SPOTIFY_URL}
               target="_blank"
               rel="noreferrer"
-              className="text-bone-200 underline underline-offset-4 hover:no-underline"
+              className="text-ink underline underline-offset-4 hover:no-underline"
             >
               Spotify
             </a>
@@ -51,30 +62,28 @@ const EpisodesSection = ({ episodes, isLoading, error, activeEpisodeId, onSelect
         )}
 
         {!isLoading && !error && episodes.length === 0 && (
-          <p className="max-w-prose text-bone-400">
-            Inga avsnitt publicerade än — det första släpps inom kort.
+          <p className="max-w-prose py-12 text-paper-700">
+            Registret är tomt än så länge — det första avsnittet släpps inom kort.
           </p>
         )}
 
         {!isLoading && !error && episodes.length > 0 && (
           <ul>
-            {episodes.map((episode) => (
+            {episodes.map((episode, index) => (
               <EpisodeRow
                 key={episode.id}
-                title={episode.title}
-                description={episode.description}
-                imageUrl={episode.image}
-                duration={formatDuration(episode.durationSeconds)}
-                date={episode.pubDate}
-                isActive={episode.id === activeEpisodeId}
-                onPlay={() => onSelect(episode)}
+                episode={episode}
+                number={episodes.length - index}
+                isCurrent={isCurrent(episode)}
+                isPlaying={isPlaying}
+                onToggle={() => toggle(episode)}
               />
             ))}
           </ul>
         )}
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default EpisodesSection;

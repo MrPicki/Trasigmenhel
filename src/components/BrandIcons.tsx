@@ -10,19 +10,26 @@ import React from 'react';
  * only for interface icons (play, mail, arrows).
  */
 
-export type BrandIcon = (props: { size?: number; className?: string }) => JSX.Element;
+export type BrandIcon = (props: {
+  size?: number;
+  className?: string;
+  /** Set when a visible text label already names the destination, so the
+   *  mark is not announced twice inside the same link. */
+  decorative?: boolean;
+}) => JSX.Element;
 
 const svg =
   (path: string | string[], title: string): BrandIcon =>
-  ({ size = 24, className = '' }) => (
+  ({ size = 24, className = '', decorative = false }) => (
     <svg
       viewBox="0 0 24 24"
       width={size}
       height={size}
       className={className}
       fill="currentColor"
-      role="img"
-      aria-label={title}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : title}
+      aria-hidden={decorative || undefined}
       focusable="false"
     >
       {(Array.isArray(path) ? path : [path]).map((d) => (
