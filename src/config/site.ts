@@ -87,14 +87,10 @@ export const LINKS: SiteLink[] = [
     icon: YouTubeIcon,
   },
   {
-    // Sidan har inget claimat användarnamn, så det här numeriska
-    // profile.php-formatet är den enda adress som finns — kontrollerat, och
-    // den går rätt. Adressen syns aldrig för besökaren: raden säger bara
-    // "Facebook". Claimas ett användarnamn någon gång (Inställningar ->
-    // Sidnamn och användarnamn) kan den bytas mot
-    // https://www.facebook.com/<namn>.
+    // Sidan har numera ett claimat användarnamn, så den gamla numeriska
+    // profile.php-adressen är ersatt av det här.
     label: 'Facebook',
-    href: 'https://www.facebook.com/profile.php?id=61567352826893',
+    href: 'https://www.facebook.com/Trasigmenhel',
     icon: FacebookIcon,
   },
   {
