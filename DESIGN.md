@@ -70,11 +70,15 @@ Typskalan är fluid: hjälten `clamp(3.25rem, 16.5vw, 12.5rem)`, avsnittstitel
 
 En författad rörelse, inte utspridda hover-effekter:
 
-1. **Sprickan ritar sig själv** utåt från nedslagspunkten vid inladdning
-   (`src/components/Fracture.tsx`, `stroke-dashoffset` över 1,5 s). Ritad
-   geometri, ~3 kB, skarp i alla storlekar — femton radiella sprickor plus de
-   ackord som binder ihop dem, med radiell uttoning så rutan läser som krossad
-   på ett ställe i stället för jämnt rastrerad.
+1. **Sprickan propagerar** utåt från nedslagspunkten vid inladdning
+   (`src/components/Fracture.tsx`): en maskskiva växer från nedslaget och
+   avtäcker varje spricka när den passerar, 1,35 s. Geometrin är matchad mot
+   loggan — sprickorna där är inte hårstreck utan **avsmalnande vita spjut**,
+   breda och ljusa vid nedslaget och nålvassa i spetsarna, runt ett kluster av
+   små skärvor. Därför är varje spricka en fylld polygon svept längs en
+   knäckt mittlinje med halvbredd som faller mot noll, inte en streckad linje.
+   ~4 kB, skarp i alla storlekar, med radiell uttoning så rutan läser som
+   krossad på ett ställe i stället för jämnt rastrerad.
 2. **`.stage`** låter hjälten monteras uppifrån och ner, en gång.
 3. **Spelarlisten dockar** upp från nederkanten när uppspelning startar.
 

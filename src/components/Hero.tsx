@@ -27,7 +27,7 @@ const Hero = ({ episode, episodeCount, isLoading }: HeroProps) => {
 
   return (
     <header className="relative overflow-hidden bg-ink">
-      <Fracture className="pointer-events-none absolute left-[52%] top-[34%] h-[160%] w-[210%] -translate-x-1/2 -translate-y-1/2 sm:left-[46%] sm:top-[38%] sm:w-[125%]" />
+      <Fracture className="pointer-events-none absolute left-[52%] top-[30%] h-[160%] w-[190%] -translate-x-1/2 -translate-y-1/2 opacity-75 sm:left-[46%] sm:top-[38%] sm:w-[125%] sm:opacity-100" />
 
       {/* The record's header strip: where this is, and what is in it. */}
       <div className="relative border-b border-ink-600">

@@ -30,7 +30,8 @@ export const CONTACT_EMAIL = 'mail@trasigmenhel.se';
  * nedan (länksidan visar alla kanaler), men startsidans huvudåtgärder pekar
  * hit direkt så att adressen bara finns på ett ställe.
  */
-export const SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/trasigmenhel';
+export const SPOTIFY_URL =
+  'https://open.spotify.com/show/2N8p98KRnDw3OVsIwm6ArQ?si=c068c24b58c64c4f';
 export const APPLE_URL = 'https://podcasts.apple.com/se/podcast/trasig-men-hel/id6807401829';
 
 export interface SiteLink {
@@ -86,10 +87,12 @@ export const LINKS: SiteLink[] = [
     icon: YouTubeIcon,
   },
   {
-    // Facebook pages without a claimed username fall back to this numeric
-    // profile.php form. It works, but it reads as a machine address next to
-    // the other handles. Claim a username on the page (Settings -> Page name
-    // and username) and swap this for https://www.facebook.com/<namn>.
+    // Sidan har inget claimat användarnamn, så det här numeriska
+    // profile.php-formatet är den enda adress som finns — kontrollerat, och
+    // den går rätt. Adressen syns aldrig för besökaren: raden säger bara
+    // "Facebook". Claimas ett användarnamn någon gång (Inställningar ->
+    // Sidnamn och användarnamn) kan den bytas mot
+    // https://www.facebook.com/<namn>.
     label: 'Facebook',
     href: 'https://www.facebook.com/profile.php?id=61567352826893',
     icon: FacebookIcon,

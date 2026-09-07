@@ -139,16 +139,17 @@
   .stage > *:nth-child(4) { animation-delay: 0.34s; }
   .stage > *:nth-child(5) { animation-delay: 0.44s; }
 
-  /* The fracture: hairlines that draw themselves outward from the impact
-     point, once, and then stay. */
-  .fracture path {
-    stroke-dasharray: 1400;
-    stroke-dashoffset: 1400;
-    animation: fracture-draw 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+  /* The fracture propagating: the mask disc grows from the impact point and
+     uncovers each crack as it passes, once, and then stays. */
+  .fracture-grow {
+    transform-box: view-box;
+    transform-origin: 500px 420px;
+    animation: fracture-grow 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
   }
 
-  @keyframes fracture-draw {
-    to { stroke-dashoffset: 0; }
+  @keyframes fracture-grow {
+    from { transform: scale(0.02); }
+    to { transform: scale(1); }
   }
 
   .tnum {
@@ -169,7 +170,7 @@
     opacity: 1 !important;
     transform: none !important;
   }
-  .fracture path {
-    stroke-dashoffset: 0 !important;
+  .fracture-grow {
+    transform: none !important;
   }
 }
