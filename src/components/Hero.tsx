@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowUpRight, Play, Pause } from 'lucide-react';
-import Fracture from './Fracture';
 import { SpotifyIcon, ApplePodcastsIcon } from './BrandIcons';
 import { SPOTIFY_URL, APPLE_URL } from '@/config/site';
 import { usePlayer } from '@/player/PlayerProvider';
@@ -16,10 +15,10 @@ interface HeroProps {
  * The first viewport, and the only place the site is loud.
  *
  * The wordmark is live type, not a 126 kB banner screenshot: it sets itself
- * to the viewport, stays sharp on any screen, and can carry the fracture
- * behind it. Underneath it sit the two things the site actually exists to
- * do — Spotify and Apple Podcasts — at full width, above the fold, on a
- * phone. Playing the episode here is the quiet third option.
+ * to the viewport and stays sharp on any screen. Underneath it sit the two
+ * things the site actually exists to do — Spotify and Apple Podcasts — at
+ * full width, above the fold, on a phone. Playing the episode here is the
+ * quiet third option.
  */
 const Hero = ({ episode, episodeCount, isLoading }: HeroProps) => {
   const { toggle, isPlaying, isCurrent } = usePlayer();
@@ -27,8 +26,6 @@ const Hero = ({ episode, episodeCount, isLoading }: HeroProps) => {
 
   return (
     <header className="relative overflow-hidden bg-ink">
-      <Fracture className="pointer-events-none absolute left-[52%] top-[30%] h-[160%] w-[190%] -translate-x-1/2 -translate-y-1/2 opacity-75 sm:left-[46%] sm:top-[38%] sm:w-[125%] sm:opacity-100" />
-
       {/* The record's header strip: where this is, and what is in it. */}
       <div className="relative border-b border-ink-600">
         <div className="shell flex items-center justify-between py-3.5">

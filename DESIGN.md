@@ -57,8 +57,8 @@ Typskalan är fluid: hjälten `clamp(3.25rem, 16.5vw, 12.5rem)`, avsnittstitel
 
 - **Radie 0.** `borderRadius` lg/md/sm är alla `0px`. Runt hörn förekommer bara
   där formen är ett hjul: spela/pausa-cirklarna och omslagens ingenting.
-- **Inga skuggor, inga glöd, inga kort.** Det som behöver avskiljas får en
-  hårfin linjal som går hela mättet.
+- **Inga skuggor, inga glöd, inga kort, ingen bakgrundsdekor.** Det som
+  behöver avskiljas får en hårfin linjal som går hela mättet.
 - **`.shell`** är sajtens enda mått: `max-w-[64rem]`, `px-5 sm:px-8`.
 - **`.bar`** är den fullbredda åtgärdsraden (min 64/72 px). Fylld = inverterad
   sida (primär). Ruled = ram i `ink-500` (sekundär).
@@ -70,17 +70,13 @@ Typskalan är fluid: hjälten `clamp(3.25rem, 16.5vw, 12.5rem)`, avsnittstitel
 
 En författad rörelse, inte utspridda hover-effekter:
 
-1. **Sprickan propagerar** utåt från nedslagspunkten vid inladdning
-   (`src/components/Fracture.tsx`): en maskskiva växer från nedslaget och
-   avtäcker varje spricka när den passerar, 1,35 s. Geometrin är matchad mot
-   loggan — sprickorna där är inte hårstreck utan **avsmalnande vita spjut**,
-   breda och ljusa vid nedslaget och nålvassa i spetsarna, runt ett kluster av
-   små skärvor. Därför är varje spricka en fylld polygon svept längs en
-   knäckt mittlinje med halvbredd som faller mot noll, inte en streckad linje.
-   ~4 kB, skarp i alla storlekar, med radiell uttoning så rutan läser som
-   krossad på ett ställe i stället för jämnt rastrerad.
-2. **`.stage`** låter hjälten monteras uppifrån och ner, en gång.
-3. **Spelarlisten dockar** upp från nederkanten när uppspelning startar.
+1. **`.stage`** låter hjälten monteras uppifrån och ner, en gång.
+2. **Spelarlisten dockar** upp från nederkanten när uppspelning startar.
+
+Grunden är odekorerad. En ritad sprickeffekt bakom ordmärket testades och
+togs bort: den tillförde inget och läste som en solstråle snarare än som
+glas. Hjälten bär på typografin och den hårda växlingen mellan svart och
+papper — inget mer behövs bakom den.
 
 Inget nedanför vecket har inträdesanimation. Allt respekterar
 `prefers-reduced-motion`.

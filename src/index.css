@@ -139,19 +139,6 @@
   .stage > *:nth-child(4) { animation-delay: 0.34s; }
   .stage > *:nth-child(5) { animation-delay: 0.44s; }
 
-  /* The fracture propagating: the mask disc grows from the impact point and
-     uncovers each crack as it passes, once, and then stays. */
-  .fracture-grow {
-    transform-box: view-box;
-    transform-origin: 500px 420px;
-    animation: fracture-grow 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
-  }
-
-  @keyframes fracture-grow {
-    from { transform: scale(0.02); }
-    to { transform: scale(1); }
-  }
-
   .tnum {
     font-variant-numeric: tabular-nums;
   }
@@ -168,9 +155,6 @@
   }
   .stage > * {
     opacity: 1 !important;
-    transform: none !important;
-  }
-  .fracture-grow {
     transform: none !important;
   }
 }

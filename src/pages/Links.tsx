@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Fracture from '@/components/Fracture';
 import ChannelList from '@/components/ChannelList';
 import { LINKS_MESSAGE } from '@/config/site';
 import { usePlayer } from '@/player/PlayerProvider';
@@ -22,8 +21,6 @@ const Links = () => {
     className="relative flex min-h-screen w-full flex-col overflow-hidden bg-ink"
     style={{ paddingBottom: playing ? '7rem' : 'max(3rem, env(safe-area-inset-bottom))' }}
   >
-    <Fracture className="pointer-events-none absolute left-1/2 top-0 h-[70vh] w-[220%] -translate-x-1/2 opacity-80 sm:w-[130%]" />
-
     <div className="shell stage relative w-full max-w-[34rem] pt-14 sm:pt-20">
       <div className="text-center">
         <img
