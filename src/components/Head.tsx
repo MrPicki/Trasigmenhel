@@ -51,7 +51,7 @@ const Head = ({
       
       {/* Additional Meta Tags */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-      <meta name="theme-color" content="#0F0F11" />
+      <meta name="theme-color" content="#0B0B0D" />
       <meta name="keywords" content="podcast, personlig utveckling, mental hälsa, självhjälp, läkning, välmående, självacceptans" />
       <meta name="author" content="Trasig men Hel" />
       <meta name="language" content="sv" />
@@ -59,13 +59,6 @@ const Head = ({
       {/* Favicon */}
       <link rel="icon" href="/webpic.png" type="image/png" />
       <link rel="apple-touch-icon" href="/webpic.png" />
-      
-      {/* Preload Critical Assets */}
-      <link
-        rel="preload"
-        href="/lovable-uploads/48ab1909-f9ce-40d6-94df-3a02b4d7bcba.png"
-        as="image"
-      />
     </Helmet>
   );
 };
