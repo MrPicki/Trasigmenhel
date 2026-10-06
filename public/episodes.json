@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T17:56:19.269Z",
+  "generatedAt": "2026-10-06T22:21:55.757Z",
   "feed": {
     "title": "Trasig men Hel",
     "description": "\"Trasig men hel\" är en ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten. Värden Christoffer ”Picki” delar sin resa från en tuff uppväxt präglad av trauma och missbruk till en pappa som kämpar för förändring. Genom personliga berättelser och gästintervjuer utforskar vi hur vi kan växa genom livets utmaningar. För dig som vill förstå dig själv bättre, bryta destruktiva cykler och utvecklas som person. Nya avsnitt varannan vecka. En Ncom produktion. #TrasigMenHel #PersonligUtveckling #MentalHälsa",
@@ -7,6 +7,17 @@
     "link": "https://trasigmenhel.se/"
   },
   "episodes": [
+    {
+      "id": "8e086765-ed89-4f3a-85f9-4c116c6c4d04",
+      "title": "Bonusavsnitt – Reflektioner efter del 1",
+      "audioUrl": "https://anchor.fm/s/3c8f8270/podcast/play/126802565/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-9-4%2F29075caa-c491-1f6f-68ce-63c6b6badefe.mp3",
+      "description": "Jag trodde att samtalet med min mamma skulle ge mig svar. Kanske till och med läka något mellan oss. Men efteråt började en annan fråga växa fram: Var jag ens rätt person att ställa frågorna? I det här bonusavsnittet av Trasig men hel går jag tillbaka till samtalet med min mamma och försöker förstå vad som egentligen hände – inte bara mellan oss, utan inom mig. Vad händer när ett vuxet barn konfronterar en förälder med sin barndom? Hur mycket ansvar kan man kräva för något som inte längre går att förändra? Och vad gör man när två människor delar samma historia, men minns och upplever den på helt olika sätt? Jag reflekterar över trauma, barndom, ansvar, skuld, förlåtelse och vår relation efter inspelningen. Om varför jag sökte ett erkännande som kanske aldrig kunde komma – och om samtalet faktiskt förde oss närmare varandra eller skapade ännu större distans. Kanske handlar läkning inte alltid om att få de svar man söker. Kanske handlar den ibland om att förstå att de aldrig kommer.",
+      "pubDateRaw": "Tue, 06 Oct 2026 10:00:00 GMT",
+      "publishedAt": "2026-10-06T10:00:00.000Z",
+      "durationSeconds": 1953,
+      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Bonusavsnitt--Reflektioner-efter-del-1-e3ps765"
+    },
     {
       "id": "ae668d51-4a80-4348-a43a-8a9496f67464",
       "title": "Avsnitt 1 Del 3",
