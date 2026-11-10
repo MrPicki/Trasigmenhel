@@ -36,11 +36,54 @@ const WHISPER = process.env.TRANSCRIBE_BIN || 'whisper-cli';
 const MODEL =
   process.env.TRANSCRIBE_MODEL ||
   path.join(process.env.HOME || '', '.samtalsklipp', 'modeller', 'ggml-large-v3-turbo.bin');
-const VAD =
-  process.env.TRANSCRIBE_VAD ||
-  path.join(process.env.HOME || '', '.samtalsklipp', 'modeller', 'ggml-silero-v5.1.2.bin');
+
 
 const SOURCE = 'whisper.cpp (large-v3-turbo) lokalt';
+
+/**
+ * Första körningen gjordes med Sileros VAD, som Samtalsklipp använder för att
+ * få ordexakta tider. Det visade sig förstöra långa filer: efter ungefär tio
+ * minuter föll modellen isär och resten av avsnittet kom tillbaka som
+ * enstaka ord och till slut "was. was. was.". Utan VAD går whisper igenom
+ * filen i jämna fönster från början till slut, vilket är precis vad ett helt
+ * transkript behöver. Tidsstämplarna blir fullt tillräckliga för att peka ut
+ * ett stycke.
+ *
+ * Kontrollen nedan finns för att samma sak aldrig ska hinna ut på sajten
+ * igen. Ett samtal håller runt 120 ord i minuten; under 60 är något fel.
+ */
+const MIN_WORDS_PER_MINUTE = 60;
+
+/** Modellen tappar greppet på ett karaktäristiskt sätt: samma korta rad om
+ *  och om igen. Hittas en sådan rad är hela körningen misstänkt. */
+const longestRepeatRun = (segments) => {
+  let longest = 1;
+  let run = 1;
+  for (let i = 1; i < segments.length; i += 1) {
+    if (segments[i].text.trim() === segments[i - 1].text.trim()) {
+      run += 1;
+      longest = Math.max(longest, run);
+    } else {
+      run = 1;
+    }
+  }
+  return longest;
+};
+
+const check = (segments, durationSeconds) => {
+  const words = segments.map((segment) => segment.text).join(' ').split(/\s+/).length;
+  const minutes = Math.max(durationSeconds / 60, 1);
+  const rate = Math.round(words / minutes);
+  const repeats = longestRepeatRun(segments);
+
+  if (rate < MIN_WORDS_PER_MINUTE) {
+    return { ok: false, reason: `bara ${rate} ord/minut (${words} ord på ${Math.round(minutes)} min)` };
+  }
+  if (repeats >= 4) {
+    return { ok: false, reason: `samma rad upprepad ${repeats} gånger i följd` };
+  }
+  return { ok: true, note: `${words} ord, ${rate} ord/min` };
+};
 
 const exists = async (file) => {
   try {
@@ -73,13 +116,16 @@ if (!(await exists(MODEL))) {
   process.exit(1);
 }
 
+/** Med --force skrivs även transkript som redan finns om. */
+const force = process.argv.includes('--force');
+
 let written = 0;
 
 for (const episode of episodes) {
   const slug = slugFor(episode);
   const target = path.join(OUT, `${slug}.json`);
 
-  if (await exists(target)) {
+  if (!force && (await exists(target))) {
     console.log(`• ${slug} — har redan transkript`);
     continue;
   }
@@ -107,8 +153,6 @@ for (const episode of episodes) {
         '-m', MODEL,
         '-f', wav,
         '-l', 'sv',
-        '--vad',
-        '--vad-model', VAD,
         '-oj',
         '-of', path.join(WORK, episode.id),
         '-np',
@@ -131,6 +175,13 @@ for (const episode of episodes) {
     continue;
   }
 
+  const verdict = check(segments, episode.durationSeconds);
+  if (!verdict.ok) {
+    console.warn(`! ${slug} — transkriptet ser trasigt ut (${verdict.reason}). Skriver inte filen.`);
+    console.warn(`  Radera ${raw} och kör om, eller granska den innan du använder den.`);
+    continue;
+  }
+
   await writeFile(
     target,
     JSON.stringify(
@@ -140,7 +191,7 @@ for (const episode of episodes) {
     ) + '\n'
   );
   written += 1;
-  console.log(`✓ ${slug} — ${segments.length} segment`);
+  console.log(`✓ ${slug} — ${segments.length} segment, ${verdict.note}`);
 }
 
 console.log(`\nKlart. ${written} nya transkript i public/transcripts/.`);
