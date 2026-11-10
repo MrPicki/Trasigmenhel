@@ -112,6 +112,33 @@ for (const route of routes) {
   });
 }
 
+// 3. Alias paths. The router sends /links to /lankar for anyone with
+//    JavaScript, but GitHub Pages answers the address itself with a 404 —
+//    which is what a crawler records. A real file with a canonical link says
+//    the same thing in the form a search engine acts on, and is kept out of
+//    the sitemap so only the canonical address is submitted.
+const ALIASES = [{ from: 'links', to: '/lankar' }];
+
+for (const alias of ALIASES) {
+  const target = `${SITE}${alias.to}`;
+  const html = `<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Länkar | Trasig men Hel</title>
+    <link rel="canonical" href="${target}" />
+    <meta http-equiv="refresh" content="0; url=${target}" />
+    <meta name="robots" content="noindex, follow" />
+  </head>
+  <body>
+    <p>Sidan finns på <a href="${target}">${target}</a>.</p>
+  </body>
+</html>
+`;
+  await mkdir(path.join(DIST, alias.from), { recursive: true });
+  await writeFile(path.join(DIST, alias.from, 'index.html'), html);
+}
+
 // 3. The sitemap, listing exactly the pages that were written. Generated
 //    rather than maintained by hand: a sitemap that lists a page which does
 //    not exist, or omits one that does, is worse than none.
@@ -129,7 +156,7 @@ ${written
 `;
 await writeFile(path.join(DIST, 'sitemap.xml'), sitemap);
 
-// 4. The 404 that GitHub Pages serves for anything else keeps the SPA
+// 5. The 404 that GitHub Pages serves for anything else keeps the SPA
 //    redirect, but should still describe itself properly.
 try {
   const notFound = await readFile(path.join(DIST, '404.html'), 'utf8');
