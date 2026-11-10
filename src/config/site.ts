@@ -158,6 +158,12 @@ export interface EpisodePage {
  * the entry pins it.
  */
 export const EPISODE_PAGES: Record<string, EpisodePage> = {
+  'f2d04560-41cc-4600-b8c4-86fa2bd0a9d3': {
+    slug: 'moster-judy-samma-uppvaxt-tva-verkligheter',
+    title: 'Moster Judy: samma uppväxt, två olika verkligheter',
+    summary:
+      'Två systrar, samma familj och samma historia — men två helt olika människor. Christoffer möter sin moster Judy. Avsnitt 2, del 1.',
+  },
   'df713108-0af4-4e76-a502-169017d989f7': {
     slug: 'samtalet-med-mamma-del-1',
     title: 'Samtalet med mamma, del 1: en uppväxt vi minns olika',

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T06:50:55.634Z",
+  "generatedAt": "2026-11-10T17:26:16.491Z",
   "feed": {
     "title": "Trasig men Hel",
     "description": "\"Trasig men hel\" är en ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten. Värden Christoffer ”Picki” delar sin resa från en tuff uppväxt präglad av trauma och missbruk till en pappa som kämpar för förändring. Genom personliga berättelser och gästintervjuer utforskar vi hur vi kan växa genom livets utmaningar. För dig som vill förstå dig själv bättre, bryta destruktiva cykler och utvecklas som person. Nya avsnitt varannan vecka. En Ncom produktion. #TrasigMenHel #PersonligUtveckling #MentalHälsa",
@@ -7,6 +7,17 @@
     "link": "https://trasigmenhel.se/"
   },
   "episodes": [
+    {
+      "id": "f2d04560-41cc-4600-b8c4-86fa2bd0a9d3",
+      "title": "Avsnitt 2 Del 1",
+      "audioUrl": "https://anchor.fm/s/3c8f8270/podcast/play/129131678/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-10-9%2F09d19143-2609-c983-0a2b-e5071cb6b009.mp3",
+      "description": "Avsnitt 2 – Del 1 | Moster Judy: Samma uppväxt, två olika verkligheter Hur kan två människor leva genom samma barndom, växa upp under samma tak och ändå bära på två helt olika berättelser? I det här avsnittet av Trasig men hel möter jag min moster Judy – min mammas syster, men också en människa som har haft en helt annan betydelse i mitt liv. Där relationen till min mamma har präglats av sår, avstånd och obesvarade frågor, har Judy representerat något annat. En kontrast som fått mig att fundera över hur två systrar, med samma familj och gemensamma historia, kan utvecklas till så olika människor. Men samtalet handlar om mer än bara min mamma och hennes syster. Det väcker också en parallell till mig och min äldre bror. Vi växte upp i samma familj, med samma föräldrar, men våra upplevelser, minnen och sätt att hantera det vi varit med om skiljer sig åt. För vad är det egentligen som formar oss? Är det vad vi upplever, hur vi upplever det eller vad vi gör med det efteråt? Tillsammans med Judy försöker jag förstå fler perspektiv på min familjs historia. Inte för att avgöra vem som har rätt eller fel, utan för att förstå hur samma verklighet kan lämna så olika spår i människor. Det här är ett samtal om familjerelationer, barndom, syskonskap, arv och miljö – men framför allt om hur våra erfarenheter formar oss och de relationer vi skapar vidare i livet. 🎧 Trasig men hel är en personlig dokumentär podd om psykisk ohälsa, barndomstrauman, trasiga relationer och vägen mot förståelse och läkning. För ibland behöver vi höra någon annans berättelse för att börja förstå vår egen. Du är inte ensam. klicka här",
+      "pubDateRaw": "Tue, 10 Nov 2026 11:00:00 GMT",
+      "publishedAt": "2026-11-10T11:00:00.000Z",
+      "durationSeconds": 2967,
+      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-2-Del-1-e3s39mu"
+    },
     {
       "id": "8e086765-ed89-4f3a-85f9-4c116c6c4d04",
       "title": "Bonusavsnitt – Reflektioner efter Avsnitt 1",
