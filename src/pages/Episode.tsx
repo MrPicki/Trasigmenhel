@@ -13,7 +13,7 @@ import { usePreload, type Transcript } from '@/data/preload';
 import { usePodcastFeed } from '@/hooks/use-podcast-feed';
 import { usePlayer } from '@/player/PlayerProvider';
 import { findBySlug, isoDate, isoDuration, pathFor, summaryFor, titleFor } from '@/lib/episodes';
-import { timecode, toParagraphs, transcriptText } from '@/lib/transcript';
+import { timecode, toParagraphs } from '@/lib/transcript';
 
 const SITE = 'https://trasigmenhel.se';
 
@@ -265,14 +265,9 @@ const Episode = () => {
 
           {paragraphs.length > 0 && (
             <section aria-labelledby="transkript" className="mt-14 border-t border-paper-400 pt-10">
-              <div className="flex flex-wrap items-baseline justify-between gap-3">
-                <h2 id="transkript" className="text-2xl tracking-tight sm:text-3xl">
-                  Transkript
-                </h2>
-                <p className="label tnum text-paper-600">
-                  {transcriptText(transcript?.segments ?? []).split(/\s+/).length} ord
-                </p>
-              </div>
+              <h2 id="transkript" className="text-2xl tracking-tight sm:text-3xl">
+                Transkript
+              </h2>
 
               {/* Vilket verktyg som skrev texten angår inte en lyssnare; att den
                   är maskinskriven gör det, eftersom namn kan bli felhörda.
