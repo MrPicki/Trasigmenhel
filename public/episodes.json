@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T17:26:16.491Z",
+  "generatedAt": "2026-11-10T18:14:06.935Z",
   "feed": {
     "title": "Trasig men Hel",
     "description": "\"Trasig men hel\" är en ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten. Värden Christoffer ”Picki” delar sin resa från en tuff uppväxt präglad av trauma och missbruk till en pappa som kämpar för förändring. Genom personliga berättelser och gästintervjuer utforskar vi hur vi kan växa genom livets utmaningar. För dig som vill förstå dig själv bättre, bryta destruktiva cykler och utvecklas som person. Nya avsnitt varannan vecka. En Ncom produktion. #TrasigMenHel #PersonligUtveckling #MentalHälsa",
@@ -16,7 +16,9 @@
       "publishedAt": "2026-11-10T11:00:00.000Z",
       "durationSeconds": 2967,
       "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
-      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-2-Del-1-e3s39mu"
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-2-Del-1-e3s39mu",
+      "appleUrl": "https://podcasts.apple.com/se/podcast/avsnitt-2-del-1/id6807401829?i=1000800981053",
+      "spotifyUrl": null
     },
     {
       "id": "8e086765-ed89-4f3a-85f9-4c116c6c4d04",
@@ -27,7 +29,9 @@
       "publishedAt": "2026-10-06T10:00:00.000Z",
       "durationSeconds": 1953,
       "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
-      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Bonusavsnitt--Reflektioner-efter-Avsnitt-1-e3ps765"
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Bonusavsnitt--Reflektioner-efter-Avsnitt-1-e3ps765",
+      "appleUrl": "https://podcasts.apple.com/se/podcast/bonusavsnitt-reflektioner-efter-avsnitt-1/id6807401829?i=1000793421785",
+      "spotifyUrl": null
     },
     {
       "id": "ae668d51-4a80-4348-a43a-8a9496f67464",
@@ -38,7 +42,9 @@
       "publishedAt": "2026-09-15T10:00:00.000Z",
       "durationSeconds": 2403,
       "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
-      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-1-Del-3-e3orgaj"
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-1-Del-3-e3orgaj",
+      "appleUrl": "https://podcasts.apple.com/se/podcast/avsnitt-1-del-3/id6807401829?i=1000789769371",
+      "spotifyUrl": null
     },
     {
       "id": "ef5bd475-4fd8-49a2-932a-26b47fae2a28",
@@ -49,7 +55,9 @@
       "publishedAt": "2026-09-08T10:00:00.000Z",
       "durationSeconds": 2915,
       "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
-      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-1-Del-2-e3ofe4m"
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-1-Del-2-e3ofe4m",
+      "appleUrl": "https://podcasts.apple.com/se/podcast/avsnitt-1-del-2/id6807401829?i=1000788444588",
+      "spotifyUrl": null
     },
     {
       "id": "df713108-0af4-4e76-a502-169017d989f7",
@@ -60,7 +68,9 @@
       "publishedAt": "2026-09-01T10:00:00.000Z",
       "durationSeconds": 2928,
       "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
-      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Premir-Avsnitt-1-Del-1-e3n7krv"
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Premir-Avsnitt-1-Del-1-e3n7krv",
+      "appleUrl": "https://podcasts.apple.com/se/podcast/premi%C3%A4r-avsnitt-1-del-1/id6807401829?i=1000787175993",
+      "spotifyUrl": null
     }
   ]
 }

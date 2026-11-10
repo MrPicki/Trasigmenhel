@@ -57,6 +57,88 @@ const toSeconds = (value) => {
   return parts.reduce((total, part) => total * 60 + part, 0);
 };
 
+/** Apples id för podden, ur länken på /lankar. */
+const APPLE_PODCAST_ID = '6807401829';
+
+/**
+ * Apples öppna sök-API listar varje avsnitt med sin egen adress. Ingen nyckel
+ * krävs, så en knapp som går rakt in i rätt avsnitt kan hållas aktuell av sig
+ * själv — vilket är hela poängen: en lyssnare som läser om del 2 ska inte
+ * landa på poddens startsida och själv få leta.
+ *
+ * Matchas på titel, eftersom avsnittens id skiljer sig mellan Apples katalog
+ * och RSS-flödet. Hittas ingen träff blir fältet null och sajten faller
+ * tillbaka på poddens huvudadress.
+ */
+const appleEpisodeUrls = async () => {
+  try {
+    const response = await fetch(
+      `https://itunes.apple.com/lookup?id=${APPLE_PODCAST_ID}&entity=podcastEpisode&limit=200&country=se`,
+      { signal: AbortSignal.timeout(20000) }
+    );
+    if (!response.ok) throw new Error(`Apple svarade ${response.status}`);
+
+    const data = await response.json();
+    const map = new Map();
+    for (const result of data.results || []) {
+      if (result.wrapperType === 'podcastEpisode' && result.trackName && result.trackViewUrl) {
+        // uo=4 är Apples spårningsparameter; den behövs inte.
+        map.set(result.trackName.trim().toLowerCase(), result.trackViewUrl.replace(/[?&]uo=4\b/, ''));
+      }
+    }
+    return map;
+  } catch (error) {
+    console.error(`Kunde inte hämta avsnittslänkar från Apple: ${error.message}`);
+    return new Map();
+  }
+};
+
+/**
+ * Spotify har inget öppet motsvarande API: avsnittsadresser kräver en app med
+ * client credentials. Finns SPOTIFY_CLIENT_ID och SPOTIFY_CLIENT_SECRET i
+ * miljön används de; annars lämnas fältet null och knappen pekar på podden i
+ * stället för på avsnittet. Inget går sönder av att de saknas.
+ */
+const SPOTIFY_SHOW_ID = '2N8p98KRnDw3OVsIwm6ArQ';
+
+const spotifyEpisodeUrls = async () => {
+  const id = process.env.SPOTIFY_CLIENT_ID;
+  const secret = process.env.SPOTIFY_CLIENT_SECRET;
+  if (!id || !secret) return new Map();
+
+  try {
+    const auth = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
+      },
+      body: 'grant_type=client_credentials',
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!auth.ok) throw new Error(`token ${auth.status}`);
+    const { access_token: token } = await auth.json();
+
+    const response = await fetch(
+      `https://api.spotify.com/v1/shows/${SPOTIFY_SHOW_ID}/episodes?market=SE&limit=50`,
+      { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(20000) }
+    );
+    if (!response.ok) throw new Error(`episodes ${response.status}`);
+
+    const data = await response.json();
+    const map = new Map();
+    for (const item of data.items || []) {
+      if (item?.name && item?.external_urls?.spotify) {
+        map.set(item.name.trim().toLowerCase(), item.external_urls.spotify);
+      }
+    }
+    return map;
+  } catch (error) {
+    console.error(`Kunde inte hämta avsnittslänkar från Spotify: ${error.message}`);
+    return new Map();
+  }
+};
+
 async function main() {
   let xml;
   try {
@@ -123,6 +205,18 @@ async function main() {
     process.exitCode = 1;
     return;
   }
+
+  const [apple, spotify] = await Promise.all([appleEpisodeUrls(), spotifyEpisodeUrls()]);
+
+  for (const episode of episodes) {
+    const key = episode.title.trim().toLowerCase();
+    episode.appleUrl = apple.get(key) || null;
+    episode.spotifyUrl = spotify.get(key) || null;
+  }
+
+  const withApple = episodes.filter((episode) => episode.appleUrl).length;
+  const withSpotify = episodes.filter((episode) => episode.spotifyUrl).length;
+  console.log(`Avsnittslänkar: ${withApple}/${episodes.length} Apple, ${withSpotify}/${episodes.length} Spotify.`);
 
   try {
     const existing = JSON.parse(await readFile(OUT_FILE, 'utf-8'));

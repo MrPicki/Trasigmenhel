@@ -12,6 +12,13 @@ export interface PodcastEpisode {
   durationSeconds: number;
   image: string;
   link: string;
+  /**
+   * Adressen till just det här avsnittet hos plattformen, när den gått att
+   * slå upp (se scripts/fetch-episodes.mjs). Saknas den pekar knappen på
+   * podden i stället — en lyssnare ska aldrig mötas av en död länk.
+   */
+  appleUrl: string | null;
+  spotifyUrl: string | null;
 }
 
 export interface PodcastFeedInfo {
@@ -65,6 +72,8 @@ interface StaticEpisode {
   durationSeconds: number;
   image: string;
   link: string;
+  appleUrl?: string | null;
+  spotifyUrl?: string | null;
 }
 
 const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim();
@@ -176,6 +185,8 @@ const fromStatic = (episode: StaticEpisode): PodcastEpisode => ({
   durationSeconds: episode.durationSeconds || 0,
   image: episode.image || '',
   link: episode.link || '',
+  appleUrl: episode.appleUrl || null,
+  spotifyUrl: episode.spotifyUrl || null,
 });
 
 const fromRss2Json = (item: Rss2JsonItem, fallbackImage: string): PodcastEpisode => ({
@@ -188,6 +199,10 @@ const fromRss2Json = (item: Rss2JsonItem, fallbackImage: string): PodcastEpisode
   durationSeconds: Number(item.enclosure?.duration) || 0,
   image: item.thumbnail || item.enclosure?.image || fallbackImage,
   link: item.link || '',
+  // rss2json-passet finns bara för färskhet och känner inte till
+  // plattformarnas egna adresser; de kommer från episodes.json.
+  appleUrl: null,
+  spotifyUrl: null,
 });
 
 const formatDuration = (seconds: number) => {

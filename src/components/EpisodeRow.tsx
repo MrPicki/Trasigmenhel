@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Pause } from 'lucide-react';
+import EpisodeLinks from '@/components/EpisodeLinks';
 import { pathFor, titleFor } from '@/lib/episodes';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
@@ -96,11 +97,12 @@ const EpisodeRow = ({ episode, number, isCurrent, isPlaying, onToggle }: Episode
                 </>
               )}
 
+              <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={onToggle}
                 aria-label={playing ? `Pausa ${titleFor(episode)}` : `Spela ${titleFor(episode)}`}
-                className={`bar mt-6 max-w-sm gap-3 px-4 sm:min-h-[56px] sm:px-5 ${
+                className={`bar max-w-sm gap-3 px-4 sm:min-h-[56px] sm:px-5 ${
                   isCurrent
                     ? 'bg-ink text-paper hover:bg-ink-700'
                     : 'border border-ink text-ink hover:bg-ink hover:text-paper'
@@ -120,6 +122,11 @@ const EpisodeRow = ({ episode, number, isCurrent, isPlaying, onToggle }: Episode
                   {playing ? 'Pausa' : isCurrent ? 'Fortsätt lyssna' : 'Lyssna här'}
                 </span>
               </button>
+
+              {/* Vill man hellre lyssna i sin vanliga app ska man slippa gå
+                  via startsidan och leta rätt på avsnittet själv. */}
+              <EpisodeLinks episode={episode} />
+              </div>
 
               <Link
                 to={pathFor(episode)}

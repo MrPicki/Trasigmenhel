@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Pause, Play } from 'lucide-react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Link2, Pause, Play } from 'lucide-react';
 import Head from '@/components/Head';
 import StructuredData from '@/components/StructuredData';
 import NewsletterForm from '@/components/NewsletterForm';
 import SiteFooter from '@/components/SiteFooter';
+import EpisodeLinks from '@/components/EpisodeLinks';
 import StickyFollow from '@/components/StickyFollow';
 import ShareButton from '@/components/ShareButton';
 import { SpotifyIcon, ApplePodcastsIcon } from '@/components/BrandIcons';
@@ -27,9 +28,10 @@ const SITE = 'https://trasigmenhel.se';
  */
 const Episode = () => {
   const { slug = '' } = useParams();
+  const { hash } = useLocation();
   const preload = usePreload();
   const { episodes, isLoading } = usePodcastFeed();
-  const { toggle, seek, isPlaying, isCurrent } = usePlayer();
+  const { toggle, cue, playAt, isPlaying, isCurrent } = usePlayer();
 
   const episode = useMemo(() => findBySlug(episodes, slug), [episodes, slug]);
   const index = episode ? episodes.findIndex((item) => item.id === episode.id) : -1;
@@ -69,10 +71,65 @@ const Episode = () => {
     [transcript]
   );
 
-  const jumpTo = (seconds: number) => {
+  /** The moment a single paragraph starts, as an address. */
+  const anchorFor = (seconds: number) => `t-${Math.round(seconds)}`;
+
+  // Which paragraph the current address points at. A shared link lands on a
+  // sentence, so the sentence has to be findable once the page opens.
+  const [activeMoment, setActiveMoment] = useState<number | null>(null);
+  const [copiedMoment, setCopiedMoment] = useState<number | null>(null);
+
+  useEffect(() => {
+    const match = /^#t-(\d+)$/.exec(hash);
+    if (!match || !episode) {
+      setActiveMoment(null);
+      return;
+    }
+
+    const seconds = Number(match[1]);
+
+    // Standing on the spot, not playing out loud in someone's hand.
+    cue(episode, seconds);
+
+    // Adressen behöver inte peka exakt på ett styckes början — den kan lika
+    // gärna komma från spelaren. Markera stycket som tidpunkten ligger i.
+    const containing = paragraphs.reduce<number | null>(
+      (found, paragraph) => (paragraph.start <= seconds + 1 ? Math.round(paragraph.start) : found),
+      null
+    );
+
+    setActiveMoment(containing ?? seconds);
+
+    // Hoppa dit direkt, inte med en mjuk rullning: sidan är flera tusen
+    // pixlar hög, och en mjuk rullning hinner dessutom avbrytas av
+    // webbläsarens egen återställning av scrollpositionen. 'instant' krävs
+    // eftersom html har scroll-behavior: smooth.
+    const target = document.getElementById(anchorFor(containing ?? seconds));
+    if (target) {
+      requestAnimationFrame(() =>
+        target.scrollIntoView({ block: 'center', behavior: 'instant' as ScrollBehavior })
+      );
+    }
+  }, [hash, episode, cue, paragraphs.length]);
+
+  const playFrom = (seconds: number) => {
     if (!episode) return;
-    if (!isCurrent(episode)) toggle(episode);
-    seek(seconds);
+    playAt(episode, seconds);
+    setActiveMoment(seconds);
+    // Replace rather than push: the back button should leave the episode,
+    // not walk back through every timestamp that was tapped.
+    window.history.replaceState(null, '', `#${anchorFor(seconds)}`);
+  };
+
+  const copyMoment = async (seconds: number) => {
+    if (!episode) return;
+    try {
+      await navigator.clipboard.writeText(`${SITE}${pathFor(episode)}#${anchorFor(seconds)}`);
+      setCopiedMoment(seconds);
+      window.setTimeout(() => setCopiedMoment(null), 2500);
+    } catch {
+      // Clipboard blocked; the address is in the timestamp link either way.
+    }
   };
 
   if (!episode) {
@@ -218,8 +275,10 @@ const Episode = () => {
               </span>
             </button>
 
+            {/* Rakt in i det här avsnittet när plattformen har en egen
+                adress för det, annars in i podden. */}
             <a
-              href={SPOTIFY_URL}
+              href={episode.spotifyUrl || SPOTIFY_URL}
               target="_blank"
               rel="noreferrer"
               className="bar border border-ink-500 text-paper hover:border-paper-500 hover:bg-ink-700"
@@ -230,7 +289,7 @@ const Episode = () => {
             </a>
 
             <a
-              href={APPLE_URL}
+              href={episode.appleUrl || APPLE_URL}
               target="_blank"
               rel="noreferrer"
               className="bar border border-ink-500 text-paper hover:border-paper-500 hover:bg-ink-700"
@@ -278,27 +337,67 @@ const Episode = () => {
               </p>
 
               <div className="mt-10 space-y-7">
-                {paragraphs.map((paragraph) => (
-                  <div
-                    key={paragraph.start}
-                    className="grid grid-cols-1 gap-1.5 sm:grid-cols-[5.5rem_1fr] sm:gap-8"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => jumpTo(paragraph.start)}
-                      className="label tnum text-left text-paper-600 transition-colors hover:text-ink sm:pt-1.5"
-                      aria-label={`Spela från ${timecode(paragraph.start)}`}
+                {paragraphs.map((paragraph) => {
+                  const anchor = anchorFor(paragraph.start);
+                  const isActive = activeMoment === Math.round(paragraph.start);
+                  const isCopied = copiedMoment === paragraph.start;
+
+                  return (
+                    <div
+                      key={paragraph.start}
+                      id={anchor}
+                      className="group grid scroll-mt-28 grid-cols-1 gap-1.5 sm:grid-cols-[5.5rem_1fr] sm:gap-8"
                     >
-                      {timecode(paragraph.start)}
-                    </button>
-                    <p className="max-w-[66ch] text-[1.0625rem] leading-[1.75] text-ink">
-                      {paragraph.text}
-                    </p>
-                  </div>
-                ))}
+                      <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2 sm:pt-1.5">
+                        <a
+                          href={`#${anchor}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            playFrom(paragraph.start);
+                          }}
+                          aria-label={`Spela från ${timecode(paragraph.start)}`}
+                          className={`label tnum transition-colors hover:text-ink ${
+                            isActive ? 'text-ink' : 'text-paper-600'
+                          }`}
+                        >
+                          {timecode(paragraph.start)}
+                        </a>
+
+                        {/* Alltid på plats, men tyst: den syns först när stycket
+                            pekas på, och alltid så fort den fokuseras. */}
+                        <button
+                          type="button"
+                          onClick={() => copyMoment(paragraph.start)}
+                          aria-label={`Kopiera länk till ${timecode(paragraph.start)}`}
+                          className={`label inline-flex items-center gap-1.5 text-paper-600 transition-opacity hover:text-ink focus-visible:opacity-100 ${
+                            isCopied ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
+                          }`}
+                        >
+                          {isCopied ? <Check size={12} /> : <Link2 size={12} />}
+                          {isCopied ? 'Kopierad' : 'Länk'}
+                        </button>
+                      </div>
+
+                      <p
+                        className={`max-w-[66ch] text-[1.0625rem] leading-[1.75] text-ink ${
+                          isActive ? 'border-l-2 border-ink pl-4 sm:-ml-4' : ''
+                        }`}
+                      >
+                        {paragraph.text}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
+
+          {/* Den som läst hela transkriptet är den mest sannolika lyssnaren
+              på hela sajten. Här, inte bara högst upp. */}
+          <div className="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-paper-400 pt-8">
+            <p className="text-[0.9375rem] text-paper-700">Lyssna på avsnittet:</p>
+            <EpisodeLinks episode={episode} />
+          </div>
 
           {others.length > 0 && (
             <nav aria-labelledby="fler-avsnitt" className="mt-14 border-t border-paper-400 pt-10">

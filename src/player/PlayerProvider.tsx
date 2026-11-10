@@ -36,6 +36,17 @@ interface PlayerApi extends PlayerState {
   /** Pause and put the player away entirely. */
   dismiss: () => void;
   seek: (seconds: number) => void;
+  /**
+   * Load an episode at a given second without starting it.
+   *
+   * Someone opening a shared link to a moment should land with the player
+   * already standing on that spot, ready to play — not with sound suddenly
+   * coming out of their phone on a bus. Browsers block that autoplay anyway;
+   * this is the honest version of what the link promises.
+   */
+  cue: (episode: PodcastEpisode, seconds: number) => void;
+  /** Start an episode at a given second, as a tapped timestamp does. */
+  playAt: (episode: PodcastEpisode, seconds: number) => void;
   /** Move `delta` seconds relative to the current position. */
   nudge: (delta: number) => void;
   isCurrent: (episode: PodcastEpisode | null) => boolean;
@@ -45,6 +56,12 @@ const PlayerContext = createContext<PlayerApi | null>(null);
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  /**
+   * A position asked for before the file knew its own length. Setting
+   * currentTime on an element with no metadata is silently dropped, so it is
+   * held here and applied the moment the metadata lands.
+   */
+  const pendingSeekRef = useRef<number | null>(null);
   const [state, setState] = useState<PlayerState>({
     episode: null,
     isPlaying: false,
@@ -65,8 +82,13 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     if (!audio) return;
 
     const onTime = () => setState((s) => ({ ...s, currentTime: audio.currentTime }));
-    const onMeta = () =>
+    const onMeta = () => {
+      if (pendingSeekRef.current !== null) {
+        audio.currentTime = pendingSeekRef.current;
+        pendingSeekRef.current = null;
+      }
       setState((s) => ({ ...s, duration: Number.isFinite(audio.duration) ? audio.duration : s.duration }));
+    };
     const onEnded = () => setState((s) => ({ ...s, isPlaying: false, currentTime: 0 }));
     const onPlay = () => setState((s) => ({ ...s, isPlaying: true, failed: false }));
     const onPause = () => setState((s) => ({ ...s, isPlaying: false }));
@@ -178,6 +200,46 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [state.episode?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /** Point the element at an episode, at a position, without playing. */
+  const load = useCallback((episode: PodcastEpisode, seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio || !episode.audioUrl) return null;
+
+    if (audio.src !== episode.audioUrl) {
+      audio.src = episode.audioUrl;
+      pendingSeekRef.current = seconds;
+    } else if (audio.readyState > 0) {
+      audio.currentTime = seconds;
+    } else {
+      pendingSeekRef.current = seconds;
+    }
+
+    setState((s) => ({
+      ...s,
+      episode,
+      currentTime: seconds,
+      duration: Number.isFinite(audio.duration) ? audio.duration : episode.durationSeconds || 0,
+      failed: false,
+    }));
+
+    return audio;
+  }, []);
+
+  const cue = useCallback(
+    (episode: PodcastEpisode, seconds: number) => {
+      load(episode, seconds);
+    },
+    [load]
+  );
+
+  const playAt = useCallback(
+    (episode: PodcastEpisode, seconds: number) => {
+      const audio = load(episode, seconds);
+      audio?.play().catch(() => setState((s) => ({ ...s, isPlaying: false, failed: true })));
+    },
+    [load]
+  );
+
   const seek = useCallback((seconds: number) => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -201,10 +263,12 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
       pause,
       dismiss,
       seek,
+      cue,
+      playAt,
       nudge,
       isCurrent: (episode) => Boolean(episode && state.episode && episode.id === state.episode.id),
     }),
-    [state, toggle, pause, dismiss, seek, nudge]
+    [state, toggle, pause, dismiss, seek, cue, playAt, nudge]
   );
 
   return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
