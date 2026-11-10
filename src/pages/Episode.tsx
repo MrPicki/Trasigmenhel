@@ -274,10 +274,12 @@ const Episode = () => {
                 </p>
               </div>
 
+              {/* Vilket verktyg som skrev texten angår inte en lyssnare; att den
+                  är maskinskriven gör det, eftersom namn kan bli felhörda.
+                  Hur den gjordes står i transkriptfilen och i README. */}
               <p className="mt-4 max-w-[62ch] text-[0.9375rem] leading-relaxed text-paper-700">
-                Hela avsnittet i text. Transkriberat automatiskt med {transcript?.source} — det kan
-                innehålla felhörningar, och ljudet är alltid originalet. Klicka på en tidsstämpel
-                för att hoppa dit i avsnittet.
+                Hela avsnittet i text. Texten är maskinskriven och kan innehålla felhörningar —
+                ljudet är originalet. Klicka på en tidsstämpel för att hoppa dit i avsnittet.
               </p>
 
               <div className="mt-10 space-y-7">

@@ -75,7 +75,13 @@ const writePage = async (route, contents) => {
  *  gets it inlined so the text is in the HTML a crawler reads. */
 const transcriptFor = async (slug) => {
   try {
-    return JSON.parse(await readFile(path.join(ROOT, 'public', 'transcripts', `${slug}.json`), 'utf8'));
+    const { source, ...transcript } = JSON.parse(
+      await readFile(path.join(ROOT, 'public', 'transcripts', `${slug}.json`), 'utf8')
+    );
+    // `source` namnger verktyget som skrev texten. Det hör hemma i filen som
+    // en notering om hur den kom till, inte i sidan någon läser — varken i
+    // brödtexten eller i källkoden.
+    return transcript;
   } catch {
     return null;
   }

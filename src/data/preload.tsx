@@ -21,8 +21,12 @@ export interface Transcript {
   slug: string;
   /** When the transcript was produced, so a re-run can be dated. */
   generatedAt: string;
-  /** How it was produced — stated on the page, never passed off as hand-typed. */
-  source: string;
+  /**
+   * Hur texten kom till. En notering i filen, inte något sidan visar: vilket
+   * verktyg som skrev den angår inte en lyssnare. Bygget utelämnar fältet när
+   * transkriptet bäddas in i sidan.
+   */
+  source?: string;
   segments: TranscriptSegment[];
 }
 
