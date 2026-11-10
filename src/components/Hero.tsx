@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUpRight, Play, Pause } from 'lucide-react';
-import { SpotifyIcon, ApplePodcastsIcon } from './BrandIcons';
-import { SPOTIFY_URL, APPLE_URL } from '@/config/site';
+import { SpotifyIcon, ApplePodcastsIcon, MailIcon } from './BrandIcons';
+import { SPOTIFY_URL, APPLE_URL, CONTACT_EMAIL } from '@/config/site';
 import { usePlayer } from '@/player/PlayerProvider';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
@@ -46,8 +46,10 @@ const Hero = ({ episode, episodeCount, isLoading }: HeroProps) => {
           En ärlig och osminkad podd om att bryta negativa mönster och hitta styrka i sårbarheten.
         </p>
 
-        {/* The two destinations, at the size of the decision they carry. */}
-        <div className="mt-10 grid gap-2 sm:mt-12 sm:grid-cols-2">
+        {/* The destinations, at the size of the decision they carry. Spotify
+            and Apple sit side by side from sm up; the contact bar takes the
+            full width under them until there is room for three across. */}
+        <div className="mt-10 grid gap-2 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
           <a
             href={SPOTIFY_URL}
             target="_blank"
@@ -67,6 +69,15 @@ const Hero = ({ episode, episodeCount, isLoading }: HeroProps) => {
           >
             <ApplePodcastsIcon size={24} className="flex-shrink-0" decorative />
             <span className="flex-1 text-lg font-semibold tracking-tight sm:text-xl">Apple Podcasts</span>
+            <ArrowUpRight size={20} className="flex-shrink-0 opacity-45" aria-hidden="true" />
+          </a>
+
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="bar border border-ink-500 text-paper hover:border-paper-500 hover:bg-ink-700 sm:col-span-2 lg:col-span-1"
+          >
+            <MailIcon size={24} className="flex-shrink-0" decorative />
+            <span className="flex-1 text-lg font-semibold tracking-tight sm:text-xl">Kontakta oss</span>
             <ArrowUpRight size={20} className="flex-shrink-0 opacity-45" aria-hidden="true" />
           </a>
         </div>
