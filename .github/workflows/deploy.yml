@@ -55,3 +55,19 @@ jobs:
       - name: Publicera till GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Säger till Bing, DuckDuckGo, Yandex och Seznam att adresserna är
+      # uppdaterade, i stället för att vänta på att de tittar förbi själva.
+      # Sidan är redan ute när det här körs, och ett misslyckat anrop får
+      # aldrig fälla en deploy som redan gått igenom.
+      - name: Checka ut
+        uses: actions/checkout@v4
+
+      - name: Sätt upp Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Pinga IndexNow
+        continue-on-error: true
+        run: node scripts/ping-indexnow.mjs

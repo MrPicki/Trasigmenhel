@@ -63,6 +63,29 @@ söka på; ingen skriver det. Skriv vad avsnittet handlar om, med orden en
 lyssnare skulle använda, och sätt **samma titel i Spotify for Creators** — det
 mesta av poddupptäckt sker i Spotifys och Apples egna sökrutor, inte i Google.
 
+### Delningsbilder
+
+```bash
+npm run og          # ritar bilder för avsnitt som saknar en
+npm run og -- --force   # ritar om allihop, t.ex. efter en titeländring
+```
+
+Varje avsnitt har en egen bild i `public/og/<slug>.png` som visas när någon
+delar länken. Utan den previewas alla fem avsnitt som samma omslag, och
+previewbilden är det mesta av det som avgör om någon klickar. Bilderna
+genereras lokalt och committas; ett avsnitt utan bild faller tillbaka på
+omslaget, så en missad körning blir aldrig en trasig preview.
+
+Typsnittet ligger i `assets/fonts/` (Familjen Grotesk, OFL-licensierat).
+
+### IndexNow
+
+`public/<nyckel>.txt` och `scripts/ping-indexnow.mjs` talar om för Bing,
+DuckDuckGo, Yandex och Seznam att adresserna ändrats, i stället för att vänta
+på att de tittar förbi. Deploy-flödet kör det automatiskt efter varje lyckad
+publicering. Nyckeln är ingen hemlighet — protokollet bygger på att den ligger
+publikt på domänen, det är så en sökmotor kontrollerar vem som skickat in.
+
 ### Search Console
 
 Domänen är verifierad som **domänegendom** (`sc-domain:trasigmenhel.se`) och

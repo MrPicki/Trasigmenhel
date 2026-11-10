@@ -81,6 +81,16 @@ const transcriptFor = async (slug) => {
   }
 };
 
+/** The episode's own share image, if `npm run og` has drawn one. */
+const ogImageFor = async (slug) => {
+  try {
+    await readFile(path.join(ROOT, 'public', 'og', `${slug}.png`));
+    return `/og/${slug}.png`;
+  } catch {
+    return null;
+  }
+};
+
 const feed = feedData.feed ?? null;
 const basePreload = { episodes: rawEpisodes, feed };
 
@@ -101,7 +111,7 @@ for (const route of routes) {
   const transcript = await transcriptFor(route.slug);
   if (transcript) withTranscript += 1;
 
-  const preload = { ...basePreload, transcript };
+  const preload = { ...basePreload, transcript, ogImage: await ogImageFor(route.slug) };
   const { html, head } = render(route.path, preload);
   await writePage(route.path, buildPage({ html, head, preload }));
   written.push({

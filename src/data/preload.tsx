@@ -32,6 +32,12 @@ export interface PreloadData {
   feed?: { title?: string; description?: string; image?: string; link?: string } | null;
   /** Only on an episode page, and only for the episode that page is about. */
   transcript?: Transcript | null;
+  /**
+   * The episode's own share image (public/og/<slug>.png), when one has been
+   * generated. Absent means the podcast cover is used instead, so a missed
+   * `npm run og` never leaves a link previewing as nothing.
+   */
+  ogImage?: string | null;
 }
 
 declare global {

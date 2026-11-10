@@ -6,6 +6,7 @@ import StructuredData from '@/components/StructuredData';
 import NewsletterForm from '@/components/NewsletterForm';
 import SiteFooter from '@/components/SiteFooter';
 import StickyFollow from '@/components/StickyFollow';
+import ShareButton from '@/components/ShareButton';
 import { SpotifyIcon, ApplePodcastsIcon } from '@/components/BrandIcons';
 import { APPLE_URL, SPOTIFY_URL } from '@/config/site';
 import { usePreload, type Transcript } from '@/data/preload';
@@ -102,6 +103,9 @@ const Episode = () => {
   const summary = summaryFor(episode);
   const url = `${SITE}${pathFor(episode)}`;
   const published = isoDate(episode.pubDateRaw);
+  // What a shared link previews as: the episode's own card when the build
+  // drew one, the podcast cover otherwise.
+  const shareImage = preload.ogImage || episode.image || '/lovable-uploads/podcast-cover-og.jpg';
   const minutes = episode.durationSeconds ? `${Math.round(episode.durationSeconds / 60)} min` : null;
 
   const schema: Record<string, unknown>[] = [
@@ -115,7 +119,7 @@ const Episode = () => {
       datePublished: published || undefined,
       timeRequired: isoDuration(episode.durationSeconds),
       inLanguage: 'sv-SE',
-      image: episode.image || `${SITE}/lovable-uploads/podcast-cover-og.jpg`,
+      image: shareImage.startsWith('http') ? shareImage : `${SITE}${shareImage}`,
       episodeNumber: number ?? undefined,
       partOfSeries: {
         '@type': 'PodcastSeries',
@@ -149,7 +153,7 @@ const Episode = () => {
         title={`${title} | Trasig men Hel`}
         description={summary}
         url={url}
-        image={episode.image || '/lovable-uploads/podcast-cover-og.jpg'}
+        image={shareImage}
         type="article"
         publishedTime={published}
       />
@@ -235,6 +239,12 @@ const Episode = () => {
               <span className="flex-1 text-lg font-semibold tracking-tight sm:text-xl">Apple</span>
               <ArrowUpRight size={18} className="flex-shrink-0 opacity-45" aria-hidden="true" />
             </a>
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <ShareButton title={`${title} — Trasig men Hel`} url={url} />
+            <span className="hidden h-4 w-px bg-ink-500 sm:block" aria-hidden="true" />
+            <span className="label text-paper-500">Nya avsnitt varannan vecka</span>
           </div>
         </div>
         <div id="episode-head-end" aria-hidden="true" className="h-px w-full" />

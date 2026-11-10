@@ -15,7 +15,9 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "transcribe": "node scripts/transcribe-episodes.mjs"
+    "transcribe": "node scripts/transcribe-episodes.mjs",
+    "og": "node scripts/generate-og-images.mjs",
+    "indexnow": "node scripts/ping-indexnow.mjs"
   },
   "homepage": "https://trasigmenhel.se",
   "dependencies": {
@@ -74,6 +76,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
@@ -87,6 +90,7 @@
     "globals": "^15.9.0",
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",
+    "satori": "^0.63.2",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
