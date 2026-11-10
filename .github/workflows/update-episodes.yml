@@ -34,16 +34,22 @@ jobs:
       - name: Hämta avsnitt
         run: node scripts/fetch-episodes.mjs
 
+      # Klippen på startsidan kommer från YouTube-kanalens egna RSS-flöde.
+      # Ingen nyckel krävs, och ett nytt klipp syns utan att någon rör koden.
+      - name: Hämta klipp
+        continue-on-error: true
+        run: node scripts/fetch-youtube.mjs
+
       - name: Committa om något ändrats
         run: |
-          if git diff --quiet -- public/episodes.json; then
-            echo "Inga nya avsnitt — inget att committa."
+          if git diff --quiet -- public/episodes.json public/youtube.json; then
+            echo "Inget nytt — inget att committa."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/episodes.json
-          git commit -m "Uppdatera avsnittslistan"
+          git add public/episodes.json public/youtube.json
+          git commit -m "Uppdatera avsnitt och klipp"
           git pull --rebase origin master
           git push origin HEAD:master
 

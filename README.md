@@ -63,6 +63,22 @@ söka på; ingen skriver det. Skriv vad avsnittet handlar om, med orden en
 lyssnare skulle använda, och sätt **samma titel i Spotify for Creators** — det
 mesta av poddupptäckt sker i Spotifys och Apples egna sökrutor, inte i Google.
 
+### Klipp på startsidan
+
+Klippen hämtas från YouTube-kanalens öppna RSS-flöde till `public/youtube.json`
+av `scripts/fetch-youtube.mjs` — före varje bygge och på schema i
+`Uppdatera avsnitt`. Ett nytt klipp syns alltså av sig självt, utan att någon
+rör koden.
+
+Bara YouTube, och det är ett medvetet val. Instagram, TikTok och Facebook
+kräver var sin OAuth-app med token som måste förnyas — Instagrams var 60:e dag
+— och den dagen en token tyst slutar fungera står det ingenting på startsidan
+utan att någon märker det. Publicerar du på YouTube också, vilket du redan
+gör, fångas allt den vägen.
+
+Inget bäddas in: sektionen är bilder och länkar, så ingen YouTube-spelare
+laddas och ingen besökare får en kaka av Google.
+
 ### Delningsbilder
 
 ```bash

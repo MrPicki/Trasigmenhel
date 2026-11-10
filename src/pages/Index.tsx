@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Hero from '@/components/Hero';
 import AboutSection from '@/components/AboutSection';
 import EpisodesSection from '@/components/EpisodesSection';
+import ClipsSection from '@/components/ClipsSection';
 import NewsletterForm from '@/components/NewsletterForm';
 import SiteFooter from '@/components/SiteFooter';
 import StickyFollow from '@/components/StickyFollow';
@@ -70,6 +71,8 @@ const Index = () => {
       <EpisodesSection episodes={episodes} isLoading={isLoading} error={error} />
 
       <AboutSection description={feedInfo?.description} />
+
+      <ClipsSection />
 
       <NewsletterForm />
 

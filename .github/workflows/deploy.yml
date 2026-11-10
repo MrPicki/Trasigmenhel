@@ -37,6 +37,12 @@ jobs:
         continue-on-error: true
         run: node scripts/fetch-episodes.mjs
 
+      # Samma sak för klippen på startsidan: hämtas färska, men får aldrig
+      # fälla bygget om YouTube inte svarar.
+      - name: Hämta klipp
+        continue-on-error: true
+        run: node scripts/fetch-youtube.mjs
+
       - name: Bygg sajten
         run: npm run build
 

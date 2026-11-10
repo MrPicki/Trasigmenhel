@@ -26,10 +26,22 @@ export interface Transcript {
   segments: TranscriptSegment[];
 }
 
+/** One video from the YouTube channel's RSS feed. */
+export interface Clip {
+  id: string;
+  title: string;
+  /** ISO timestamp from the feed. */
+  published: string;
+  url: string;
+  thumbnail: string;
+}
+
 export interface PreloadData {
   /** Raw entries exactly as they appear in public/episodes.json. */
   episodes?: unknown[];
   feed?: { title?: string; description?: string; image?: string; link?: string } | null;
+  /** The newest clips, for the home page's clip row. */
+  clips?: Clip[];
   /** Only on an episode page, and only for the episode that page is about. */
   transcript?: Transcript | null;
   /**

@@ -91,8 +91,19 @@ const ogImageFor = async (slug) => {
   }
 };
 
+/** The clips, when scripts/fetch-youtube.mjs has run. Missing is fine: the
+ *  section renders nothing rather than an empty row. */
+const clips = await (async () => {
+  try {
+    const data = JSON.parse(await readFile(path.join(ROOT, 'public', 'youtube.json'), 'utf8'));
+    return Array.isArray(data.videos) ? data.videos : [];
+  } catch {
+    return [];
+  }
+})();
+
 const feed = feedData.feed ?? null;
-const basePreload = { episodes: rawEpisodes, feed };
+const basePreload = { episodes: rawEpisodes, feed, clips };
 
 const written = [];
 
