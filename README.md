@@ -63,6 +63,17 @@ söka på; ingen skriver det. Skriv vad avsnittet handlar om, med orden en
 lyssnare skulle använda, och sätt **samma titel i Spotify for Creators** — det
 mesta av poddupptäckt sker i Spotifys och Apples egna sökrutor, inte i Google.
 
+### Search Console
+
+Domänen är verifierad som **domänegendom** (`sc-domain:trasigmenhel.se`) och
+`https://trasigmenhel.se/sitemap.xml` är inskickad under *Webbplatskartor*.
+Sitemapen behöver aldrig skickas in igen — Google läser om den av sig själv när
+den ändras.
+
+Ett nytt avsnitt hittas alltså på egen hand, men det går fortare att be om det:
+klistra in avsnittets adress i sökrutan högst upp i Search Console och välj
+*Begär indexering*. Kvoten är cirka tio adresser per dygn.
+
 ### Transkript
 
 ```bash

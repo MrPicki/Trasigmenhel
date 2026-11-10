@@ -123,10 +123,13 @@ export const LINKS_MESSAGE = {
 };
 
 /**
- * Google Search Console säger vad folk faktiskt söker på när de hittar
- * sajten — utan den gissar vi. Lägg till domänen på
- * search.google.com/search-console, välj verifiering med HTML-tagg, och
- * klistra in enbart innehållet i `content="..."` här. Tom sträng = ingen tagg.
+ * Sajten är redan verifierad i Google Search Console som en domänegendom
+ * (sc-domain:trasigmenhel.se), vilket sker via DNS och täcker både http och
+ * https, med och utan www. Taggen nedan behövs alltså inte.
+ *
+ * Den finns kvar som väg in för ett andra konto: lägg till egendomen som
+ * webbadressprefix, välj verifiering med HTML-tagg, och klistra in enbart
+ * innehållet i `content="..."` här. Tom sträng = ingen tagg.
  */
 export const GOOGLE_SITE_VERIFICATION = '';
 
