@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Play, Pause } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Play, Pause } from 'lucide-react';
+import { pathFor, titleFor } from '@/lib/episodes';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
 interface EpisodeRowProps {
@@ -51,7 +53,15 @@ const EpisodeRow = ({ episode, number, isCurrent, isPlaying, onToggle }: Episode
             className="mt-2.5 text-ink"
             style={{ fontSize: 'clamp(1.75rem, 6vw, 3rem)', letterSpacing: '-0.035em', lineHeight: 0.95 }}
           >
-            {episode.title}
+            {/* The title is the door into the episode's own page — the one
+                place with its full text, and the only thing a search engine
+                can rank for anything but the podcast's name. */}
+            <Link
+              to={pathFor(episode)}
+              className="transition-colors hover:text-paper-700 focus-visible:text-paper-700"
+            >
+              {titleFor(episode)}
+            </Link>
           </h3>
 
           <div className="mt-5 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
@@ -89,7 +99,7 @@ const EpisodeRow = ({ episode, number, isCurrent, isPlaying, onToggle }: Episode
               <button
                 type="button"
                 onClick={onToggle}
-                aria-label={playing ? `Pausa ${episode.title}` : `Spela ${episode.title}`}
+                aria-label={playing ? `Pausa ${titleFor(episode)}` : `Spela ${titleFor(episode)}`}
                 className={`bar mt-6 max-w-sm gap-3 px-4 sm:min-h-[56px] sm:px-5 ${
                   isCurrent
                     ? 'bg-ink text-paper hover:bg-ink-700'
@@ -110,6 +120,14 @@ const EpisodeRow = ({ episode, number, isCurrent, isPlaying, onToggle }: Episode
                   {playing ? 'Pausa' : isCurrent ? 'Fortsätt lyssna' : 'Lyssna här'}
                 </span>
               </button>
+
+              <Link
+                to={pathFor(episode)}
+                className="label mt-4 inline-flex items-center gap-2 text-paper-600 underline underline-offset-4 transition-colors hover:text-ink"
+              >
+                Avsnittssidan med transkript
+                <ArrowRight size={13} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </div>

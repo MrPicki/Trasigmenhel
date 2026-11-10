@@ -123,6 +123,68 @@ export const LINKS_MESSAGE = {
 };
 
 /**
+ * Google Search Console säger vad folk faktiskt söker på när de hittar
+ * sajten — utan den gissar vi. Lägg till domänen på
+ * search.google.com/search-console, välj verifiering med HTML-tagg, och
+ * klistra in enbart innehållet i `content="..."` här. Tom sträng = ingen tagg.
+ */
+export const GOOGLE_SITE_VERIFICATION = '';
+
+export interface EpisodePage {
+  /**
+   * The URL segment: trasigmenhel.se/avsnitt/<slug>.
+   *
+   * Once an episode has been published and shared, its slug is permanent.
+   * Changing it breaks every link anyone has posted and throws away whatever
+   * ranking the page has earned. Add a new entry; never edit a live slug.
+   */
+  slug: string;
+  /**
+   * The title the site shows, when the feed's own title does not say what the
+   * episode is about. "Avsnitt 1 Del 2" is invisible in search — nobody types
+   * it. Write what the episode actually covers, in the words a listener would
+   * use, and mirror the same title in Spotify for Creators.
+   */
+  title?: string;
+  /** The <meta description>, about 150 characters. Falls back to the feed text. */
+  summary?: string;
+}
+
+/**
+ * One entry per published episode, keyed by its id in the RSS feed.
+ *
+ * An episode with no entry still gets a page — the slug is then derived from
+ * its feed title, which works but moves if the title is ever edited. Writing
+ * the entry pins it.
+ */
+export const EPISODE_PAGES: Record<string, EpisodePage> = {
+  'df713108-0af4-4e76-a502-169017d989f7': {
+    slug: 'samtalet-med-mamma-del-1',
+    title: 'Samtalet med mamma, del 1: en uppväxt vi minns olika',
+    summary:
+      'Christoffer och hans mamma går tillbaka till minnen och sår från en uppväxt som format dem båda — men som de inte minns på samma sätt. Del 1 av 3.',
+  },
+  'ef5bd475-4fd8-49a2-932a-26b47fae2a28': {
+    slug: 'samtalet-med-mamma-del-2',
+    title: 'Samtalet med mamma, del 2: när två versioner av samma barndom krockar',
+    summary:
+      'Tonen hårdnar och murarna går upp. Två versioner av samma barndom krockar, och avståndet känns större än åren som gått. Del 2 av 3.',
+  },
+  'ae668d51-4a80-4348-a43a-8a9496f67464': {
+    slug: 'samtalet-med-mamma-del-3',
+    title: 'Samtalet med mamma, del 3: att söka ett erkännande som aldrig kommer',
+    summary:
+      'Christoffer söker svar, ansvar och ett erkännande av skadan han bär på — och lämnas utan. Den tredje och sista delen av samtalet.',
+  },
+  '8e086765-ed89-4f3a-85f9-4c116c6c4d04': {
+    slug: 'reflektioner-efter-samtalet-med-mamma',
+    title: 'Bonus: vad händer när ett vuxet barn konfronterar sin förälder',
+    summary:
+      'Efter samtalet med mamma — om trauma, skuld, förlåtelse, och om läkning kan handla om att förstå att svaren aldrig kommer.',
+  },
+};
+
+/**
  * Which episodes the site shows, and which one leads.
  *
  * The RSS feed is not guaranteed to arrive newest-first, so the site sorts it

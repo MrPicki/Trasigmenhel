@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { EPISODES } from '@/config/site';
+import { usePreload, type PreloadData } from '@/data/preload';
 
 export interface PodcastEpisode {
   id: string;
@@ -76,6 +77,42 @@ const stripTrailingHashtags = (text: string) =>
   text.replace(/(\s*#[^\s#]+){2,}\s*$/u, '').trim();
 
 /**
+ * The feed descriptions end with the show notes' own link row — "Länkar till
+ * social media", "besök en av våra andra kanaler Här", the bare domain. In
+ * the RSS those are anchors; stripped of their HTML they are orphaned words
+ * at the end of a paragraph, and on a page that already carries the channel
+ * list and the domain in its URL they say nothing. Only trailing matches are
+ * removed, so nothing inside the text itself is touched.
+ */
+const TRAILING_CALLS_TO_ACTION = [
+  /\s*Länkar till social media\.?\s*$/i,
+  /\s*(Lyssna på avsnittet eller b|B)esök en av våra andra kanaler\s*(Här)?\.?\s*$/i,
+  /\s*Du lyssnar på Trasig men Hel\.?\s*$/i,
+  /\s*(https?:\/\/)?(www\.)?trasigmenhel\.se\/?\.?\s*$/i,
+];
+
+const stripTrailingLinks = (text: string) => {
+  let result = text.trim();
+  let changed = true;
+
+  while (changed) {
+    changed = false;
+    for (const pattern of TRAILING_CALLS_TO_ACTION) {
+      const next = result.replace(pattern, '').trim();
+      if (next !== result) {
+        result = next;
+        changed = true;
+      }
+    }
+  }
+
+  return result;
+};
+
+/** Everything a description goes through before it reaches the page. */
+const cleanDescription = (text: string) => stripTrailingLinks(stripTrailingHashtags(text));
+
+/**
  * rss2json hands back dates as "2026-09-01 05:00:00" while raw RSS uses
  * "Mon, 01 Sep 2026 05:00:00 GMT". Safari refuses the first form, so
  * normalise it before parsing rather than trusting `new Date` with either.
@@ -133,7 +170,7 @@ const fromStatic = (episode: StaticEpisode): PodcastEpisode => ({
   id: episode.id,
   title: episode.title,
   audioUrl: episode.audioUrl,
-  description: stripTrailingHashtags(episode.description || ''),
+  description: cleanDescription(episode.description || ''),
   pubDate: formatDate(episode.pubDateRaw),
   pubDateRaw: episode.pubDateRaw,
   durationSeconds: episode.durationSeconds || 0,
@@ -145,7 +182,7 @@ const fromRss2Json = (item: Rss2JsonItem, fallbackImage: string): PodcastEpisode
   id: item.guid || item.link || '',
   title: stripHtml(item.title || ''),
   audioUrl: item.enclosure?.link || '',
-  description: stripTrailingHashtags(stripHtml(item.description || item.content || '')),
+  description: cleanDescription(stripHtml(item.description || item.content || '')),
   pubDate: formatDate(item.pubDate || ''),
   pubDateRaw: item.pubDate || '',
   durationSeconds: Number(item.enclosure?.duration) || 0,
@@ -158,13 +195,42 @@ const formatDuration = (seconds: number) => {
   return `${Math.floor(seconds / 60)} min`;
 };
 
-export const usePodcastFeed = () => {
-  const [state, setState] = useState<FeedState>({
-    episodes: [],
-    feedInfo: null,
-    isLoading: true,
+/**
+ * The episode list the build already rendered into this page's HTML. When it
+ * is there the hook opens with the finished list instead of a skeleton, and
+ * the network passes below only ever add a newer episode.
+ */
+/** The site's episode list, built from raw episodes.json entries. Shared by
+ *  the browser and by the build-time renderer so both show the same order. */
+export const episodesFromStatic = (raw: StaticEpisode[]): PodcastEpisode[] =>
+  prepare((raw || []).filter((episode) => episode?.audioUrl).map(fromStatic));
+
+const seedFrom = (preload: PreloadData): FeedState => {
+  const raw = Array.isArray(preload.episodes) ? (preload.episodes as StaticEpisode[]) : [];
+  const episodes = episodesFromStatic(raw);
+
+  if (episodes.length === 0) {
+    return { episodes: [], feedInfo: null, isLoading: true, error: null };
+  }
+
+  return {
+    episodes,
+    feedInfo: preload.feed
+      ? {
+          title: preload.feed.title || '',
+          description: stripTrailingHashtags(preload.feed.description || ''),
+          image: preload.feed.image || '',
+          link: preload.feed.link || '',
+        }
+      : null,
+    isLoading: false,
     error: null,
-  });
+  };
+};
+
+export const usePodcastFeed = () => {
+  const preload = usePreload();
+  const [state, setState] = useState<FeedState>(() => seedFrom(preload));
 
   useEffect(() => {
     let cancelled = false;
@@ -175,7 +241,7 @@ export const usePodcastFeed = () => {
       const data = await response.json();
       if (!Array.isArray(data.episodes)) throw new Error('episodes.json kunde inte tolkas');
 
-      const episodes = prepare((data.episodes as StaticEpisode[]).filter((e) => e.audioUrl).map(fromStatic));
+      const episodes = episodesFromStatic(data.episodes as StaticEpisode[]);
       if (episodes.length === 0) throw new Error('episodes.json innehöll inga avsnitt');
 
       return {
@@ -221,7 +287,9 @@ export const usePodcastFeed = () => {
     };
 
     const run = async () => {
-      let haveEpisodes = false;
+      // The inlined list already counts: a failing network must never turn a
+      // page that is showing episodes into an error message.
+      let haveEpisodes = (Array.isArray(preload.episodes) ? preload.episodes.length : 0) > 0;
 
       try {
         const result = await loadStatic();
@@ -264,7 +332,7 @@ export const usePodcastFeed = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return state;
 };

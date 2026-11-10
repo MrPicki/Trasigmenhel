@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-prerender.tsx --outDir dist-ssr",
     "postbuild": "node scripts/prerender-routes.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
@@ -14,7 +14,8 @@
     "newsletter:notify": "node scripts/notify-new-episode.mjs",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "transcribe": "node scripts/transcribe-episodes.mjs"
   },
   "homepage": "https://trasigmenhel.se",
   "dependencies": {

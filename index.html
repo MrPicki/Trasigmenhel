@@ -7,9 +7,10 @@
     <meta name="description" content="Lyssna på Trasig men Hel, en podcast där vi utforskar resan från trasighet till helhet. Berättelser om personlig utveckling, mentalt välmående och vägen till självacceptans." />
     <meta name="author" content="Trasig men hel" />
 
-    <!-- Social crawlers do not run JavaScript, so these static tags — not the
-         Helmet ones — are what actually produce a link preview. They mirror
-         the home page's Helmet values exactly so the SPA duplicate is inert. -->
+    <!-- Every page is written to disk as finished HTML by
+         scripts/prerender-routes.mjs, which replaces the tags below with that
+         page's own. They remain here as the dev server's head and as the
+         fallback for any file that was not prerendered. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Trasig men Hel" />
     <meta property="og:locale" content="sv_SE" />
@@ -26,6 +27,8 @@
          Familjen Grotesk for everything a person reads, Martian Mono for what
          a machine recorded. No third-party stylesheet in the critical path,
          and no visitor IP handed to a font CDN. -->
+
+    <link rel="alternate" type="application/rss+xml" title="Trasig men Hel" href="https://anchor.fm/s/3c8f8270/podcast/rss" />
 
     <!-- Favicon -->
     <link rel="icon" href="/webpic.png" type="image/png" />

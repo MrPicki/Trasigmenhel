@@ -10,6 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
+# Nedladdat ljud och whisper-utdata; transkripten i public/transcripts committas
+.transcribe-cache
 *.local
 
 # impeccable-ignore-start
