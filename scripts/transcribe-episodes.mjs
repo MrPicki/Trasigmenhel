@@ -153,6 +153,10 @@ for (const episode of episodes) {
         '-m', MODEL,
         '-f', wav,
         '-l', 'sv',
+        // Utan detta matas förra fönstrets text in som ledtråd till nästa.
+        // Går modellen vilse en gång fortplantar sig felet resten av filen,
+        // och ett helt avsnitt kommer tillbaka som "Tjena. Tjena. Tjena.".
+        '-mc', '0',
         '-oj',
         '-of', path.join(WORK, episode.id),
         '-np',
@@ -160,6 +164,11 @@ for (const episode of episodes) {
       ],
       { maxBuffer: 1024 * 1024 * 64 }
     );
+  }
+
+  if (!(await exists(raw))) {
+    console.warn(`! ${slug} — whisper skrev ingen fil. Hoppar över.`);
+    continue;
   }
 
   const parsed = JSON.parse(await readFile(raw, 'utf8'));
