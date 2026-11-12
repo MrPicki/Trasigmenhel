@@ -10,6 +10,7 @@ import Links from './pages/Links';
 import Episode from './pages/Episode';
 import Head from '@/components/Head';
 import PlayerBar from '@/components/PlayerBar';
+import PreviewGate from '@/components/PreviewGate';
 import { PlayerProvider } from '@/player/PlayerProvider';
 import { PreloadProvider, preloadFromWindow } from '@/data/preload';
 
@@ -88,6 +89,7 @@ export const AppShell = ({ children }: { children: React.ReactNode }) => (
       <PlayerProvider>
         {children}
         <PlayerBar />
+        <PreviewGate />
       </PlayerProvider>
     </TooltipProvider>
   </QueryClientProvider>

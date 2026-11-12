@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { PREVIEW_SECONDS } from '@/config/site';
 import type { PodcastEpisode } from '@/hooks/use-podcast-feed';
 
 /**
@@ -26,6 +27,8 @@ interface PlayerState {
   duration: number;
   /** Set when the browser refused or failed the load, so the UI can offer Spotify instead. */
   failed: boolean;
+  /** Satt när försmaken tagit slut och lyssnaren ska ledas vidare. */
+  previewEnded: boolean;
 }
 
 interface PlayerApi extends PlayerState {
@@ -50,12 +53,23 @@ interface PlayerApi extends PlayerState {
   /** Move `delta` seconds relative to the current position. */
   nudge: (delta: number) => void;
   isCurrent: (episode: PodcastEpisode | null) => boolean;
+  /** Stäng rutan. Det som redan hörts är fortfarande förbrukat. */
+  dismissPreview: () => void;
 }
 
 const PlayerContext = createContext<PlayerApi | null>(null);
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  /** Avsnittet elementet står på, läsbart inifrån händelselyssnarna. */
+  const currentIdRef = useRef<string | null>(null);
+  /**
+   * Hörd tid per avsnitt, summerad över hela besöket. Räknas på uppspelad
+   * tid och inte på positionen: att spola fram förbrukar inget, och ger
+   * heller inget tillbaka.
+   */
+  const consumedRef = useRef<Record<string, number>>({});
+  const lastTimeRef = useRef(0);
   /**
    * A position asked for before the file knew its own length. Setting
    * currentTime on an element with no metadata is silently dropped, so it is
@@ -68,7 +82,11 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     currentTime: 0,
     duration: 0,
     failed: false,
+    previewEnded: false,
   });
+
+  const previewSpent = (episode: PodcastEpisode | null) =>
+    PREVIEW_SECONDS > 0 && !!episode && (consumedRef.current[episode.id] || 0) >= PREVIEW_SECONDS;
 
   // The element is created once, imperatively, so React never re-mounts it
   // mid-playback and cuts the audio.
@@ -81,7 +99,27 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onTime = () => setState((s) => ({ ...s, currentTime: audio.currentTime }));
+    const onTime = () => {
+      const now = audio.currentTime;
+      const delta = now - lastTimeRef.current;
+      lastTimeRef.current = now;
+
+      // Bara verklig uppspelning räknas: ett hopp i tiden ger ett stort
+      // delta, en paus ger inget alls.
+      if (PREVIEW_SECONDS > 0 && !audio.paused && delta > 0 && delta < 1.5) {
+        const id = currentIdRef.current;
+        if (id) {
+          const spent = (consumedRef.current[id] || 0) + delta;
+          consumedRef.current[id] = spent;
+          if (spent >= PREVIEW_SECONDS) {
+            audio.pause();
+            setState((s) => ({ ...s, previewEnded: true }));
+          }
+        }
+      }
+
+      setState((s) => ({ ...s, currentTime: now }));
+    };
     const onMeta = () => {
       if (pendingSeekRef.current !== null) {
         audio.currentTime = pendingSeekRef.current;
@@ -143,9 +181,17 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
+    if (previewSpent(episode)) {
+      // Rutan kommer tillbaka i stället för att knappen tyst gör ingenting.
+      setState((s) => ({ ...s, episode, previewEnded: true }));
+      return;
+    }
+
     if (!isSame) {
       audio.src = episode.audioUrl;
       audio.currentTime = 0;
+      currentIdRef.current = episode.id;
+      lastTimeRef.current = 0;
       setState((s) => ({
         ...s,
         episode,
@@ -161,9 +207,11 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     // Autoplay can be refused (a browser policy, a dead file). Surface it as
     // a paused player with a way out rather than a button that does nothing.
     audio.play().catch(() => setState((s) => ({ ...s, isPlaying: false, failed: true })));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const pause = useCallback(() => audioRef.current?.pause(), []);
+
+  const dismissPreview = useCallback(() => setState((s) => ({ ...s, previewEnded: false })), []);
 
   const dismiss = useCallback(() => {
     audioRef.current?.pause();
@@ -205,6 +253,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     const audio = audioRef.current;
     if (!audio || !episode.audioUrl) return null;
 
+    currentIdRef.current = episode.id;
+    lastTimeRef.current = seconds;
+
     if (audio.src !== episode.audioUrl) {
       audio.src = episode.audioUrl;
       pendingSeekRef.current = seconds;
@@ -235,9 +286,13 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const playAt = useCallback(
     (episode: PodcastEpisode, seconds: number) => {
       const audio = load(episode, seconds);
+      if (previewSpent(episode)) {
+        setState((s) => ({ ...s, previewEnded: true }));
+        return;
+      }
       audio?.play().catch(() => setState((s) => ({ ...s, isPlaying: false, failed: true })));
     },
-    [load]
+    [load] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const seek = useCallback((seconds: number) => {
@@ -266,9 +321,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
       cue,
       playAt,
       nudge,
+      dismissPreview,
       isCurrent: (episode) => Boolean(episode && state.episode && episode.id === state.episode.id),
     }),
-    [state, toggle, pause, dismiss, seek, cue, playAt, nudge]
+    [state, toggle, pause, dismiss, seek, cue, playAt, nudge, dismissPreview]
   );
 
   return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;

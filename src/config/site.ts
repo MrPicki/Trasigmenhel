@@ -133,6 +133,19 @@ export const LINKS_MESSAGE = {
  */
 export const GOOGLE_SITE_VERIFICATION = '';
 
+/**
+ * Hur många sekunder av ett avsnitt som spelas här innan lyssnaren leds
+ * vidare till Spotify eller Apple.
+ *
+ * Sajten är en skyltning, inte en spelare. En uppspelning här räknas
+ * ingenstans; en uppspelning i en poddapp räknas i poddens siffror och i
+ * apparnas egna listor. Försmaken ska vara lång nog att rösten och tonen går
+ * fram, kort nog att ingen slår sig ner.
+ *
+ * Sätt till 0 för att låta hela avsnittet spelas här.
+ */
+export const PREVIEW_SECONDS = 20;
+
 export interface EpisodePage {
   /**
    * The URL segment: trasigmenhel.se/avsnitt/<slug>.
