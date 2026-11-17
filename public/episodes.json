@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T18:14:06.935Z",
+  "generatedAt": "2026-11-17T17:23:34.878Z",
   "feed": {
     "title": "Trasig men Hel",
     "description": "\"Trasig men hel\" är en ärlig och osminkad podcast om att bryta negativa mönster och hitta styrka i sårbarheten. Värden Christoffer ”Picki” delar sin resa från en tuff uppväxt präglad av trauma och missbruk till en pappa som kämpar för förändring. Genom personliga berättelser och gästintervjuer utforskar vi hur vi kan växa genom livets utmaningar. För dig som vill förstå dig själv bättre, bryta destruktiva cykler och utvecklas som person. Nya avsnitt varannan vecka. En Ncom produktion. #TrasigMenHel #PersonligUtveckling #MentalHälsa",
@@ -7,6 +7,19 @@
     "link": "https://trasigmenhel.se/"
   },
   "episodes": [
+    {
+      "id": "b3f9de56-62b9-4028-8675-1448648fbd4b",
+      "title": "Avsnitt 2 Del 2",
+      "audioUrl": "https://anchor.fm/s/3c8f8270/podcast/play/129566893/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-10-16%2Fab303fbe-5592-b183-286c-87b6947a1371.mp3",
+      "description": "Avsnitt 2 – Del 2: Moster Judy | Samma familj, olika barndomar Hur kan två människor växa upp i samma familj, under samma tak, med samma föräldrar – och ändå bära med sig två helt olika berättelser? I den andra och avslutande delen av mitt samtal med moster Judy fortsätter vi att utforska något som blivit allt tydligare under arbetet med Trasig men hel : Att vår historia inte bara formas av det vi varit med om, utan också av hur vi upplevt det. Judy och min mamma är två systrar. De delar föräldrar, uppväxt och familjehistoria. Ändå har deras liv tagit olika riktningar, och deras sätt att se på det förflutna skiljer sig åt. Det väcker en parallell som ligger mig ännu närmare. Jag och min bror. Två söner. Samma mamma. Samma familj. Men var det verkligen samma barndom? Hur mycket av den vi blir formas av våra föräldrar? Hur mycket handlar om våra egna förutsättningar, våra roller i familjen och det vi tvingas lära oss för att hantera vår uppväxt? Och kanske den svåraste frågan av alla: Om vi kan komma från samma plats men bli så olika – hur mycket av våra liv är egentligen förutbestämt? Det här samtalet handlar inte om att avgöra vems minnen som är rätt eller fel. Det handlar om att försöka förstå hur flera verkligheter kan existera sida vid sida. Hur det som för en människa blev ett minne, för en annan blev ett sår. Och hur det vi bär med oss från barndomen kan fortsätta påverka våra relationer långt in i vuxenlivet. Men det handlar också om Judy. Om hennes och hennes mans betydelse i mitt liv, och om hur mycket det kan betyda för ett barn att det finns någon som erbjuder den trygghet och värme som barnet behöver. Vi avslutar inte med alla svar. Kanske snarare med ännu fler frågor. Men också med en insikt: Vi kan inte alltid förändra den historia vi kommer ifrån. Men vi kan försöka förstå den, så att den inte behöver bestämma hela vår framtid. Det här är Trasig men hel . En podd om barndom, familjerelationer, psykisk ohälsa, arv och miljö – och om att försöka bryta de mönster vi aldrig själva valde. För du är inte ensam om det du bär på. ❤️",
+      "pubDateRaw": "Tue, 17 Nov 2026 11:00:00 GMT",
+      "publishedAt": "2026-11-17T11:00:00.000Z",
+      "durationSeconds": 3115,
+      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/10060380/10060380-1747134266321-6e2268ab55033.jpg",
+      "link": "https://podcasters.spotify.com/pod/show/trasigmenhel/episodes/Avsnitt-2-Del-2-e3sgind",
+      "appleUrl": null,
+      "spotifyUrl": null
+    },
     {
       "id": "f2d04560-41cc-4600-b8c4-86fa2bd0a9d3",
       "title": "Avsnitt 2 Del 1",
